@@ -1,4 +1,6 @@
-namespace DefaultNamespace;
+using System.Security.Principal;
+
+namespace SmartCampusServicesPortal.Data.Models;
 
 public class ApplicationUser: IIdentity
 {
@@ -8,7 +10,7 @@ public class ApplicationUser: IIdentity
     public int StakeholderId { get; set; }
 
     /// <summary>
-    /// Gets or sets the user name.
+    /// Gets or sets the username.
     /// </summary>
     public virtual string UserName { get; set; }
 
@@ -50,7 +52,7 @@ public class ApplicationUser: IIdentity
     /// <summary>
     ///  If a user is IsVerified or not
     /// </summary>
-    public virtual bool IsVerified { get; set; }
+    public virtual bool isLocked { get; set; }
 
     /// <summary>
     ///  Gets or sets the groupActions.

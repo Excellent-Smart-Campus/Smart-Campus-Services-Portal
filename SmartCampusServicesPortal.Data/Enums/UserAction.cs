@@ -1,6 +1,47 @@
-namespace DefaultNamespace;
+namespace SmartCampusServicesPortal.Data.Enums;
 
-public class UserAction
+public enum UserAction
 {
-    
+    Login = 1,
+    UpdateProfile = 2,
+    ViewTimetable = 3,
+    AssignClassSchedule = 4,
+    UpdateClassSchedule = 5,
+    DeleteClassSchedule = 6,
+    ViewAvailableRooms = 7,
+    BookRoom = 8,
+    CancelRoomBooking = 9,
+    ViewMyBookings = 10,
+    ApproveBooking = 11,
+    RejectBooking = 12,
+    ReportMaintenanceIssue = 13,
+    UpdateMaintenanceIssue = 14,
+    CloseMaintenanceIssue = 15,
+    ViewMaintenanceRequests = 16,
+    AssignMaintenanceTechnician = 17,
+    ViewAnnouncements = 18,
+    PostAnnouncement = 19,
+    EditAnnouncement = 20,
+    DeleteAnnouncement = 21,
+    SendNotification = 22,
+    ReceiveNotification = 23,
+    AccessDashboard = 24,
+    ViewLogs = 25,
+    SearchRecords = 26,
+    ExportData = 27,
+    RevokeActionFromGroup = 28,
+    AssignActionToGroup = 29,
+    RemoveUserFromGroup = 30,
+    AddUserToGroup = 31,
+    DeleteGroup = 32,
+    UpdateGroup = 33,
+    CreateGroup = 34,
+    UnlockUser = 35,
+    AddGroupAction = 36,
+    DeleteGroupAction = 37,
+    DeleteGroupMember = 38,
+    LockUser = 39,
+    ResetPassword = 40,
+    ChangePassword = 41,
+    SetGroupMember = 42
 }

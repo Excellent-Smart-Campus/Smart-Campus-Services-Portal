@@ -1,0 +1,16 @@
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/bin/Debug/net8.0/SmartCampusServicesPortal.Domain.deps.json
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/bin/Debug/net8.0/SmartCampusServicesPortal.Domain.dll
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/bin/Debug/net8.0/SmartCampusServicesPortal.Domain.pdb
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/bin/Debug/net8.0/SmartCampusServicesPortal.Data.dll
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/bin/Debug/net8.0/SmartCampusServicesPortal.Data.pdb
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/SmartCampusServicesPortal.Domain.csproj.AssemblyReference.cache
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/SmartCampusServicesPortal.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/SmartCampusServicesPortal.Domain.AssemblyInfoInputs.cache
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/SmartCampusServicesPortal.Domain.AssemblyInfo.cs
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/SmartCampusServicesPortal.Domain.csproj.CoreCompileInputs.cache
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/SmartCampusServicesPortal.Domain.sourcelink.json
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/SmartCam.72D3D29D.Up2Date
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/SmartCampusServicesPortal.Domain.dll
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/refint/SmartCampusServicesPortal.Domain.dll
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/SmartCampusServicesPortal.Domain.pdb
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/Debug/net8.0/ref/SmartCampusServicesPortal.Domain.dll

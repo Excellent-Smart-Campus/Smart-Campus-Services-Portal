@@ -1,4 +1,4 @@
-namespace DefaultNamespace;
+namespace SmartCampusServicesPortal.Data.Models;
 
 /// <summary>
 /// User data model.

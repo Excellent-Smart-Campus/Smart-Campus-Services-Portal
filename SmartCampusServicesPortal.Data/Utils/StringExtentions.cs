@@ -1,6 +1,6 @@
-namespace DefaultNamespace;
+namespace SmartCampusServicesPortal.Data.Utils;
 
-public class StringExtentions
+public static class StringExtentions
 {
     public static string ToFilter(this string value)
     {

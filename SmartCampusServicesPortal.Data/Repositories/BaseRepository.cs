@@ -1,9 +1,11 @@
+using Microsoft.Data.SqlClient;
+
 namespace SmartCampusServicesPortal.Data.Repositories;
 
 /// <summary>
-///     Initializes a new instance of the <see cref="BaseRepository" /> class.
+///     Base class for configuring connections to the database.
 /// </summary>
-public class BaseRepository(string connectionString)
+public abstract class BaseRepository
 {
     internal const int DefaultTimeout = 5000;
     private readonly string _connectionString;

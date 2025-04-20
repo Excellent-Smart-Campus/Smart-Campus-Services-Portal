@@ -1,9 +1,14 @@
-namespace SmartCampusServicesPortal.Data;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using SmartCampusServicesPortal.Data.Models;
+
+namespace SmartCampusServicesPortal.Data.Repositories;
 
 public class SecurityRepository(string connectionString) : BaseRepository(connectionString)
 {
         /// <summary>
-    /// Creates a transact that fetches user security, group actions, group memebrs.
+    /// Creates a transaction that fetches user security, group actions, group members.
     /// </summary>
     /// <param name="stakeholderId"></param>
     /// <param name="userName"></param>
@@ -46,16 +51,13 @@ public class SecurityRepository(string connectionString) : BaseRepository(connec
         queryParameters.Add("@passwordHash", securityUser.PasswordHash);
         queryParameters.Add("@securityStamp", securityUser.SecurityStamp);
         queryParameters.Add("@isDeleted", securityUser.IsDeleted);
-        queryParameters.Add("@isVerified", securityUser.IsVerified);
-        queryParameters.Add("@roleId", securityUser.RoleId);
-        queryParameters.Add("@titleId", securityUser.TitleId);
+        queryParameters.Add("@iIsLocked", securityUser.IsLocked);
 
         return await connection.QueryFirstOrDefaultAsync<SecurityUser>(
             "usr.SetSecurityUser",
             commandType: CommandType.StoredProcedure,
             param: queryParameters,
             commandTimeout: DefaultTimeout);
-
     }
 
     /// <summary>

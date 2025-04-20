@@ -1,0 +1,6 @@
+@Smart_Campus_Service_Portal_Server_HostAddress = http://localhost:5233
+
+GET {{Smart_Campus_Service_Portal_Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

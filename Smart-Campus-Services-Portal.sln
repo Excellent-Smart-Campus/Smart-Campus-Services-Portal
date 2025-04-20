@@ -1,0 +1,52 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35208.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartCampusServicesPortal.Server", "SmartCampusServicesPortal.Server\SmartCampusServicesPortal.Server.csproj", "{0528F967-2914-45DE-896B-FA1AA79E92FD}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "SmartCampusServicesPortal.Client", "SmartCampusServicesPortal.Client\SmartCampusServicesPortal.Client.esproj", "{2F4552A0-3EAF-4DB4-81EE-2351D680D037}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A2CE7568-B91F-4799-ACF7-44FA0C8DB82B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartCampusServicesPortal.Domain", "SmartCampusServicesPortal.Domain\SmartCampusServicesPortal.Domain.csproj", "{77F89DB3-40F5-4F62-B378-43473493D538}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartCampusServicesPortal.Data", "SmartCampusServicesPortal.Data\SmartCampusServicesPortal.Data.csproj", "{924D94FA-DD05-4439-86DA-2F28498953AC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0528F967-2914-45DE-896B-FA1AA79E92FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0528F967-2914-45DE-896B-FA1AA79E92FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0528F967-2914-45DE-896B-FA1AA79E92FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0528F967-2914-45DE-896B-FA1AA79E92FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F4552A0-3EAF-4DB4-81EE-2351D680D037}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F4552A0-3EAF-4DB4-81EE-2351D680D037}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F4552A0-3EAF-4DB4-81EE-2351D680D037}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2F4552A0-3EAF-4DB4-81EE-2351D680D037}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F4552A0-3EAF-4DB4-81EE-2351D680D037}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F4552A0-3EAF-4DB4-81EE-2351D680D037}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{77F89DB3-40F5-4F62-B378-43473493D538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F89DB3-40F5-4F62-B378-43473493D538}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F89DB3-40F5-4F62-B378-43473493D538}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F89DB3-40F5-4F62-B378-43473493D538}.Release|Any CPU.Build.0 = Release|Any CPU
+		{924D94FA-DD05-4439-86DA-2F28498953AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{924D94FA-DD05-4439-86DA-2F28498953AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{924D94FA-DD05-4439-86DA-2F28498953AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{924D94FA-DD05-4439-86DA-2F28498953AC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9928D729-4D5F-4E90-98DC-446A6549359B}
+	EndGlobalSection
+EndGlobal
