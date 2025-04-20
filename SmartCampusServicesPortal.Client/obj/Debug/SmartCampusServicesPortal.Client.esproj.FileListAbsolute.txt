@@ -1,0 +1,1 @@
+/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Client/obj/Debug/SmartCampusServicesPortal.Client.esproj.CoreCompileInputs.cache
