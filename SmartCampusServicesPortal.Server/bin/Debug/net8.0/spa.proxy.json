@@ -1,0 +1,10 @@
+{
+"SpaProxyServer": {
+"ServerUrl": "https://localhost:5173",
+"RedirectUrl": "",
+"LaunchCommand": "npm run dev",
+"WorkingDirectory": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/../SmartCampusServicesPortal.Client",
+"MaxTimeoutInSeconds": "120",
+"KeepRunning": "false"
+}
+}
