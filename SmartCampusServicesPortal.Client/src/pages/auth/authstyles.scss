@@ -1,0 +1,52 @@
+.login{
+  background-color: white;
+  .siginForm {
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .rs-panel {
+    background: #fff;
+    box-shadow: 0 0.1em 0.5em 0 rgba(0, 0, 0, 0.28);
+  }
+  .rs-form-group:not(:last-child) {
+    margin-bottom: 30px !important;
+  }
+  .mybtn {
+    border-radius: 0%;
+  }
+  .links{
+    margin-top: -5px;
+  }
+  .forgot{
+    margin-top: 1em;
+  }
+  .text{
+    margin-bottom: 35px;
+  }
+  .header{
+    text-align: center;
+  }
+  .verify{
+    margin-top: 1em;
+    text-align: center;
+    width: 100%;
+  }
+  .resent{
+    font-size:medium;
+    margin-left: -12px;
+  }
+}
+.forgot_password{
+  .mybtn {
+    border-radius: 0%;
+  }
+  .rs-modal-content{
+    border-radius: 0%;
+  }
+  .rs-modal-body{
+    overflow: unset;
+  }
+}

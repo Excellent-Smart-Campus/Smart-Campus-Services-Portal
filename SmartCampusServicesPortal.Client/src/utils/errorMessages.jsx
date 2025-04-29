@@ -8,7 +8,17 @@ export const errorMessages = {
         required: 'Email is required',
         invalid: 'Please enter a valid email address'
     },
+    title: {
+        required: 'Title is required'
+    },
+    firstname: {
+        required: 'Firstname is required',
+    },
+    lastname: {
+        required: 'Lastname is required',
+    },
     password: {
         required: 'Password is required',
-    }
+    },
+    
 };
