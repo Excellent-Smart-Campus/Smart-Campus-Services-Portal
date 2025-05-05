@@ -13,9 +13,10 @@ import NotFound from "@/pages/NotFound.jsx";
 import RestrictAuth from "@/layout/RestrictAuth.jsx";
 import AccessGuard from "@/components/AccessGuard.jsx";
 import muiTheme  from "@/utils/theme.jsx";
-import './App.css';
+import BookingRequestSchedule from '@/pages/private/Student/BookingRequestSchedule.jsx';
 import Loader from "@/components/Loader.jsx";
 import Notification from "@/pages/private/Notification.jsx";
+import './App.css';
 
 function App() {
     const { loading } = useAuth();
@@ -24,7 +25,6 @@ function App() {
     }
     return (
         <ThemeProvider theme={muiTheme}>
-            
             <Container maxWidth="lg">
             <CssBaseline />
             <Box sx={{ height: '100vh' }} >
@@ -41,6 +41,9 @@ function App() {
                                         <Profile />
                                   //  </AccessGuard>
                             } 
+                        />
+                        <Route path={constantRoutes.protected.student.bookingRequestSchedule(':type')}
+                            element={<BookingRequestSchedule />}
                         />
                         <Route path={constantRoutes.protected.index}  element={ <Home /> } />
                         <Route path={constantRoutes.protected.notification}

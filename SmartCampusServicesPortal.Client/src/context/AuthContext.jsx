@@ -4,6 +4,7 @@ import { Success, Error } from '@/helper/toasters';
 import { errorMessages } from '@/utils/errorMessages';
 import ApiClient from "@/service/ApiClient";
 import {constantRoutes} from "@/utils/constantRoutes.jsx";
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
@@ -72,9 +73,12 @@ export function AuthProvider({ children }){
     }, [setUser, setAuthenticated, setUserPermissions]);
 
     const canAccess = (action) => {
-        console.log(action);
-        console.log(userPermissions);
-        return authenticated && userPermissions.some(action => action?.actionId === action);
+        const actionIdNumber = Number(action);  // Convert the action to number
+        const hasPermission = userPermissions.some(permission => {
+            const permissionActionId = Number(permission?.actionId); // Convert permission actionId to number
+            return permissionActionId === actionIdNumber;  // Compare the two numbers
+        });
+        return authenticated && hasPermission;
     };
     
     useEffect(() => {
@@ -101,3 +105,7 @@ export function AuthProvider({ children }){
         </AuthContext.Provider>
     );
 }
+
+AuthProvider.propTypes = {
+    children: PropTypes.node.isRequired
+};

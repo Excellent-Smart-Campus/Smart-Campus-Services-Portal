@@ -1,3 +1,5 @@
+import { bookingActionEnum } from '@/utils/bookingActionEnum.jsx';
+
 export const constantRoutes = {
     auth: {
         login: '/auth/login/',
@@ -17,5 +19,8 @@ export const constantRoutes = {
             addUser: '/admin/add-user/',
             editUser: '/admin/edit-user/:id',
         },
+        student:{
+            bookingRequestSchedule: type =>`/student/booking/${type}`,
+        }
     }
 }

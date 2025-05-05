@@ -85,7 +85,7 @@ public class EducationRepository(string connectionString) : BaseRepository(conne
         
         var queryParameters = new DynamicParameters();
         queryParameters.Add("@stakeholderId", stakeholderId);
-        queryParameters.Add("@stakeholderRelationshipTypeId", (int)stakeholderRelationshipType);
+        queryParameters.Add("@stakeholderRelationshipTypeId", (int?)stakeholderRelationshipType);
         
         Dictionary<int, Course> courseSubjectsDictionary =
             new Dictionary<int, Course>();
@@ -131,12 +131,12 @@ public class EducationRepository(string connectionString) : BaseRepository(conne
 
         var queryParameters = new DynamicParameters();
         queryParameters.Add("@stakeholderId", stakeholderId);
-        queryParameters.Add("@stakeholderRelationshipTypeId", (int)stakeholderRelationshipType);
+        queryParameters.Add("@stakeholderRelationshipTypeId", (int?)stakeholderRelationshipType);
         
         Dictionary<int, TimeTable> timeTableDictionary = new Dictionary<int, TimeTable>();
         
         await connection.QueryAsync<TimeTable, SubjectSchedule, TimeTable>(
-             "edu.GetStakeholderCourseAndSubjects",
+             "edu.GetTimeTable",
             (timeTable, subjectSchedule) =>
             {
                 if (!timeTableDictionary.TryGetValue(timeTable.CourseId, out TimeTable timeTableInstance))
