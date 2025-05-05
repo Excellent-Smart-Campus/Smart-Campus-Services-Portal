@@ -5,9 +5,8 @@ import { model } from '@/helper/ValidateLogin';
 import { CustomButton } from '@/components/CustomButton.jsx';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '@/context/AuthContext.jsx';
+import { constantRoutes } from "@/utils/constantRoutes.jsx";
 import './authstyles.scss';
-import {constantRoutes} from "@/utils/constantRoutes.jsx";
-
 function Login() {
     const { login, errors, loading, setLoading, setErrors } = useAuth();
     const formRef = useRef();
@@ -38,10 +37,22 @@ function Login() {
                                 <TextField name="password" label="Password" type="password" autoComplete="off" />
                                 
                                 <ButtonToolbar style={{marginBottom: "1em"}}>
-                                    <CustomButton mybtn={'mybtn'} handle={handleSubmit} label={'Sign in'} appearance={"primary"} />
+                                    <CustomButton
+                                        handle={handleSubmit} 
+                                        label={'Sign in'}
+                                        loading={loading}
+                                        variant={'contained'}
+                                        color={'primary'}
+                                    />
                                 </ButtonToolbar>
 
-                                <p >Don't have an account<CustomButton mybtn={'links'} appearance={"link"} handle={()=>navigate(constantRoutes.auth.signUp)} label={'register!'} /></p>
+                                <p >Don't have an account
+                                    <CustomButton
+                                        handle={()=>navigate(constantRoutes.auth.signUp)}
+                                        label={'register!'}
+                                        color={'primary'}
+                                    />
+                                </p>
                                 {errors.general && <p className="error">{errors.general}</p>}
                             </Form>
                         </Panel>

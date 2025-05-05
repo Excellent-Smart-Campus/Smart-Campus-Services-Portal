@@ -13,16 +13,6 @@ public class CustomClaims
     public const string Name = "Name";
 
     /// <summary>
-    /// The users initials
-    /// </summary>
-    public const string Initials = "Initials";
-
-    /// <summary>
-    /// The users first name
-    /// </summary>
-    public const string Firstname = "Firstname";
-
-    /// <summary>
     /// The users Deleted status
     /// </summary>
     public const string IsDeleted = "IsDeleted";
@@ -31,11 +21,6 @@ public class CustomClaims
     /// The users IsLocked status
     /// </summary>
     public const string IsLocked = "IsLocked";
-
-    /// <summary>
-    /// The users IsNewUser status
-    /// </summary>
-    public const string IsNewUser = "IsNewUser";
 
     /// <summary>
     /// The Users Action mendate

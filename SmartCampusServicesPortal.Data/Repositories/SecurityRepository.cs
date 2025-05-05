@@ -7,12 +7,6 @@ namespace SmartCampusServicesPortal.Data.Repositories;
 
 public class SecurityRepository(string connectionString) : BaseRepository(connectionString)
 {
-        /// <summary>
-    /// Creates a transaction that fetches user security, group actions, group members.
-    /// </summary>
-    /// <param name="stakeholderId"></param>
-    /// <param name="userName"></param>
-    /// <returns></returns>
     public async Task<SecurityUser> GetSecurityUserAsync(long? stakeholderId, string userName, bool excludeMembersAndActions = false)
     {
         await using var connection = await GetOpenConnectionAsync();
@@ -22,7 +16,7 @@ public class SecurityRepository(string connectionString) : BaseRepository(connec
 
         if(user != null && !excludeMembersAndActions)
         {
-            await GetAllGroupMembersAsync(user, connection, transaction);
+            user.GroupMembers = await GetGroupUserAsync(user.StakeholderId, connection, transaction);
 
             foreach (var group in user.GroupMembers)
             {
@@ -35,12 +29,7 @@ public class SecurityRepository(string connectionString) : BaseRepository(connec
 
         return user;
     }
-
-    /// <summary>
-    /// Sets the Security user 
-    /// </summary>
-    /// <param name="securityUser"></param>
-    /// <returns></returns>
+        
     public async Task<SecurityUser> SetSecurityUserAsync(SecurityUser securityUser)
     {
         await using var connection = await GetOpenConnectionAsync();
@@ -51,7 +40,7 @@ public class SecurityRepository(string connectionString) : BaseRepository(connec
         queryParameters.Add("@passwordHash", securityUser.PasswordHash);
         queryParameters.Add("@securityStamp", securityUser.SecurityStamp);
         queryParameters.Add("@isDeleted", securityUser.IsDeleted);
-        queryParameters.Add("@iIsLocked", securityUser.IsLocked);
+        queryParameters.Add("@isLocked", securityUser.IsLocked);
 
         return await connection.QueryFirstOrDefaultAsync<SecurityUser>(
             "usr.SetSecurityUser",
@@ -59,14 +48,35 @@ public class SecurityRepository(string connectionString) : BaseRepository(connec
             param: queryParameters,
             commandTimeout: DefaultTimeout);
     }
+    
+    public async Task<GroupMember> SetGroupMemberAsync(int stakeholderId, int groupId, int userId)
+    {
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+        var queryParameters = new DynamicParameters();
 
-    /// <summary>
-    /// Get the group actions by group id.
-    /// </summary>
-    /// <param name="groupId"></param>
-    /// <param name="connection"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
+        queryParameters.Add("@stakeholderId", stakeholderId);
+        queryParameters.Add("@groupId", groupId);
+        queryParameters.Add("@userId", userId);
+
+        return await connection.QueryFirstOrDefaultAsync<GroupMember>(
+            "usr.SetGroupMember",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters,
+            commandTimeout: DefaultTimeout);
+    }
+    
+    public async Task<List<GroupMember>> GetGroupUserAsync(int stakeholderId)
+    {
+        await using var connection = await GetOpenConnectionAsync();
+        return await GetGroupUserAsync(stakeholderId, connection);
+    }
+    
+    public async Task<List<GroupAction>> GetGroupActionsById(int stakeholderId)
+    {
+        await using var connection = await GetOpenConnectionAsync();
+        return await GetGroupActionsAsync(stakeholderId, connection);
+    }
+    
     private async Task<List<GroupAction>> GetGroupActionsAsync(int groupId, SqlConnection connection, SqlTransaction transaction = null)
     {
         var queryParameters = new DynamicParameters();
@@ -79,37 +89,22 @@ public class SecurityRepository(string connectionString) : BaseRepository(connec
                  transaction: transaction,
                  commandTimeout: DefaultTimeout)).ToList();
     }
-
-    /// <summary>
-    /// Get the  group members by stakeholder id.
-    /// </summary>
-    /// <param name="securityUser"></param>
-    /// <param name="connection"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
-    private static async Task GetAllGroupMembersAsync(SecurityUser securityUser, SqlConnection connection, SqlTransaction transaction = null)
+    
+    private static async Task<List<GroupMember>> GetGroupUserAsync(int stakeholderId, SqlConnection connection, SqlTransaction transaction = null)
     {
         var queryParameters = new DynamicParameters();
-        queryParameters.Add("@stakeholderId", securityUser.StakeholderId);
+        queryParameters.Add("@stakeholderId", stakeholderId);
 
-        var groupMembers = await connection.QueryAsync<GroupMember>(
-            "usr.GetGroupMembershipByStakeHolderId",
+        var result = await connection.QueryAsync<GroupMember>(
+            "usr.GetUserGroup",
             commandType: CommandType.StoredProcedure,
             param: queryParameters,
             transaction: transaction,
             commandTimeout: DefaultTimeout);
 
-        securityUser.GroupMembers = groupMembers.ToList();
+        return result.ToList();
     }
-
-    /// <summary>
-    /// Get the user security by stakeholder id or username.
-    /// </summary>
-    /// <param name="stakeholderId"></param>
-    /// <param name="userName"></param>
-    /// <param name="connection"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
+    
     private async Task<SecurityUser> GetSecurityUserAsync(long? stakeholderId, string userName, SqlConnection connection, SqlTransaction transaction = null)
     {
         var queryParameters = new DynamicParameters();

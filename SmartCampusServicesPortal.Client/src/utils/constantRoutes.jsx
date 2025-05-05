@@ -1,13 +1,21 @@
 export const constantRoutes = {
     auth: {
         login: '/auth/login/',
-        resetPassword: '/auth/reset-password/',
         signUp: '/auth/sign-up/',
-        otp: '/auth/verify-otp/',
-        forgotPassword: '/auth/forgot-password/',
-        addPassword: '/auth/add-password/'
     },
-    profile: {
-        index: '/profile/'
+    access: {
+        unauthorised: '/unauthorised/',
+        notFound: '/*',
+    },
+    protected: {
+        index: '/',
+        profile: '/profile/',
+        notification: '/notification/',
+        admin: {
+            index: '/admin/',
+            users: '/admin/users/',
+            addUser: '/admin/add-user/',
+            editUser: '/admin/edit-user/:id',
+        },
     }
 }

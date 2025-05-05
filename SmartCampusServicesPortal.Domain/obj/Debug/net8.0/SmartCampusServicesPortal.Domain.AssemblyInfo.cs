@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartCampusServicesPortal.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1abbef857760dd5970acc448ab52288400b9dc83")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6d465416aedb5f59120a920f50fcc54ed6dfeafc")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartCampusServicesPortal.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartCampusServicesPortal.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

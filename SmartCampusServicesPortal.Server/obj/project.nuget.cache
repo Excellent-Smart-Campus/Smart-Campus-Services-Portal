@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "870o3zzA4cE=",
+  "dgSpecHash": "OSQA/DNiHus=",
   "success": true,
-  "projectFilePath": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj",
+  "projectFilePath": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj",
   "expectedPackageFiles": [
     "/Users/excellentmashengete/.nuget/packages/azure.core/1.44.0/azure.core.1.44.0.nupkg.sha512",
     "/Users/excellentmashengete/.nuget/packages/azure.identity/1.12.0/azure.identity.1.12.0.nupkg.sha512",

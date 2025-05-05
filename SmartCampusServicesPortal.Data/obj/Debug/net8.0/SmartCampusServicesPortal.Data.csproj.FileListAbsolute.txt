@@ -11,3 +11,16 @@
 /Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/refint/SmartCampusServicesPortal.Data.dll
 /Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/SmartCampusServicesPortal.Data.pdb
 /Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/ref/SmartCampusServicesPortal.Data.dll
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/bin/Debug/net8.0/SmartCampusServicesPortal.Data.deps.json
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/bin/Debug/net8.0/SmartCampusServicesPortal.Data.dll
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/bin/Debug/net8.0/SmartCampusServicesPortal.Data.pdb
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/SmartCampusServicesPortal.Data.csproj.AssemblyReference.cache
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/SmartCampusServicesPortal.Data.GeneratedMSBuildEditorConfig.editorconfig
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/SmartCampusServicesPortal.Data.AssemblyInfoInputs.cache
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/SmartCampusServicesPortal.Data.AssemblyInfo.cs
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/SmartCampusServicesPortal.Data.csproj.CoreCompileInputs.cache
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/SmartCampusServicesPortal.Data.sourcelink.json
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/SmartCampusServicesPortal.Data.dll
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/refint/SmartCampusServicesPortal.Data.dll
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/SmartCampusServicesPortal.Data.pdb
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/Debug/net8.0/ref/SmartCampusServicesPortal.Data.dll

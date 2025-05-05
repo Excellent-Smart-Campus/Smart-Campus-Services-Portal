@@ -144,17 +144,32 @@ function Register() {
 
                             <ButtonToolbar  className="button-toolbar">
                                 {step > 1 && (
-                                    <CustomButton mybtn={'mybtn'} handle={handleBack} label={'Back'} appearance={"primary"} />
+                                    <CustomButton
+                                        handle={handleBack}
+                                        label={'Back'}
+                                        variant={'contained'}
+                                        color={'primary'}
+                                    />
                                 )}
                                 {step < 3 && (
-                                    <CustomButton mybtn={'mybtn'} handle={handleNext} label={'Next'} appearance="primary"/>
+                                    <CustomButton
+                                        handle={handleNext}
+                                        label={'Next'}
+                                        variant={'contained'}
+                                        color={'primary'}
+                                    />
                                 )}
                                 {step === 3 && (
-                                    <CustomButton mybtn={'mybtn'} handle={handleSubmit} label={'Submit'} appearance="primary" />
+                                    <CustomButton
+                                        handle={handleSubmit}
+                                        label={'Submit'}
+                                        variant={'contained'}
+                                        color={'primary'}
+                                    />
                                 )}
                             </ButtonToolbar>
                             <p>Already have an account click
-                                <CustomButton mybtn={'links'} appearance={"link"}
+                                <CustomButton color={'primary'}
                                     handle={()=> navigate(constantRoutes.auth.login)} label={'here!'}/>
                             </p>
                         </Panel>

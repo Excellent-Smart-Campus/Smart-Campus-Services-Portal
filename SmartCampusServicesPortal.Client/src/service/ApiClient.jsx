@@ -10,7 +10,6 @@ class ApiClient {
         });
         this.cache = {};
     }
-
     async callApi(path, method, { cacheResponse = true, data = null, params = null } = {}) {
         const cacheKey = this.buildCacheKey(path, params);
 
@@ -37,8 +36,8 @@ class ApiClient {
         const searchParams = new URLSearchParams(params).toString();
         return `${path}?${searchParams}`;
     }
-    async getUser() {
-        return await this.callApi('/api/auth/getUser', 'GET',{ cacheResponse: true });
+    async getProfile() {
+        return await this.callApi('/api/auth/userProfile', 'GET',{ cacheResponse: false });
     }
     async getUserTitles() {
         return await this.callApi('/api/auth/getUserTitles', 'GET',{ cacheResponse: true });
@@ -54,11 +53,19 @@ class ApiClient {
             params: courseId ? { courseId } : null
         });
     }
-
     async getSubjectAndCourseById(courseId) {
         return await this.callApi('/api/education/course/subjectsAndCourse', 'GET', {
             params: courseId ? { courseId } : null
         });
+    }
+    async getTimeTable(){
+        return await this.callApi('/api/education/course/timetable', 'GET');
+    }
+    async getEnrolledSubject(){
+        return await this.callApi('/api/education/course/enrolledSubject', 'GET');
+    }
+    async getUserAuthenticated(){
+        return await this.callApi('/api/auth/userAuthenticated', 'GET',{ cacheResponse: false });
     }
     async logout() {
         return await this.callApi('/api/auth/logout', 'POST', { cacheResponse: false });

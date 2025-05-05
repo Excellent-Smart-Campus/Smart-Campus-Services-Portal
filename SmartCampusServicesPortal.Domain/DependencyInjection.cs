@@ -12,10 +12,14 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddDomain(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("SMARTCAMPUSDATABASE");       
+        var connectionString = configuration.GetConnectionString("SmartCampusDb");  
+        
         SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
         services.AddScoped(_ => new SecurityRepository(connectionString));
-        
+        services.AddScoped(_ => new StakeholderRepository(connectionString));
+        services.AddScoped(_ => new EducationRepository(connectionString));
+        services.AddScoped<StakeholderManager>();
+        services.AddScoped<EducationManager>();
         return services;
     }
 }

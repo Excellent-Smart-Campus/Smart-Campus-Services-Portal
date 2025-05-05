@@ -1,16 +1,17 @@
 import React from 'react'
-import { Button } from 'rsuite'
+import { Button } from '@mui/material'
 
 export const CustomButton = ((props) => {
-    const { handle, label, appearance, mybtn } = props;
+    const { handle, label, variant, loading, color} = props;
     return (
-        
-        <Button 
-            className={`${mybtn} responsive-button`} 
-            onClick={handle} 
-            appearance={appearance}
-            block
-        >
+        <Button
+            loadingIndicator="Loading…"
+            size="large"
+            loading={loading}
+            color={color}
+            onClick={handle}
+            variant={variant}
+            >
             {label}
         </Button>
     )

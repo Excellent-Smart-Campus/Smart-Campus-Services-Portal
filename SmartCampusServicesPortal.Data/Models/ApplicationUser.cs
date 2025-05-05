@@ -52,23 +52,8 @@ public class ApplicationUser: IIdentity
     /// <summary>
     ///  If a user is IsVerified or not
     /// </summary>
-    public virtual bool isLocked { get; set; }
-
-    /// <summary>
-    ///  Gets or sets the groupActions.
-    /// </summary>
-    public bool IsNewUser { get; set; }
-
-    /// <summary>
-    ///  Gets or sets the user TitleId.
-    /// </summary>
-    public int TitleId { get; set; }
-
-    /// <summary>
-    ///  Gets or sets the user RoleId.
-    /// </summary>
-    public int RoleId { get; set; }
-
+    public virtual bool IsLocked { get; set; }
+    
     /// <summary>
     ///  Gets or sets the groupActions.
     /// </summary>

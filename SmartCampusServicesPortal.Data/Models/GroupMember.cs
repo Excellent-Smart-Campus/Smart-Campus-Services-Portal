@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace SmartCampusServicesPortal.Data.Models;
 
 public class GroupMember
@@ -6,6 +8,7 @@ public class GroupMember
 
     public string Description { get; set; }
 
+    [JsonIgnore]
     public int StakeholderId { get; set; }
 
     public string UserName { get; set; }

@@ -6,7 +6,7 @@ public class ErrorMessagesConstant
     public const string UserAlreadyLoggedIn = "User is already logged in.";
     public const string NoUserFound = "No user found with that email.";
     public const string NoPermissionToLogIn = "You do not have permission to log into the system.";
-    public const string AccountNotVerified = "Thanks for registering. \n\n The administrator will verify your registration in the next 24 hours to ensure quality and that no duplications exist. Hold on, almost there...";
+    public const string AccountLocked = "Your account has been locked, Please contact support to unlock your account.";
     public const string InvalidPassword = "Invalid password.";
     public const string PasswordUpdateFailed = "Unable to add password, Please try again later.";
     public const string ForgotPasswordOtpFailed = "Unable to process forgot password request. Please try again later.";
