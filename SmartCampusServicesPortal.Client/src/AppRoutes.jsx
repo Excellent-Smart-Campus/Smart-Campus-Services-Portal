@@ -66,7 +66,7 @@ export const AppRoutes = (
                 <Route index element={<AdminIndex />} />
                 <Route path={constantRoutes.protected.admin.manageUserAndGroups} element={<ManageUserAndGroups />} />
                 <Route path={constantRoutes.protected.admin.lockedUsers} element={<ManageLockedUsers />} />
-                <Route path={constantRoutes.protected.admin.manageMaintenance} element={<ManageLockedUsers/>} />
+                <Route path={constantRoutes.protected.admin.manageMaintenance} element={<ManageMaintenance/>} />
                 <Route path={constantRoutes.protected.admin.viewGroup(':groupId')} element={<ManageGroup />} /> 
                 <Route path={constantRoutes.protected.admin.viewUser(':userId')} element={<ManageUser />} />  
             </Route>

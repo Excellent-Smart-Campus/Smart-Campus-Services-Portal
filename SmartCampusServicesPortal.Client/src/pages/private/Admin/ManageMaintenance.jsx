@@ -3,7 +3,7 @@ import { Box, Tabs, Tab, CardActions, useMediaQuery, Card, CardContent, Typograp
 import { constantRoutes } from "@/utils/constantRoutes.jsx";
 import { useNavigate } from "react-router-dom";
 import { ButtonToolbar } from 'rsuite';
-import { usersAndGroupsType } from "@/utils/constants.jsx";
+import { maintenanceTypes } from "@/utils/constants.jsx";
 import { useAdmin } from  "@/context/AdminContext.jsx";
 import { useTheme } from '@mui/material/styles';
 import { encodeId } from '@/utils/hashHelper';
@@ -18,19 +18,17 @@ const ManageMaintenance = () => {
     const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const [value, setValue] = useState(usersAndGroupsType.Users);
+    const [value, setValue] = useState(maintenanceTypes.Open);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     useEffect(() => {
         const fetchData = async () => {
-            if (value === usersAndGroupsType.Users) {
-                console.log("users");
-                await fetchAllUsers();
-            } else if (value === usersAndGroupsType.Groups) {
-                console.log("group");
-                await fetchGroups();
+            if (value === maintenanceTypes.Open) {
+
+            } else if (value === maintenanceTypes.Closed) {
+
             }
         };
 
@@ -38,20 +36,11 @@ const ManageMaintenance = () => {
     }, [value]);
 
     const handleUserClick = (userId) => {
-        navigate(constantRoutes.protected.admin.viewUser(encodeId(userId)))
     };
 
     const handleGroupClick = (groupId) => {
-        navigate(constantRoutes.protected.admin.viewGroup(encodeId(groupId)))
     };
-
-    const handleAddClick = () => {
-        if (value === usersAndGroupsType.Users) {
-            console.log("users");
-        } else if (value === usersAndGroupsType.Groups) {
-            console.log("group");
-        }
-    }
+    
     const renderUsers = () => {
         return isMobile ? (
             <Box display="flex" flexDirection="column" gap={2}>
@@ -152,8 +141,8 @@ const ManageMaintenance = () => {
     }
 
     const tabData = [
-        { label: 'Users', content: renderUsers(), key: usersAndGroupsType.Users },
-        { label: 'Groups', content: renderGroups(), key: usersAndGroupsType.Groups }
+        { label: 'Open', content: renderUsers(), key: maintenanceTypes.Open },
+        { label: 'Closed', content: renderGroups(), key: maintenanceTypes.Closed }
     ];
 
     return (
