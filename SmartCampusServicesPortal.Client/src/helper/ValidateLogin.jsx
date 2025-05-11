@@ -1,12 +1,13 @@
 import { Schema} from 'rsuite';
+import {errorMessages} from "@/utils/errorMessages.jsx";
 
 const { StringType } = Schema.Types;
 
 export const model = Schema.Model({
     email: StringType()
-        .isEmail('Please enter a valid email address.')
-        .isRequired('This field is required.'),
+        .isEmail(errorMessages.email.invalid)
+        .isRequired(errorMessages.required),
 
-    password: StringType().isRequired('This field is required.'),
+    password: StringType().isRequired(errorMessages.required),
 });
   

@@ -26,6 +26,7 @@ function CustomAccordion({ title, icon, expandIconText = "View All", children })
                             transform: 'none !important', // prevent any MUI rotation
                             transition: 'none',
                         }}
+                        color="secondary"
                     >
                         {expandIconText}
                     </Typography>
@@ -42,7 +43,7 @@ function CustomAccordion({ title, icon, expandIconText = "View All", children })
             >
                 <Box display="flex" alignItems="center" gap={1}>
                     {icon && <Box>{icon}</Box>}
-                    <Typography component="span">{title}</Typography>
+                    <Typography color="secondary" component="span">{title}</Typography>
                 </Box>           
             </AccordionSummary>
 

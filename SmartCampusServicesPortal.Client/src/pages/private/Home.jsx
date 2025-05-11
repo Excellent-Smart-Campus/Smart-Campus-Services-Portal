@@ -1,28 +1,33 @@
-import { Box, Typography, Card } from '@mui/material';
-import { useAuth } from "@/context/AuthContext.jsx";
-import StudentIndex from "@/pages/private/Student/StudentIndex.jsx";
-import LecturerIndex from "@/pages/private/Lecturer/LecturerIndex.jsx";
-import AccessGuard from "@/components/AccessGuard.jsx";
+import { Box} from '@mui/material';
 import { userActions } from "@/utils/authEnums.jsx";
+import { useAuth } from "@/context/AuthContext.jsx";
+import { constantRoutes } from "@/utils/constantRoutes.jsx";
+import { Navigate } from "react-router-dom";
+import AccessGuard from "@/components/AccessGuard.jsx";
 
-function Home() {
-    const { authenticated, user} = useAuth();
-    const renderStudentView = () => ( <StudentIndex /> );
-    const renderLecturerView = () => ( <LecturerIndex />);
+import NotFound from "@/pages/NotFound.jsx";
+
+function Home() { 
+    const { currentDashboard } = useAuth();
     
+    const renderDashboard = () => {
+        switch (currentDashboard) {
+            case userActions.STUDENT_DASHBOARD:
+                return <Navigate to={constantRoutes.protected.student.index} />
+            case userActions.LECTURE_DASHBOARD:
+                return <Navigate to={constantRoutes.protected.lecturer.index} />
+            case userActions.ADMIN_DASHBOARD:
+                return <Navigate to={constantRoutes.protected.admin.index} />
+            default:
+                return <NotFound />;
+        }
+    };
+
     return (
         <Box sx={{ flexGrow: 1 }}>
-            {/* <AccessGuard accessKey={userActions.STUDENT_DASHBOARD}> */}
-                {user.description === 'Students' && renderStudentView()}
-            {/*</AccessGuard> */}
-            
-            {/*<AccessGuard accessKey={userActions.LECTURER_DASHBOARD}>*/}
-                {user.description === 'Lecturer' && renderLecturerView()}
-            {/*</AccessGuard>*/}
-
-            {/*<AccessGuard accessKey={userActions.LECTURER_DASHBOARD}>
-                {user.description === 'ADMIN_DASHBOARD' && renderLecturerView()}
-            </AccessGuard>*/}
+            <AccessGuard accessKey={currentDashboard}>
+                {renderDashboard()}
+            </AccessGuard>
         </Box>
     );
 }

@@ -8,6 +8,11 @@ public class CustomClaims
     public const string StakeholderId = "StakeholderId";
 
     /// <summary>
+    /// The users stakeholder type id.
+    /// </summary>
+    public const string StakeholderTypeId = "StakeholderTypeId";
+
+    /// <summary>
     /// The users full name
     /// </summary>
     public const string Name = "Name";

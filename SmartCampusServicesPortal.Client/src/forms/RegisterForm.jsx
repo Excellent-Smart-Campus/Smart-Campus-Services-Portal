@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Form, ButtonToolbar, Row, SelectPicker, CheckPicker, FlexboxGrid} from 'rsuite';
 import { TextField } from '@/components/TextField';
-import { CustomButton } from '@/components/CustomButton';
 import { mapCoursesToOptions, mapSubjectsToOptions} from "@/utils/mapper.jsx";
 
 export const RegisterForm = ((props) => {
@@ -17,10 +16,10 @@ export const RegisterForm = ((props) => {
     return (
         <>
             <Form fluid ref={formRef} onChange={setFormValue} formValue={formValue} model={model}>
-                <Row className="show-grid" gutter={24} >
+                <Row className="show-grid" gutter={24} style={{marginBlock: '2em'}} >
                     {step === 1 && (
                         <>
-                            <Row gutter={24}>
+                            <Row gutter={24} style={{marginBlock: '1rem', width:'100%'}}>
                                 <Col xs={24} sm={24} md={12} lg={12} className="text">
                                     <Form.Group controlId="course">
                                         <Form.ControlLabel>Title</Form.ControlLabel>
@@ -36,28 +35,28 @@ export const RegisterForm = ((props) => {
                                 </Col>
                             </Row>
                             
-                            <Col xs={24} sm={24} md={12} lg={12} className="text">
-                                <TextField name="firstname" label="First Name" />
+                            <Col xs={24} sm={24} md={12} lg={12} style={{marginBlock: '1rem'}} className="text">
+                                <TextField name="firstname" label="First Name" type="text"  />
                             </Col>
         
-                            <Col xs={24} sm={24} md={12} lg={12} className="text">
-                                <TextField name="lastname" label="Last Name" />
+                            <Col xs={24} sm={24} md={12} lg={12} style={{marginBlock: '1rem'}} className="text">
+                                <TextField name="lastname" label="Last Name" type="text" />
                             </Col>
                             
-                            <Col xs={24} sm={24} md={24} lg={24} className="text">
-                                <TextField name="email" label="Email" />
+                            <Col xs={24} sm={24} md={24} lg={24} style={{marginBlock: '1rem'}} className="text">
+                                <TextField name="email" label="Email" type="email"  />
                             </Col>
         
-                            <Col xs={24} sm={24} md={24} lg={24} className="text">
-                                <TextField name="phone" label="Phone Number" />
+                            <Col xs={24} sm={24} md={24} lg={24} style={{marginBlock: '1rem'}} className="text">
+                                <TextField name="phone" label="Phone Number" type="tel"  />
                             </Col>
         
-                            <Col xs={24} sm={24} md={12} lg={12} className="text">
-                                <TextField name="password" label="Password" type="password" autoComplete="off" />
+                            <Col xs={24} sm={24} md={12} lg={12} style={{marginBlock: '1rem'}} className="text">
+                                <TextField name="password" label="Password" type="password" showEye={false} showProgress={true} autoComplete="off" />
                             </Col>
         
-                            <Col xs={24} sm={24} md={12} lg={12} >
-                                <TextField name="confirmPassword" label="Verify password" type="password" autoComplete="off" />
+                            <Col xs={24} sm={24} md={12} lg={12}  style={{marginBlock: '1rem'}}>
+                                <TextField name="confirmPassword" label="Verify password" showEye={false} showProgress={true} type="password" autoComplete="off" />
                             </Col>
                         </>
                     )}

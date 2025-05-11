@@ -15,12 +15,23 @@ export const constantRoutes = {
         notification: '/notification/',
         admin: {
             index: '/admin/',
-            users: '/admin/users/',
-            addUser: '/admin/add-user/',
-            editUser: '/admin/edit-user/:id',
+            manageUserAndGroups: '/admin/manage-users-and-groups/',
+            lockedUsers: '/admin/locked-users/',
+            manageMaintenance: '/admin/manage-maintenance/',
+            viewGroup: groupId => `/admin/view-group/${groupId}/`,
+            viewUser: userId => `/admin/view-user/${userId}/`,
         },
         student:{
-            bookingRequestSchedule: type =>`/student/booking/${type}`,
+            index: '/student/',
+            maintenanceRequest:'booking/maintenance-request/',
+            bookRoom: 'book-room/',
+            lecturerAppointment: 'lecturer-appointment/',
+        },
+        lecturer:{
+            index: '/lecture/',
+            maintenanceRequest:'booking/maintenance-request',
+            bookRoom: 'book-room/',
+            manageAppointents: 'manage-appointments/',
         }
     }
 }

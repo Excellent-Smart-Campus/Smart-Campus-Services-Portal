@@ -124,6 +124,7 @@ public class ApplicationUserStore
         return new ApplicationUser
         {
             StakeholderId = securityUser.StakeholderId,
+            StakeholderTypeId = securityUser.StakeholderTypeId,
             Name = securityUser.Name,
             UserName = securityUser.Username,
             NormalizedUserName = securityUser.Username,
@@ -150,6 +151,7 @@ public class ApplicationUserStore
         return new ApplicationUser
         {
             StakeholderId = securityUser.StakeholderId,
+            StakeholderTypeId = securityUser.StakeholderTypeId,
             Name = securityUser.Name,
             UserName = securityUser.Username,
             NormalizedUserName = securityUser.Username,
@@ -225,7 +227,8 @@ public class ApplicationUserStore
                 new (CustomClaims.StakeholderId, dbUser.StakeholderId.ToString()),
                 new (CustomClaims.Name, dbUser.Name.Trim()),
                 new (CustomClaims.IsDeleted, dbUser.IsDeleted.ToString()),
-                new (CustomClaims.IsLocked, dbUser.IsLocked.ToString())
+                new (CustomClaims.IsLocked, dbUser.IsLocked.ToString()),
+                new (CustomClaims.StakeholderTypeId, dbUser.StakeholderTypeId.ToString())
             };
 
         if (dbUser.GroupActions != null && dbUser.GroupActions.Count > 0)
@@ -348,6 +351,7 @@ public class ApplicationUserStore
         return new ApplicationUser
         {
             StakeholderId = securityUser.StakeholderId,
+            StakeholderTypeId = securityUser.StakeholderTypeId,
             Name = securityUser.Name,
             UserName = securityUser.Username,
             NormalizedUserName = securityUser.Username,

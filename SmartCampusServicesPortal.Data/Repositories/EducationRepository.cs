@@ -79,8 +79,21 @@ public class EducationRepository(string connectionString) : BaseRepository(conne
             commandType: CommandType.StoredProcedure,
             param: queryParameters);
     }
-
-    public async Task<Course> GetStakeholderCourseAndSubjectsAsyn(int stakeholderId, StakeholderRelationshipType? stakeholderRelationshipType){
+    
+    public async Task<IEnumerable<SubjectLecture>> GetRegisteredSubjectLecturersAsync(int subjectId)
+    {
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+        
+        var queryParameters = new DynamicParameters();
+        queryParameters.Add("@subjectId", subjectId);
+        
+        return await connection.QueryAsync<SubjectLecture>(
+            "edu.GetRegisteredSubjectLecturers",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters);
+    }
+    
+    public async Task<IEnumerable<Course>> GetStakeholderCourseAndSubjectsAsync(int stakeholderId, StakeholderRelationshipType? stakeholderRelationshipType){
         await using SqlConnection connection = await GetOpenConnectionAsync();
         
         var queryParameters = new DynamicParameters();
@@ -122,8 +135,8 @@ public class EducationRepository(string connectionString) : BaseRepository(conne
             param: queryParameters,
             commandTimeout: DefaultTimeout
         );
-        
-        return courseSubjectsDictionary.Values.FirstOrDefault();
+
+        return courseSubjectsDictionary.Values;
     }
 
     public async Task<TimeTable> GetTimeTableAsync(int stakeholderId, StakeholderRelationshipType? stakeholderRelationshipType){
@@ -135,9 +148,9 @@ public class EducationRepository(string connectionString) : BaseRepository(conne
         
         Dictionary<int, TimeTable> timeTableDictionary = new Dictionary<int, TimeTable>();
         
-        await connection.QueryAsync<TimeTable, SubjectSchedule, TimeTable>(
+        await connection.QueryAsync<TimeTable, WeekDays, Schedule, TimeTable>(
              "edu.GetTimeTable",
-            (timeTable, subjectSchedule) =>
+            (timeTable, weekdays, schedule) =>
             {
                 if (!timeTableDictionary.TryGetValue(timeTable.CourseId, out TimeTable timeTableInstance))
                 {
@@ -145,32 +158,44 @@ public class EducationRepository(string connectionString) : BaseRepository(conne
                     timeTableDictionary.Add(timeTable.CourseId, timeTableInstance);
                 }
                 
-                SubjectSchedule subjectScheduleInstance = timeTableInstance.SubjectSchedules
-                    .FirstOrDefault(i => i.SubjectId == subjectSchedule.SubjectId);
-                
-                if (subjectScheduleInstance == null)
+                WeekDays weekDaysInstance = timeTableInstance.WeekDays
+                    .FirstOrDefault(i => i.DayOfWeekTypeId == weekdays.DayOfWeekTypeId);
+
+                if (weekDaysInstance == null)
                 {
-                    subjectScheduleInstance = new SubjectSchedule
+                    weekDaysInstance = new WeekDays
                     {
-                        SubjectId = subjectSchedule.SubjectId,
-                        SubjectCode = subjectSchedule.SubjectCode,
-                        SubjectName = subjectSchedule.SubjectName,
-                        TimetableId = subjectSchedule.TimetableId,
-                        DayOfWeekType = subjectSchedule.DayOfWeekType,
-                        DayOfWeekTypeId = subjectSchedule.DayOfWeekTypeId,
-                        EndTime = subjectSchedule.EndTime,
-                        StartTime = subjectSchedule.StartTime, 
-                        RoomId  = subjectSchedule.RoomId,
-                        RoomNumber = subjectSchedule.RoomNumber,
-                        RoomType = subjectSchedule.RoomType,
-                        Location = subjectSchedule.Location                  
+                        DayOfWeekTypeId = weekdays.DayOfWeekTypeId,
+                        DayOfWeekType = weekdays.DayOfWeekType
+                    };
+                    timeTableInstance.WeekDays.Add(weekDaysInstance);  
+                }
+                
+                Schedule scheduleInstance = timeTableInstance.WeekDays
+                    .FirstOrDefault(i => i.DayOfWeekTypeId == weekdays.DayOfWeekTypeId)
+                    .Schedules.FirstOrDefault(s => s.SubjectId == schedule.SubjectId);
+                
+                if (scheduleInstance == null)
+                {
+                    scheduleInstance = new Schedule
+                    {
+                        SubjectId = schedule.SubjectId,
+                        SubjectCode = schedule.SubjectCode,
+                        SubjectName = schedule.SubjectName,
+                        TimetableId = schedule.TimetableId,
+                        EndTime = schedule.EndTime,
+                        StartTime = schedule.StartTime, 
+                        RoomId  = schedule.RoomId,
+                        RoomNumber = schedule.RoomNumber,
+                        RoomType = schedule.RoomType,
+                        Location = schedule.Location                  
                     };
                     
-                    timeTableInstance.SubjectSchedules.Add(subjectScheduleInstance);
+                    weekDaysInstance.Schedules.Add(scheduleInstance);
                 }
                 return timeTable;
             },
-            splitOn: "SubjectId",
+            splitOn: "DayOfWeekTypeId, TimetableId",
             commandType: CommandType.StoredProcedure,
             param: queryParameters,
             commandTimeout: DefaultTimeout

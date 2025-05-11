@@ -1,28 +1,31 @@
 import  {useState, useEffect, useRef } from 'react';
 import { Container, Col, Content, Panel, ButtonToolbar, FlexboxGrid, Steps } from 'rsuite';
-import { RegisterForm } from '@/components/RegisterForm.jsx';
+import { RegisterForm } from '@/forms/RegisterForm.jsx';
 import { CustomButton } from "@/components/CustomButton.jsx";
 import { useNavigate } from "react-router-dom";
 import { model } from '@/helper/ValidateRegister';
-import { Success, Error } from '@/helper/Toasters.jsx';
 import { constantRoutes } from "@/utils/constantRoutes";
-import ApiClient from '@/service/ApiClient';
-import {errorMessages} from "@/utils/errorMessages";
+import { getErrorMessageFromResponse } from '@/utils/getErrorMessageFromResponse.jsx';
+import { Error, Success } from '@/helper/Toasters.jsx'; 
 import { mapTitlesToOptions } from "@/utils/mapper.jsx";
+import { useAuth } from '@/context/AuthContext.jsx';
+import ApiClient from '@/service/ApiClient';
 
 function Register() {
     const formRef = useRef();
+    const { setLoading } = useAuth();
     const [step, setStep] = useState(1);
-    const [errors, setErrors] = useState({});
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [courses, setCourses] = useState([]);
     const [titles, setTitles] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const navigate = useNavigate();
-    const [formValue, setFormValue] = useState({title: 0, firstname: '', lastname: '',
-        email: '', phone: '', password: '', confirmPassword: '', subjects: [], course: 0
+    const [formValue, setFormValue] = useState({title: null, firstname: '', lastname: '',
+        email: '', phone: '', password: '', confirmPassword: '', subjects: [], course: null
     });
+
     useEffect(() => {
+        setLoading(false);
         const fetchData = async () => {
             try {
                 const courses = await ApiClient.instance.getCourseById(null);
@@ -57,12 +60,10 @@ function Register() {
             fieldsToValidate = ['subjects', 'course'];
         }
 
-        // Manually validate only these fields
         const form = formRef.current;
         const checkResults = fieldsToValidate.map(field => form.checkForField(field));
 
         if (checkResults.includes(false)) {
-            // If any field validation failed, don't proceed
             return;
         }       
         setStep(prev => prev + 1);
@@ -71,7 +72,9 @@ function Register() {
         e.preventDefault();
         setStep(prev => prev - 1);
     };
+
     const handleSubmit = async e => {
+        setLoading(true);
         e.preventDefault();
         if (!formRef.current.check()) {
             return;
@@ -91,33 +94,23 @@ function Register() {
 
         try {
             const response = await ApiClient.instance.register(userData);
-
-            if (!response.success) {
-                if (response.errors) {
-                    const allErrors = Object.values(response.errors).flat().join(' -- ');
-                    setErrors({ general: allErrors });
-                    return;
-                } else {
-                    setErrors({ general: response.message });
-                    return;
-                }
-            }
-
-            setErrors({});
+            Success(response.message);
+            navigate(constantRoutes.auth.login);
         } catch(e) {
-            console.log(e);
-            setErrors({ general: errorMessages.error });
+            Error(getErrorMessageFromResponse(e));
+        }finally {
+            setLoading(false);
         }
     };
 
     return (
         <Container className='login'>
             <Content className='siginForm'>
-                <FlexboxGrid justify="center">
+                <FlexboxGrid justify="center" align="middle" className={"min-height"}>
                     <FlexboxGrid.Item as={Col} colspan={22} md={15} lg={12} xl={10}>
                         <Panel header="Student Register" bordered>
-                            {/* Stepper */}
-                            <Steps current={step} style={{marginBottom: 20}}>
+         
+                            <Steps small current={step} style={{marginBottom: 20}}>
                                 <Steps.Item title="Personal Info"/>
                                 <Steps.Item title="Subjects & Course"/>
                                 <Steps.Item title="Confirm"/>
@@ -135,12 +128,6 @@ function Register() {
                                 subjectOptions={subjects}
                        
                             />
-
-                            {errors.general && (
-                                <div className='dropdown-errors'>
-                                    <h4 className='error'>{errors.general}</h4>
-                                </div>
-                            )}
 
                             <ButtonToolbar  className="button-toolbar">
                                 {step > 1 && (
@@ -169,7 +156,7 @@ function Register() {
                                 )}
                             </ButtonToolbar>
                             <p>Already have an account click
-                                <CustomButton color={'primary'}
+                                <CustomButton color={'secondary'}
                                     handle={()=> navigate(constantRoutes.auth.login)} label={'here!'}/>
                             </p>
                         </Panel>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppBar, Box, useScrollTrigger, Slide, Toolbar, Typography, Badge, MenuItem, Menu} from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, Badge, MenuItem, Menu} from '@mui/material';
 import { useAuth } from '@/context/AuthContext.jsx';
 import { useNavigate } from "react-router-dom";
 import { constantRoutes } from "@/utils/constantRoutes.jsx";
@@ -8,18 +8,14 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const Navigation = ({ handleDrawerToggle }) => {
-    const {authenticated, user, logout, userPermissions} = useAuth();
-    const [open, setOpen] = useState(false);
+const Navigation = () => {
+    const {user, logout} = useAuth();
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const navigate = useNavigate();
 
-    const handleProfileMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
@@ -83,34 +79,16 @@ const Navigation = ({ handleDrawerToggle }) => {
             </MenuItem>
         </Menu>
     );
-
-    { /* <IconButton
-         color="inherit"
-         aria-label="open drawer"
-         edge="start"
-         onClick={handleDrawerToggle}
-         sx={[
-             {mr: 2,
-             },
-             open && {display: 'none'},
-         ]}
-
-        <MenuIcon />
-    </IconButton>
-         >*/
-    }
     
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="static" disableElevation>
+            <AppBar position="static">
                 <Toolbar>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
-                        onClick={handleDrawerToggle}
                         edge="start"
-                        sx={{ mr: 2, display: { sm: 'none' } }}
-                        
+                        sx={{ mr: 2, display: { sm: 'none' } }} 
                     >
                         <MenuIcon/>
                     </IconButton>

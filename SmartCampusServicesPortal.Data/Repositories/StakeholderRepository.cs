@@ -87,9 +87,12 @@ public class StakeholderRepository(string connectionString) : BaseRepository(con
         var queryParameters = new DynamicParameters();
         queryParameters.Add("@stakeholderId", stakeholderId);
         
-        return await connection.QueryFirstOrDefaultAsync<StakeholderPerson>(
+        var s =  await connection.QueryFirstOrDefaultAsync<StakeholderPerson>(
             "sh.GetStakeholderPerson",
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters);
+
+        return s;
     }
     
     public async Task<Stakeholder> SetStakeholder(Stakeholder stakeholder)

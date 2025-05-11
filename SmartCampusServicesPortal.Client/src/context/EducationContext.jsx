@@ -2,7 +2,7 @@ import { createContext, useContext, useCallback, useState, useEffect } from 'rea
 import PropTypes from 'prop-types';
 import ApiClient from "@/service/ApiClient.jsx";
 import { useAuth } from "@/context/AuthContext";
-import {userActions} from "@/utils/authEnums.jsx"; // adjust path if needed
+import { userActions } from "@/utils/authEnums.jsx";
 
 const EducationContext = createContext();
 export const useEducation = () => {
@@ -10,12 +10,10 @@ export const useEducation = () => {
 };
 
 export function EducationProvider({ children }){
-    const { authenticated, canAccess} = useAuth();
-    const [loading, setLoading] = useState(true);
+    const { authenticated, canAccess, setLoading} = useAuth();
     const [enrolled, setEnrolled] = useState([]);
     const [timeTable, setTimeTable] = useState({});
     const [enrolledError, setEnrolledError] = useState(null);
-    const [timeTableError, setTimeTableError] = useState(null);
     
     const getEnrolled = useCallback(async () => {
         try {
@@ -27,12 +25,8 @@ export function EducationProvider({ children }){
     }, []);
 
     const getTimeTable = useCallback(async () => {
-        try {
-            const response = await ApiClient.instance.getTimeTable();
-            setTimeTable(response);
-        } catch (error) {
-            setEnrolledError(error?.message || "An error occurred while fetching the timetable.");
-        }
+        const response = await ApiClient.instance.getTimeTable();
+        setTimeTable(response);
     }, []);
 
     const getSubjectDetails = useCallback(async  () => {
@@ -52,23 +46,16 @@ export function EducationProvider({ children }){
         };
 
         if (authenticated) {
-            const viewTimeTable = canAccess(userActions.VIEW_TIMETABLE);
-            const enrolledSubject = canAccess(userActions.STUDENT_ENROLLMENT_SUBJECT);
-
-         
-                fetchData();
-      
+            fetchData();
         }
     }, [authenticated, getEnrolled, getTimeTable]);
     
     return (
         <EducationContext.Provider
             value={{
-                loading,
                 enrolled,
                 timeTable,
-                enrolledError,
-                timeTableError
+                enrolledError
             }}
         >
             {children}

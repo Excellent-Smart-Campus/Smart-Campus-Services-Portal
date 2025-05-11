@@ -19,7 +19,7 @@
     <PackageJsonDependenciesConfig Condition="$(PackageJsonDependenciesConfig) == ''">^3.3.12</PackageJsonDependenciesConfig>
     <PackageJsonDependenciesReact Condition="$(PackageJsonDependenciesReact) == ''">^19.0.0</PackageJsonDependenciesReact>
     <PackageJsonDependenciesReactDom Condition="$(PackageJsonDependenciesReactDom) == ''">^19.0.0</PackageJsonDependenciesReactDom>
-    <PackageJsonDependenciesReactToastify Condition="$(PackageJsonDependenciesReactToastify) == ''">^9.1.3</PackageJsonDependenciesReactToastify>
+    <PackageJsonDependenciesReactToastify Condition="$(PackageJsonDependenciesReactToastify) == ''">^11.0.5</PackageJsonDependenciesReactToastify>
     <PackageJsonDependenciesRsuite Condition="$(PackageJsonDependenciesRsuite) == ''">^5.80.1</PackageJsonDependenciesRsuite>
     <PackageJsonDependenciesSmartcampusservicesportalClient Condition="$(PackageJsonDependenciesSmartcampusservicesportalClient) == ''">file:</PackageJsonDependenciesSmartcampusservicesportalClient>
     <PackageJsonDependenciesStyledComponents Condition="$(PackageJsonDependenciesStyledComponents) == ''">^6.1.17</PackageJsonDependenciesStyledComponents>

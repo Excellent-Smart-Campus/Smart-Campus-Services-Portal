@@ -2,11 +2,11 @@ import React from 'react'
 import { Button } from '@mui/material'
 
 export const CustomButton = ((props) => {
-    const { handle, label, variant, loading, color} = props;
+    const { handle, size = "large", label, variant, loading, color} = props;
     return (
         <Button
             loadingIndicator="Loading…"
-            size="large"
+            size={size}
             loading={loading}
             color={color}
             onClick={handle}

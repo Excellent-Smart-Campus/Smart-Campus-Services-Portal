@@ -5,22 +5,22 @@ const { StringType, NumberType, ArrayType} = Schema.Types;
 
 export const model = Schema.Model({
     title: NumberType()
-        .isRequired(errorMessages.title.required),
-    firstname: StringType().isRequired(errorMessages.firstname.required),
-    lastname: StringType().isRequired(errorMessages.lastname.required),
+        .isRequired(errorMessages.required),
+    firstname: StringType().isRequired(errorMessages.required),
+    lastname: StringType().isRequired(errorMessages.required),
     email: StringType()
         .isEmail(errorMessages.email.invalid)
-        .isRequired(errorMessages.email.required),
+        .isRequired(errorMessages.required),
     phone: NumberType()
-        .isRequired('Contact Number is required'),
+        .isRequired(errorMessages.required),
     password: StringType()
-        .isRequired(errorMessages.password.required)
+        .isRequired(errorMessages.required)
         .proxy(['confirmPassword']),
     confirmPassword: StringType().equalTo('password'),
     course: NumberType()
-        .isRequired('This field is required.'),
+        .isRequired(errorMessages.required),
     subjects: ArrayType()
         .minLength(2, 'Please select at least subjects')
-        .isRequired('This field is required.'),
+        .isRequired(errorMessages.required),
 });
   

@@ -18,8 +18,10 @@ public static class DependencyInjection
         services.AddScoped(_ => new SecurityRepository(connectionString));
         services.AddScoped(_ => new StakeholderRepository(connectionString));
         services.AddScoped(_ => new EducationRepository(connectionString));
+        services.AddScoped(_ => new ServiceRepository(connectionString));
         services.AddScoped<StakeholderManager>();
         services.AddScoped<EducationManager>();
+        services.AddScoped<ServiceManager>();
         return services;
     }
 }

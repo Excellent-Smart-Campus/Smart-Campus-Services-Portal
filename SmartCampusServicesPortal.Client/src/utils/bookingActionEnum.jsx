@@ -1,6 +1,6 @@
 
 export const bookingActionEnum = Object.freeze({
-    BOOKING: 'booking',
-    REQUEST: 'request',
-    SCHEDULE: 'schedule',
+    BOOKING: 'booking-room',
+    REQUEST: 'request-maintenance',
+    SCHEDULE: 'schedule-appointment',
 });

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartCampusServicesPortal.Data.Models;
 using SmartCampusServicesPortal.Domain.Manager;
+using SmartCampusServicesPortal.Server.ViewModels;
 
 namespace SmartCampusServicesPortal.Server.Controller;
 
@@ -40,6 +41,15 @@ public class EducationController : BaseController
         return await _educationManager.GetSubjectsByCourseIdAsync(courseId);
     }
     
+    [HttpGet("subject/subjectLecturers", Name = "getSubjectLecturers")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IEnumerable<SubjectLecture>> GetSubjectsLecturer([FromQuery]int subjectId)
+    {
+        return await _educationManager.GetRegisteredSubjectLecturersAsync(subjectId);
+    }
+    
     [HttpGet("course/subjectsAndCourse", Name = "getSubjectAndCourseById")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -53,16 +63,19 @@ public class EducationController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<TimeTable> getTimetableAsync()
+    public async Task<TimeTable> GetTimetableAsync()
     {
-        return await _educationManager.GetTimeTableAsync(GetStakeholderId());
-    }
+        
+        var res = await _educationManager.GetTimeTableAsync(GetStakeholderId());
 
+        return res;
+    }
+    
     [HttpGet("course/enrolledSubject", Name = "getEnrolledSubject")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<Course> GetEnrolledSubjectAsync()
+    public async Task<IEnumerable<Course>> GetEnrolledSubjectAsync()
     {
         return await _educationManager.GetEnrolledSubjectsAsync(GetStakeholderId());
     }

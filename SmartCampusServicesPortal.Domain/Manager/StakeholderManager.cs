@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using SmartCampusServicesPortal.Data.Enums;
 using SmartCampusServicesPortal.Data.Models;
 using SmartCampusServicesPortal.Data.Repositories;
+using Action = SmartCampusServicesPortal.Data.Models.Action;
 
 namespace SmartCampusServicesPortal.Domain.Manager;
 
@@ -90,5 +91,30 @@ public class StakeholderManager
     public async Task<StakeholderPerson> GetUserProfile(int stakeholderId)
     {
         return await _stakeholderRepository.GetStakeholderPersonAsync(stakeholderId);
+    }
+    
+    public async Task<IEnumerable<User>>  GetAllUsersAsync()
+    {
+        return await _securityRepository.GetAllUsersAsync();
+    }
+    
+    public async Task<IEnumerable<Group>> GetAllGroupAsync(int? groupId)
+    {
+        return await _securityRepository.GetGroupAsync(groupId);
+    }
+    
+    public async Task<IEnumerable<Action>> GetAllActionsAsync()
+    {
+        return await _securityRepository.GetAllActionsAsync();
+    }
+
+    public async Task<List<GroupAction>> GetGroupActionsAsync(int groupdId)
+    {
+       return await _securityRepository.GetGroupActionsById(groupdId);
+    }
+    
+    public async Task<IEnumerable<StakeholderPerson>> GetUserDetailsAsync(int stakeholderId)
+    {
+        return await _securityRepository.GetUserDetailsAsync(stakeholderId);
     }
 }

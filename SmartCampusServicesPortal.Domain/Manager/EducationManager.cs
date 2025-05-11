@@ -25,6 +25,11 @@ public class EducationManager
         return await _educationRepository.GetSubjectAndCourseByIdAsync(subjectId);
     }
     
+    public async Task<IEnumerable<SubjectLecture>> GetRegisteredSubjectLecturersAsync(int subjectId)
+    {
+        return await _educationRepository.GetRegisteredSubjectLecturersAsync(subjectId);
+    }
+    
     public async Task<IEnumerable<Subject>> GetSubjectsByCourseIdAsync(int? courseId)
     {
         return await _educationRepository.GetSubjectsByCourseIdAsync(courseId);
@@ -34,7 +39,7 @@ public class EducationManager
         return await _educationRepository.GetTimeTableAsync(stakeholderId, stakeholderRelationshipType);
     }
 
-    public async Task<Course> GetEnrolledSubjectsAsync(int stakeholderId, StakeholderRelationshipType? stakeholderRelationshipType = null){
-        return await _educationRepository.GetStakeholderCourseAndSubjectsAsyn(stakeholderId, stakeholderRelationshipType);
+    public async Task<IEnumerable<Course>> GetEnrolledSubjectsAsync(int stakeholderId, StakeholderRelationshipType? stakeholderRelationshipType = null){
+        return await _educationRepository.GetStakeholderCourseAndSubjectsAsync(stakeholderId, stakeholderRelationshipType);
     }
 }

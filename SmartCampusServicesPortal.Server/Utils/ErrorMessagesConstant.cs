@@ -2,27 +2,20 @@ namespace SmartCampusServicesPortal.Server.Utils;
 
 public class ErrorMessagesConstant
 {
-    public const string UnexpectedError = "An unexpected error occurred. Please try again later.";
+    public const string UnexpectedError = "Something went wrong. Please try again later.";
     public const string UserAlreadyLoggedIn = "User is already logged in.";
-    public const string NoUserFound = "No user found with that email.";
+    public const string NoUserFound = "No matching account found.";
     public const string NoPermissionToLogIn = "You do not have permission to log into the system.";
-    public const string AccountLocked = "Your account has been locked, Please contact support to unlock your account.";
-    public const string InvalidPassword = "Invalid password.";
-    public const string PasswordUpdateFailed = "Unable to add password, Please try again later.";
-    public const string ForgotPasswordOtpFailed = "Unable to process forgot password request. Please try again later.";
-    public const string ResetPasswordFailed = "Unable to reset password.";
-    public const string PasswordResetSuccess = "Password reset successfully.";
-    public const string ChangePasswordSuccess = "Password changed successfully";
-    public const string OTPIncorrect = "OTP is incorrect.";
-    public const string OTPVerified = "OTP verified successfully.";
-    public const string EmailAlreadyExists = "A user with this email already exists.";
-    public const string RegistrationError = "Unable to register.";
-    public const string RegistrationSuccess = "User registered successfully.";
-    public const string ProfileUpdatedSuccess = "Profile updated successfully.";
-    public const string AddPassword = "Please add your password.";
-    public const string LoginSuccess = "Successfully logged in";
-    public const string OTPVerificationFailed = "OTP verification failed. The operation is invalid.";
-    public const string AddSuccess = "{0} successfully added.";
-    public const string AddFailed = "Failed to add {0}";
-    public const string DescriptionRequired = "The Group is required";
+    public const string AccountLocked = "Your account is locked. Please contact support";
+    public const string ManyAttemptsLockAccount = "Your account has been locked due to too many failed attempts. Please contact support";
+    public const string InvalidCredentials = "Incorrect username or password.";
+    public const string ScheduleSuccess = "Schedule request submitted successfully.";
+    public const string ScheduleError = "Failed to submit schedule request.";
+    public const string EmailAlreadyExists = "An account already exists.";
+    public const string RegistrationError = "Registration failed. Please try again.";
+    public const string RegistrationSuccess = "Registration completed successfully.";
+    public const string LoginSuccess = "You’ve successfully logged in.";
+    public const String AccountStatusSuccess = "Account unblocked successfully, user can login";
+    public const String AccountStatusFailure = " Account Failed to unblock";
+
 }

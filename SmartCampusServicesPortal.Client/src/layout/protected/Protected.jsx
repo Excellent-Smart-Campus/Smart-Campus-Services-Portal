@@ -1,19 +1,12 @@
 import { Navigate, Outlet, useLocation} from "react-router-dom";
-import { useState } from 'react';
 import { useAuth } from "@/context/AuthContext.jsx";
 import { constantRoutes } from "@/utils/constantRoutes.jsx";
-import { Toolbar  } from '@mui/material';
 import { Box } from '@mui/material';
 import Navigation from "@/layout/protected/Navigation.jsx";
 
-export default function Protected({ window }) {
+export default function Protected() {
     const location = useLocation();
     const { authenticated, user} = useAuth();
-    const [mobileOpen, setMobileOpen] = useState(false);
-
-    const handleDrawerToggle = () => {
-        setMobileOpen((prev) => !prev);
-    };
     
     if (!user && !authenticated) {
         return (
@@ -27,7 +20,7 @@ export default function Protected({ window }) {
     
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <Navigation handleDrawerToggle={handleDrawerToggle}/>
+            <Navigation />
 
             <Box sx={{flexGrow: 1, p: { xs: 2, sm: 3 }}}>
                 <Box >

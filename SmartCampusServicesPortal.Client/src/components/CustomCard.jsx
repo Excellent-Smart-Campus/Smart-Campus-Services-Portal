@@ -2,7 +2,7 @@ import { Typography, Card, CardContent, CardActionArea} from '@mui/material';
 
 function CustomCard({ title, description, onClick }) {
     return (
-        <Card>
+        <Card >
             <CardActionArea onClick={onClick}>
                 <CardContent>
                     <Typography variant="h6">{title}</Typography>

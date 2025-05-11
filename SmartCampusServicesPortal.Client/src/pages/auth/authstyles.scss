@@ -1,5 +1,5 @@
 .login{
-  background-color: white;
+
   .siginForm {
     position: absolute;
     left: 0%;
@@ -14,39 +14,17 @@
   .rs-form-group:not(:last-child) {
     margin-bottom: 30px !important;
   }
-  .mybtn {
-    border-radius: 0%;
-  }
-  .links{
-    margin-top: -5px;
-  }
-  .forgot{
-    margin-top: 1em;
-  }
-  .text{
-    margin-bottom: 35px;
-  }
-  .header{
-    text-align: center;
-  }
-  .verify{
-    margin-top: 1em;
-    text-align: center;
-    width: 100%;
-  }
-  .resent{
-    font-size:medium;
-    margin-left: -12px;
-  }
 }
-.forgot_password{
-  .mybtn {
-    border-radius: 0%;
-  }
-  .rs-modal-content{
-    border-radius: 0%;
-  }
-  .rs-modal-body{
-    overflow: unset;
+
+.min-height{
+  min-height: 100vh;
+}
+
+@media (max-width: 600px) {
+  .login {
+    .siginForm {
+      position: relative;
+      transform: unset;
+    }
   }
 }

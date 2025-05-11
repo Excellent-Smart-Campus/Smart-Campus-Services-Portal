@@ -1,3 +1,5 @@
+import {roomType} from "@/utils/constants.jsx";
+
 function mapCoursesToOptions(courses) {
     if (!courses || !Array.isArray(courses)) return [];
 
@@ -24,4 +26,35 @@ function mapTitlesToOptions(subjects) {
     }));
 }
 
-export { mapSubjectsToOptions, mapCoursesToOptions, mapTitlesToOptions };
+function filterStudyRooms(roomList){
+    if (!roomList || !Array.isArray(roomList)) return [];
+    return roomList.filter(s =>
+         s?.roomTypeId !== roomType.StudyRoom);
+}
+function mapLecturersToOptions(lecturerOptions) {
+    if (!lecturerOptions || !Array.isArray(lecturerOptions)) return [];
+
+    return lecturerOptions.map(lecturer => ({
+        label: lecturer.name ?? '',
+        value: lecturer.lecturer ?? null,
+    }));
+}
+
+function mapRoomsToOptions(rooms){
+    if (!rooms || !Array.isArray(rooms)) return [];
+
+    return rooms.map(room => ({
+        label: `${room.roomNumber} - ${room.roomName} `?? '',
+        value: room.roomId ?? null,
+    }));
+}
+
+
+export { 
+    mapSubjectsToOptions, 
+    mapCoursesToOptions,
+    mapTitlesToOptions, 
+    mapRoomsToOptions, 
+    mapLecturersToOptions,
+    filterStudyRooms
+};

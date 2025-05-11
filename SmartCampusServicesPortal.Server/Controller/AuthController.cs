@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -66,13 +67,24 @@ public class AuthController : BaseController
                 return BadRequest(new { message = ErrorMessagesConstant.AccountLocked, success = false });
             }
             
-            var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, lockoutOnFailure: true);
 
             if (!result.Succeeded)
             {
-                return BadRequest(new { message = ErrorMessagesConstant.InvalidPassword, success = false });
+                int currentFailCount = _failedLoginAttempts.AddOrUpdate(user.UserName, 1, (_, count) => count + 1);
+
+                if (currentFailCount >= 5)
+                {
+                    user.IsLocked = true;
+                    await _userManager.UpdateAsync(user);
+                    _failedLoginAttempts.TryRemove(user.UserName, out _);
+                    return Unauthorized(new { message = ErrorMessagesConstant.ManyAttemptsLockAccount, success = false });
+                }
+
+                return Unauthorized(new { message = ErrorMessagesConstant.InvalidCredentials, success = false });
             }
-            
+        
+            _failedLoginAttempts.TryRemove(user.UserName, out _);
             return Ok(new { success = true, message = ErrorMessagesConstant.LoginSuccess });
         }
         catch (Exception ex)
@@ -235,14 +247,20 @@ public class AuthController : BaseController
         var contacts = await _stakeholderManager.GetStakeholderContactsAsync(user.StakeholderId);
         
         var stakeholder = await _stakeholderManager.GetUserProfile(user.StakeholderId);
+
+        var contactDetails = contacts?.Select(c => new ContactsVM
+        {
+            Detail = c.Detail,
+            ContactType = c.ContactTypeId,
+            ContactId = c.ContactId
+        }).ToList() ?? new List<ContactsVM>();
         
         var profileViewModel = new ProfileVM
         {
             FirstName = stakeholder.FirstName,
             LastName = stakeholder.LastName,
-            Email = contacts?.FirstOrDefault(s => s.ContactTypeId == ContactType.Email).Detail,
-            TitleId = stakeholder?.TitleId,
-            MobileNumber = contacts?.FirstOrDefault(c => c.ContactTypeId == ContactType.CellPhone)?.Detail.Replace(" ", ""),
+            Title = stakeholder?.TitleId,
+            Contacts = contactDetails
         };
         
         return Ok(profileViewModel);
@@ -275,4 +293,7 @@ public class AuthController : BaseController
 
         return user.GroupActions.Any(c => c.ActionId == action);
     }
+
+    private static readonly ConcurrentDictionary<string, int> _failedLoginAttempts = new();
+
 }
