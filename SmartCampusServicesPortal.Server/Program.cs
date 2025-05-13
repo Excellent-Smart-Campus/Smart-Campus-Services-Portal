@@ -47,15 +47,6 @@ builder.Services.AddAuthentication(o =>
 
 builder.Services.AddIdentityCore<ApplicationUser>(config =>
     {
-        // Password settings.
-        config.Password.RequireDigit = true;
-        config.Password.RequireLowercase = true;
-        config.Password.RequireNonAlphanumeric = true;
-        config.Password.RequireUppercase = true;
-        config.Password.RequiredLength = 12;
-        config.Password.RequiredUniqueChars = 1;
-
-        // User settings.
         config.User.RequireUniqueEmail = true;
     })
     .AddUserManager<UserManager<ApplicationUser>>()

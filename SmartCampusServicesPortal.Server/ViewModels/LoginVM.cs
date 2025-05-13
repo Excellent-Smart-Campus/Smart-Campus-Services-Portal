@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using SmartCampusServicesPortal.Server.Validations;
 
 namespace SmartCampusServicesPortal.Server.ViewModels;
 

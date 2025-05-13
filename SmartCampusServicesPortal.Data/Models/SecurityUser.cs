@@ -1,3 +1,5 @@
+using SmartCampusServicesPortal.Data.Enums;
+
 namespace SmartCampusServicesPortal.Data.Models;
 
 /// <summary>
@@ -9,6 +11,11 @@ public class SecurityUser
     /// Gets or sets the stakeholder id.
     /// </summary>
     public int StakeholderId { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the stakeholder type id.
+    /// </summary>
+    public StakeholderType StakeholderTypeId { get; set; } 
 
     /// <summary>
     /// Gets or sets the user name.

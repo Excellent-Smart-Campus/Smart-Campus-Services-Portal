@@ -1,0 +1,30 @@
+.login{
+
+  .siginForm {
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .rs-panel {
+    background: #fff;
+    box-shadow: 0 0.1em 0.5em 0 rgba(0, 0, 0, 0.28);
+  }
+  .rs-form-group:not(:last-child) {
+    margin-bottom: 30px !important;
+  }
+}
+
+.min-height{
+  min-height: 100vh;
+}
+
+@media (max-width: 600px) {
+  .login {
+    .siginForm {
+      position: relative;
+      transform: unset;
+    }
+  }
+}

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj": {}
+    "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj": {}
   },
   "projects": {
-    "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj": {
+    "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj",
+        "projectUniqueName": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj",
         "projectName": "SmartCampusServicesPortal.Data",
-        "projectPath": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj",
+        "projectPath": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj",
         "packagesPath": "/Users/excellentmashengete/.nuget/packages/",
-        "outputPath": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/",
+        "outputPath": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/excellentmashengete/.nuget/NuGet/NuGet.Config"
@@ -77,14 +77,14 @@
         }
       }
     },
-    "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj": {
+    "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj",
+        "projectUniqueName": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj",
         "projectName": "SmartCampusServicesPortal.Domain",
-        "projectPath": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj",
+        "projectPath": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj",
         "packagesPath": "/Users/excellentmashengete/.nuget/packages/",
-        "outputPath": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/",
+        "outputPath": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/excellentmashengete/.nuget/NuGet/NuGet.Config"
@@ -99,8 +99,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj": {
-                "projectPath": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj"
+              "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj": {
+                "projectPath": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Data/SmartCampusServicesPortal.Data.csproj"
               }
             }
           }
@@ -162,14 +162,14 @@
         }
       }
     },
-    "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj": {
+    "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj",
+        "projectUniqueName": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj",
         "projectName": "SmartCampusServicesPortal.Server",
-        "projectPath": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj",
+        "projectPath": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/SmartCampusServicesPortal.Server.csproj",
         "packagesPath": "/Users/excellentmashengete/.nuget/packages/",
-        "outputPath": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/obj/",
+        "outputPath": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/excellentmashengete/.nuget/NuGet/NuGet.Config"
@@ -184,8 +184,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj": {
-                "projectPath": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj"
+              "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj": {
+                "projectPath": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Domain/SmartCampusServicesPortal.Domain.csproj"
               }
             }
           }

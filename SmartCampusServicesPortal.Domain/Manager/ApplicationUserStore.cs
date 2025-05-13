@@ -89,7 +89,7 @@ public class ApplicationUserStore
         securityUser.PasswordHash = user.PasswordHash;
         securityUser.SecurityStamp = user.SecurityStamp;
         securityUser.IsDeleted = user.IsDeleted;
-        securityUser.IsLocked = user.isLocked;
+        securityUser.IsLocked = user.IsLocked;
         
         await _securityRepository.SetSecurityUserAsync(securityUser);
 
@@ -124,13 +124,14 @@ public class ApplicationUserStore
         return new ApplicationUser
         {
             StakeholderId = securityUser.StakeholderId,
+            StakeholderTypeId = securityUser.StakeholderTypeId,
             Name = securityUser.Name,
             UserName = securityUser.Username,
             NormalizedUserName = securityUser.Username,
             PasswordHash = securityUser.PasswordHash,
             SecurityStamp = securityUser.SecurityStamp,
             IsDeleted = securityUser.IsDeleted,
-            isLocked = securityUser.IsLocked,
+            IsLocked = securityUser.IsLocked,
             GroupMembers = securityUser.GroupMembers,
             GroupActions = securityUser.GroupActions,
         };
@@ -150,13 +151,14 @@ public class ApplicationUserStore
         return new ApplicationUser
         {
             StakeholderId = securityUser.StakeholderId,
+            StakeholderTypeId = securityUser.StakeholderTypeId,
             Name = securityUser.Name,
             UserName = securityUser.Username,
             NormalizedUserName = securityUser.Username,
             PasswordHash = securityUser.PasswordHash,
             SecurityStamp = securityUser.SecurityStamp,
             IsDeleted = securityUser.IsDeleted,
-            isLocked = securityUser.IsLocked,
+            IsLocked = securityUser.IsLocked,
             GroupMembers = securityUser.GroupMembers,
             GroupActions = securityUser.GroupActions,
         };
@@ -218,22 +220,15 @@ public class ApplicationUserStore
     public async Task<IList<Claim>> GetClaimsAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
         var dbUser = await _securityRepository.GetSecurityUserAsync(user.StakeholderId, null);
-
-        var names = dbUser.Name.Trim().Split(' ');
-        var initials = names
-            .Where(p => !string.IsNullOrEmpty(p))
-            .Select(p => p.Substring(0, 1).ToUpper())
-            .Take(2)
-            .ToList();
+        
 
         var claims = new List<Claim>
             {
                 new (CustomClaims.StakeholderId, dbUser.StakeholderId.ToString()),
-                new (CustomClaims.Name, initials.Count > 1 ? $"{names.First()} {names.Last().Substring(0,1)}" : names.First()),
-                new (CustomClaims.Initials, string.Join(string.Empty, initials)),
-                new (CustomClaims.Firstname, names.First()),
+                new (CustomClaims.Name, dbUser.Name.Trim()),
                 new (CustomClaims.IsDeleted, dbUser.IsDeleted.ToString()),
-                new (CustomClaims.IsLocked, dbUser.IsLocked.ToString())
+                new (CustomClaims.IsLocked, dbUser.IsLocked.ToString()),
+                new (CustomClaims.StakeholderTypeId, dbUser.StakeholderTypeId.ToString())
             };
 
         if (dbUser.GroupActions != null && dbUser.GroupActions.Count > 0)
@@ -328,7 +323,7 @@ public class ApplicationUserStore
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
 
-        return Task.FromResult(user.isLocked);
+        return Task.FromResult(user.IsLocked);
     }
 
     /// <inheritdoc />
@@ -337,7 +332,7 @@ public class ApplicationUserStore
         cancellationToken.ThrowIfCancellationRequested();
         if (user == null) throw new ArgumentNullException(nameof(user));
 
-        user.isLocked = confirmed;
+        user.IsLocked = confirmed;
 
         return Task.CompletedTask;
     }
@@ -356,13 +351,14 @@ public class ApplicationUserStore
         return new ApplicationUser
         {
             StakeholderId = securityUser.StakeholderId,
+            StakeholderTypeId = securityUser.StakeholderTypeId,
             Name = securityUser.Name,
             UserName = securityUser.Username,
             NormalizedUserName = securityUser.Username,
             PasswordHash = securityUser.PasswordHash,
             SecurityStamp = securityUser.SecurityStamp,
             IsDeleted = securityUser.IsDeleted,
-            isLocked = securityUser.IsLocked,
+            IsLocked = securityUser.IsLocked,
             GroupMembers = securityUser.GroupMembers,
             GroupActions = securityUser.GroupActions,
         };

@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 import plugin from '@vitejs/plugin-react';
 import fs from 'fs';
@@ -10,8 +10,6 @@ import { env } from 'process';
 const isDev = process.env.NODE_ENV === 'development';
 
 let httpsConfig = {};
-
-
 
 if (isDev) {
   const baseFolder =

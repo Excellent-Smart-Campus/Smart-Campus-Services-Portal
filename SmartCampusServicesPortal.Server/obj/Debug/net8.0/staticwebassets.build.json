@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "FT+X2/2CfhviRc15/cFult8ZUI/NwvS1QXrSzh4uCb8=",
+  "Hash": "VfsasNLhMS0SzjCnmu/AQd9+DZyESiGsNRF+yDZU+N8=",
   "Source": "SmartCampusServicesPortal.Server",
   "BasePath": "_content/SmartCampusServicesPortal.Server",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "/Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Client/SmartCampusServicesPortal.Client.esproj",
+      "Identity": "/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Client/SmartCampusServicesPortal.Client.esproj",
       "Version": 2,
       "Source": "SmartCampusServicesPortal.Client",
       "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
