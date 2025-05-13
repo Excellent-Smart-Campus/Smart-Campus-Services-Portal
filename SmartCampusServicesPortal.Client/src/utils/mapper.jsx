@@ -1,4 +1,4 @@
-import {roomType} from "@/utils/constants.jsx";
+import { roomType, days } from "@/utils/constants.jsx";
 
 function mapCoursesToOptions(courses) {
     if (!courses || !Array.isArray(courses)) return [];
@@ -17,13 +17,20 @@ function mapSubjectsToOptions(subjects) {
     }));
 }
 
-function mapTitlesToOptions(subjects) {
-    if (!subjects || !Array.isArray(subjects)) return [];
+function mapTitlesToOptions(titles) {
+    if (!titles || !Array.isArray(titles)) return [];
 
-    return subjects.map(subject => ({
-        label: subject.description ?? '',
-        value: subject.titleId ?? null,
+    return titles.map(title => ({
+        label: title.description ?? '',
+        value: title.titleId ?? null,
     }));
+}
+
+function mapTitle(titleOptions, title){
+    if (!titleOptions || !Array.isArray(titleOptions)) return '';
+    if (!title) return '';
+
+    return titleOptions.find(titleOption => titleOption.titleId === Number(title))?.description;
 }
 
 function filterStudyRooms(roomList){
@@ -49,6 +56,70 @@ function mapRoomsToOptions(rooms){
     }));
 }
 
+const mapToEvents = (course) => {
+
+    if (!course || !Array.isArray(course.weekDays)) {
+        return []
+    }
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+
+    const events = [];
+
+    course.weekDays.forEach(day => {
+        const dayIndex = days[day.dayOfWeekType];
+        if (dayIndex === undefined || !Array.isArray(day.schedules)) return;
+
+        const date = new Date(year, month, 1);
+        while (date.getMonth() === month) {
+            if (date.getDay() === dayIndex) {
+                const eventDate = new Date(date); // clone
+
+                day.schedules.forEach(schedule => {
+                    const [startH = 0, startM = 0, startS = 0] = (schedule.startTime || '').split(':').map(Number);
+                    const [endH = 0, endM = 0, endS = 0] = (schedule.endTime || '').split(':').map(Number);
+
+                    const startDate = new Date(eventDate);
+                    startDate.setHours(startH, startM, startS);
+
+                    const endDate = new Date(eventDate);
+                    endDate.setHours(endH, endM, endS);
+
+                    events.push({
+                        title: schedule.subjectCode || "No Title",
+                        start: startDate,
+                        end: endDate,
+                        extendedProps: {
+                            name: schedule.subjectName,
+                            course: course.courseCode,
+                            room: schedule.roomNumber,
+                            roomType: schedule.roomType,
+                        }
+                    });
+                });
+            }
+            date.setDate(date.getDate() + 1);
+        }
+    });
+    return events;
+}
+
+function getAllDatesForDay(dayName, year, month) {
+  const dates = [];
+  const dayNumber = dayMap[dayName];
+  const date = new Date(year, month, 1);
+
+  while (date.getMonth() === month) {
+    if (date.getDay() === dayNumber) {
+      dates.push(new Date(date));
+    }
+    date.setDate(date.getDate() + 1);
+  }
+
+  return dates;
+}
 
 export { 
     mapSubjectsToOptions, 
@@ -56,5 +127,7 @@ export {
     mapTitlesToOptions, 
     mapRoomsToOptions, 
     mapLecturersToOptions,
-    filterStudyRooms
+    filterStudyRooms,
+    mapToEvents,
+    mapTitle
 };

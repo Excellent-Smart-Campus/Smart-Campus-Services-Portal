@@ -18,11 +18,11 @@ function LecturerAppointment(){
     const { setLoading } = useAuth();
     const { enrolled } = useEducation()
     const [ getLecturerSubjects, setLecturerSubjects ] = useState([]);
-    const navigate = useNavigate();
-    const appointmentFormRef = useRef();
     const [ appointmentForm, setAppointmentForm ] = useState({
         subject: null, lecturer: null, purpose: '', appointmentDate: null,  startTime: null});
-    
+    const navigate = useNavigate();
+    const appointmentFormRef = useRef();
+
     useEffect(() => {
         setLoading(false);
         const fetchSubjectDetails = async () => {

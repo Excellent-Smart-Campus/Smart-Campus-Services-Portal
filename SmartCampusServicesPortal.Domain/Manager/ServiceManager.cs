@@ -6,15 +6,11 @@ namespace SmartCampusServicesPortal.Domain.Manager;
 
 public class ServiceManager
 {
-    private readonly StakeholderRepository _stakeholderRepository;
     private readonly ServiceRepository _serviceRepository;
-    private readonly SecurityRepository _securityRepository;
     
-    public ServiceManager(StakeholderRepository stakeholderRepository, ServiceRepository serviceRepository, SecurityRepository securityRepository)
+    public ServiceManager( ServiceRepository serviceRepository, SecurityRepository securityRepository)
     {
-        _stakeholderRepository = stakeholderRepository;
         _serviceRepository = serviceRepository;
-        _securityRepository = securityRepository;
     }
     
     public async Task<IEnumerable<AvailableRooms>> GetAvailableRoomsAsync(int year, int month, RoomType?[] status = null)
@@ -35,5 +31,12 @@ public class ServiceManager
     public async Task<Appointment> CreateAppointmentAsync(Appointment appointment)
     {
         return await _serviceRepository.CreateAppointmentAndNotificationAsync(appointment);
+    }
+
+    public async Task<IEnumerable<Maintenance>> GetMaintenancesAsync(int? stakeholderId, Status?[] statuses = null)
+    {
+        var statusList = statuses != null ? string.Join(",", statuses.Select(s => (int)s)) : null;
+
+        return await _serviceRepository.GetMaintenancesAsync(stakeholderId, statusList);
     }
 }

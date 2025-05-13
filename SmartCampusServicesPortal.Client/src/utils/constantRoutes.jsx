@@ -17,15 +17,17 @@ export const constantRoutes = {
             index: '/admin/',
             manageUserAndGroups: '/admin/manage-users-and-groups/',
             lockedUsers: '/admin/locked-users/',
+            scheduledLecturer: '/admin/scheduled-lecturers/',
+            registeredStudents: '/admin/registered-students/',
             manageMaintenance: '/admin/manage-maintenance/',
             viewGroup: groupId => `/admin/view-group/${groupId}/`,
-            viewUser: userId => `/admin/view-user/${userId}/`,
         },
         student:{
             index: '/student/',
             maintenanceRequest:'booking/maintenance-request/',
             bookRoom: 'book-room/',
             lecturerAppointment: 'lecturer-appointment/',
+            viewSchedule: 'view-schedule/'
         },
         lecturer:{
             index: '/lecture/',

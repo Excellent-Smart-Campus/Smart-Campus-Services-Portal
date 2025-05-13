@@ -139,6 +139,21 @@ public class EducationRepository(string connectionString) : BaseRepository(conne
         return courseSubjectsDictionary.Values;
     }
 
+    public async Task<IEnumerable<RegisteredStakeholder>> GetRegisteredStakeholderAsync(StakeholderType stakeholderType)
+    {
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+
+        var queryParameters = new DynamicParameters();
+        queryParameters.Add("@stakeholderType", (int)stakeholderType);
+        
+        return await connection.QueryAsync<RegisteredStakeholder>(
+             "edu.GetRegisteredStakeholder",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters,
+            commandTimeout: DefaultTimeout
+        );
+    }
+    
     public async Task<TimeTable> GetTimeTableAsync(int stakeholderId, StakeholderRelationshipType? stakeholderRelationshipType){
         await using SqlConnection connection = await GetOpenConnectionAsync();
 

@@ -29,7 +29,7 @@ function LecturerIndex(){
             <Typography variant="h6"> 👋 Welcome, {user.name} </Typography>
 
             <Grid container spacing={3}>
-                <Grid size={{ xs: 12}} order={{ xs: 0 }} sx={{ mt: 4 }}>
+                <Grid size={{ xs: 12}} order={{ xs: 0 }} sx={{ mt: 4, display: { xs: 'none', sm: 'block' }}}>
                     <ButtonToolbar className="button-toolbar" >
                         <CustomButton
                             label="Book Room"

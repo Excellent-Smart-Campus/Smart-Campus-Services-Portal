@@ -10,10 +10,13 @@ export const useEducation = () => {
 };
 
 export function EducationProvider({ children }){
-    const { authenticated, canAccess, setLoading} = useAuth();
+    const { authenticated, canAccess} = useAuth();
+    const [ loading, setLoading] = useState(true);
+    const [ titles, setTitles ] = useState([]);
     const [enrolled, setEnrolled] = useState([]);
     const [timeTable, setTimeTable] = useState({});
     const [enrolledError, setEnrolledError] = useState(null);
+    const [registeredStakeholders, setRegisteredStakeholders ] = useState([]);
     
     const getEnrolled = useCallback(async () => {
         try {
@@ -23,25 +26,41 @@ export function EducationProvider({ children }){
             setEnrolledError(error?.message || "An error occurred while fetching enrolled subjects.");
         }
     }, []);
-
-    const getTimeTable = useCallback(async () => {
-        const response = await ApiClient.instance.getTimeTable();
-        setTimeTable(response);
+    
+    const fetchRegisteredStakeholders = useCallback(async (stakeholderTypes) => {
+        setLoading(true);
+        try {
+            const response = await ApiClient.instance.getRegisteredStakeholders(stakeholderTypes);
+            setRegisteredStakeholders(response);
+        } catch (error){
+            setEnrolledError(error?.message || "An error occurred while registered stakeholders.");
+        }finally {
+            setLoading(false);
+        }
     }, []);
 
-    const getSubjectDetails = useCallback(async  () => {
+    const getTimeTable = useCallback(async () => {
         try {
             const response = await ApiClient.instance.getTimeTable();
             setTimeTable(response);
-        } catch (error) {
-            setEnrolledError(error?.message || "An error occurred while fetching the timetable.");
+        } catch (error){
+            setEnrolledError(error?.message || "An error occurred while registered stakeholders.");
+        }
+    }, []);
+
+    const getTitles = useCallback(async () => {
+        try {
+            const response = await ApiClient.instance.getUserTitles();
+            setTitles(response);
+        } catch (error){
+            setEnrolledError(error?.message || "An error occurred while registered stakeholders.");
         }
     }, []);
     
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            await Promise.all([getEnrolled(), getTimeTable()]);
+            await Promise.all([getEnrolled(), getTimeTable(), getTitles()]);
             setLoading(false);
         };
 
@@ -55,7 +74,11 @@ export function EducationProvider({ children }){
             value={{
                 enrolled,
                 timeTable,
-                enrolledError
+                enrolledError,
+                fetchRegisteredStakeholders,
+                registeredStakeholders,
+                titles,
+                loading
             }}
         >
             {children}

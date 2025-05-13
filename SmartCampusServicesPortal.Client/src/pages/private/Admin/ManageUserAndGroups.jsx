@@ -10,7 +10,6 @@ import { encodeId } from '@/utils/hashHelper';
 import CustomContainer from "@/components/CustomContainer.jsx";
 import CustomTabPanel from "@/components/CustomTabPanel.jsx";
 import CustomBreadcrumb from '@/components/CustomBreadcrumb.jsx';
-import CustomButton from "@/components/CustomButton.jsx";
 import EditIcon from '@mui/icons-material/Edit';
 
 const ManageUserAndGroups = () => {
@@ -26,10 +25,8 @@ const ManageUserAndGroups = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (value === usersAndGroupsType.Users) {
-                console.log("users");
              await fetchAllUsers();
             } else if (value === usersAndGroupsType.Groups) {
-                console.log("group");
                 await fetchGroups();
             }
         };
@@ -37,31 +34,19 @@ const ManageUserAndGroups = () => {
         fetchData();
     }, [value]);
     
-    const handleUserClick = (userId) => {
-        navigate(constantRoutes.protected.admin.viewUser(encodeId(userId)))
-    };
-    
     const handleGroupClick = (groupId) => {
         navigate(constantRoutes.protected.admin.viewGroup(encodeId(groupId)))
     };
-
-    const handleAddClick = () => {
-         if (value === usersAndGroupsType.Users) {
-            console.log("users");
-        } else if (value === usersAndGroupsType.Groups) {
-            console.log("group");
-        }
-    }
+    
     const renderUsers = () => {
         return isMobile ? (
             <Box display="flex" flexDirection="column" gap={2}>
                 {getAllUsers.map((user, index) => (
-                    <Card key={index} onClick={() => handleUserClick(user.stakeholderId)} sx={{ cursor: 'pointer' }}>
+                    <Card key={index} sx={{ cursor: 'pointer' }}>
                         <CardContent>
                             <Typography variant="h6">{user.displayName}</Typography>
                             <Typography variant="body2">Email: {user.username}</Typography>
-                            <Typography variant="body2">Role: {user.groups}</Typography>
-                            
+                            <Typography variant="body2">User Permission Group(s): {user.groups}</Typography>
                         </CardContent>
                     </Card>
                 ))}
@@ -73,36 +58,14 @@ const ManageUserAndGroups = () => {
                         <TableCell>Name</TableCell>
                         <TableCell>Email</TableCell>
                         <TableCell>User Permission Group(s)</TableCell>
-                        <TableCell>Account Status</TableCell>
-                        <TableCell>Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {getAllUsers.map((user, index) => (
-                        <TableRow key={index} onClick={() => handleUserClick(user.stakeholderId)}>
+                        <TableRow key={index}>
                             <TableCell>{user.displayName}</TableCell>
                             <TableCell>{user.username}</TableCell>
                             <TableCell>{user.groups}</TableCell>
-                            <TableCell>
-                                <Box 
-                                    justifyContent={'center'} 
-                                    sx={{
-                                        p: '0.5em',
-                                        bgcolor: user.isLocked ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 128, 0, 0.1)',
-                                        color: user.isLocked ? 'red' : 'green',
-                                        width: '50%',
-                                        textAlign: 'center',
-                                        borderRadius: '4px',
-                                    }}
-                                >
-                                {user.isLocked ? 'Locked' : 'Active'}
-                                </Box>
-                            </TableCell>
-                            <TableCell align="right" sx={{ width: '10%' }}>
-                                <ButtonToolbar  className="button-toolbar">
-                                    <EditIcon onClick={() => handleUserClick(user.stakeholderId)} sx={{ cursor: 'pointer' }} color="secondary" fontSize="small" />
-                                </ButtonToolbar>
-                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

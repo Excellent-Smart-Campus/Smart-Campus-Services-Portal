@@ -13,10 +13,32 @@ const usersAndGroupsType = {
     Users: 0,
     Groups: 1
 };
-
 const maintenanceTypes = {
     Open: 0,
     Closed: 1
 };
 
-export { roomType, contactType, usersAndGroupsType, maintenanceTypes };
+const stakeholderType = {
+    Student:1,
+    Lecture:2,
+    Admin:3,
+    Course:4
+}
+const days ={
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+}
+
+export { 
+    roomType, 
+    contactType, 
+    usersAndGroupsType, 
+    maintenanceTypes, 
+    days, 
+    stakeholderType 
+};

@@ -128,4 +128,16 @@ public class ServiceController: BaseController
         
         return BadRequest(new { message = ErrorMessagesConstant.ScheduleError, success = false });
     }
+
+
+    [HttpGet("getMaintenance")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IEnumerable<Maintenance>> GetMaintenancesAsync(
+        [FromQuery] int? stakeholderId,
+        [FromQuery] Status?[] statuses = null)
+    {
+        return await _serviceManager.GetMaintenancesAsync(stakeholderId, statuses);
+    }
 }

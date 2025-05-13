@@ -10,7 +10,7 @@ function CustomContainer({ bgColor = true, breadcrum, title, children }) {
             <Box sx={{ pb: '1.5em' }} >
                 { breadcrum }
             </Box>
-            <Box sx={{ bgcolor: bgColor? 'white' : 'unset', p: isMobile ? '1em' : '2em' }}>
+            <Box  sx={{ bgcolor: bgColor? 'white' : 'unset', p: isMobile ? '1em' : '2em' }}>
                 <Typography variant="h6">{title}</Typography>
                 <Box>{children}</Box>
             </Box>

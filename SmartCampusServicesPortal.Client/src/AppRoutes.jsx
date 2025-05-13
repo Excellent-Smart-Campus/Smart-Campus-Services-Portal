@@ -11,6 +11,7 @@ import BookRoom from "@/pages/private/Student/BookARoom.jsx";
 import StudentIndex from "@/pages/private/Student/StudentIndex.jsx";
 import LecturerAppointment from "@/pages/private/Student/LecturerAppointment.jsx";
 import RequestMaintenance from "@/pages/private/Student/RquestMaintenance.jsx";
+import Schedule from "@/pages/private/Student/Schedule.jsx";
 
 import LecturerIndex from "@/pages/private/Lecturer/LecturerIndex.jsx";
 import LecturerRequestMaintenance from "@/pages/private/Lecturer/LecturerRequestMaintenance.jsx";
@@ -19,7 +20,6 @@ import LecturerBookARoom from "@/pages/private/Lecturer/LecturerBookARoom.jsx";
 import AdminIndex from "@/pages/private/Admin/AdminIndex.jsx";
 import ManageUserAndGroups from "@/pages/private/Admin/ManageUserAndGroups.jsx";
 import ManageGroup from "@/pages/private/Admin/ManageGroup.jsx";
-import ManageUser from "@/pages/private/Admin/ManageUser.jsx";
 import ManageLockedUsers from "@/pages/private/Admin/ManageLockedUsers.jsx";
 import ManageMaintenance from "@/pages/private/Admin/ManageMaintenance.jsx";
 
@@ -28,6 +28,8 @@ import Unauthorized from "@/pages/Unauthorized.jsx";
 import NotFound from "@/pages/NotFound.jsx";
 import Home from "@/pages/private/Home.jsx";
 import Notification from "@/pages/private/Notification.jsx";
+import RegisteredStudents from "@/pages/private/Admin/RegisteredStudents.jsx";
+import ScheduledLecturers from "@/pages/private/Admin/ScheduledLecturers.jsx";
 
 export const AppRoutes = (
     <>
@@ -46,10 +48,11 @@ export const AppRoutes = (
             {/* Student Pages */}
             <Route path={constantRoutes.protected.student.index} 
                 element={<AccessGuard accessKey={userActions.STUDENT_DASHBOARD}> <Outlet /> </AccessGuard>}>
-                    <Route index element={<StudentIndex />} />
-                    <Route path={constantRoutes.protected.student.bookRoom} element={<BookRoom />} />
-                    <Route path={constantRoutes.protected.student.lecturerAppointment} element={<LecturerAppointment />} />
-                    <Route path={constantRoutes.protected.student.maintenanceRequest} element={<RequestMaintenance />} />
+                <Route index element={<StudentIndex />} />
+                <Route path={constantRoutes.protected.student.bookRoom} element={<BookRoom />} />
+                <Route path={constantRoutes.protected.student.lecturerAppointment} element={<LecturerAppointment />} />
+                <Route path={constantRoutes.protected.student.maintenanceRequest} element={<RequestMaintenance />} />
+                <Route path={constantRoutes.protected.student.viewSchedule} element={<Schedule /> } />
             </Route>
 
             {/* Lecturer Pages */}
@@ -67,8 +70,9 @@ export const AppRoutes = (
                 <Route path={constantRoutes.protected.admin.manageUserAndGroups} element={<ManageUserAndGroups />} />
                 <Route path={constantRoutes.protected.admin.lockedUsers} element={<ManageLockedUsers />} />
                 <Route path={constantRoutes.protected.admin.manageMaintenance} element={<ManageMaintenance/>} />
+                <Route path={constantRoutes.protected.admin.registeredStudents} element={<RegisteredStudents/>} />
+                <Route path={constantRoutes.protected.admin.scheduledLecturer} element={<ScheduledLecturers/>} />
                 <Route path={constantRoutes.protected.admin.viewGroup(':groupId')} element={<ManageGroup />} /> 
-                <Route path={constantRoutes.protected.admin.viewUser(':userId')} element={<ManageUser />} />  
             </Route>
         </Route>
 

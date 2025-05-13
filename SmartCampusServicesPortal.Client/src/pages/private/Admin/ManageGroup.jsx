@@ -30,7 +30,6 @@ const ManageGroup = () => {
                 const grp = viewGroup(decodedId);
                 setGroup(grp);
                 const response = await ApiClient.instance.getGroupActions(decodedId);
-                console.log(response);
                 setSelectedActions(response.map(r => r.actionId));
             }
         };
@@ -38,7 +37,6 @@ const ManageGroup = () => {
         fetchData();
     }, [groupId]);
 
-    console.log(getSystemPermission);
     return (
        <Box>
             <CustomContainer
@@ -99,7 +97,8 @@ const ManageGroup = () => {
                                     variant={'contained'}
                                     color={'primary'}
                                 />
-                           
+                            
+                                  
                                 <CustomButton
                                     handle={()=>{}}
                                     label={'Update'}

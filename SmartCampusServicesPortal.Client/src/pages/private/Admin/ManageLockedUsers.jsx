@@ -52,11 +52,11 @@ const ManageLockedUsers = () => {
                         ]}
                     />
                 }
+                title={'Manage Locked Users'}
             />
 
             <CustomContainer
                 bgColor={!isMobile}
-                title={'Manage Locked Users'}
                 children={
                     <Box sx={{ width: '100%'}}>
                         {isMobile ? (

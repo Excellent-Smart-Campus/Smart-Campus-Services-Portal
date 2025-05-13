@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SmartCampusServicesPortal.Data.Enums;
 using SmartCampusServicesPortal.Data.Models;
 using SmartCampusServicesPortal.Domain.Manager;
 using SmartCampusServicesPortal.Server.ViewModels;
@@ -65,9 +66,7 @@ public class EducationController : BaseController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<TimeTable> GetTimetableAsync()
     {
-        
         var res = await _educationManager.GetTimeTableAsync(GetStakeholderId());
-
         return res;
     }
     
@@ -75,8 +74,17 @@ public class EducationController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IEnumerable<Course>> GetEnrolledSubjectAsync()
+    public async Task<IEnumerable<Course>> GetEnrolledSubjectAsync([FromQuery] int? stakeholder)
     {
-        return await _educationManager.GetEnrolledSubjectsAsync(GetStakeholderId());
+        return await _educationManager.GetEnrolledSubjectsAsync(stakeholder ?? GetStakeholderId());
+    }
+    
+    [HttpGet("course/registeredStakeholder", Name = "getRegisteredStakholder")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IEnumerable<RegisteredStakeholder>> GetRegisteredStakeholderAsync([FromQuery] StakeholderType stakeholderType)
+    {
+        return await _educationManager.GetRegisteredStakeholderAsync(stakeholderType);
     }
 }

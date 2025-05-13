@@ -30,8 +30,7 @@ function AdminIndex(){
                         <StatBox
                             title= {10}
                             subtitle="Registered Students"
-                            progress="0.50"
-                            increase="+21%"
+                            link={constantRoutes.protected.admin.registeredStudents}
                             icon={<SchoolIcon color="secondary" fontSize="large"/>}
                         />
                     </Grid>
@@ -39,8 +38,7 @@ function AdminIndex(){
                         <StatBox
                             title= {5}
                             subtitle="Lectures Scheduled"
-                            progress="0.50"
-                            increase="+21%"
+                            link={constantRoutes.protected.admin.scheduledLecturer}
                             icon={<MenuBookIcon color="secondary" />}
                         />
                     </Grid>

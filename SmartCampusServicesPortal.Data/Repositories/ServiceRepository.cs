@@ -33,6 +33,21 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
             commandType: CommandType.StoredProcedure);
     }
 
+
+    public async Task<IEnumerable<Maintenance>> GetMaintenancesAsync(int? stakeholderId,  string status = null){
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+        var queryParameters = new DynamicParameters();
+        
+        queryParameters.Add("@stakeholderId", stakeholderId);
+        queryParameters.Add("@statudId", status);
+
+        return await connection.QueryAsync<Maintenance>(
+            "svc.GetStakeholderMaintenanceRequest",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters,
+            commandTimeout: DefaultTimeout);
+    }
+
     public async Task<Maintenance> CreateMaintenceBookingAndNotificationAsync(Maintenance maintenance)
     {
         await using var connection = await GetOpenConnectionAsync();

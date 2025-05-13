@@ -72,11 +72,15 @@ class ApiClient {
     }
     
     async getTimeTable(){
-        return await this.callApi('/api/education/course/timetable', 'GET');
+        return await this.callApi('/api/education/course/timetable', 'GET', );
     }
     
-    async getEnrolledSubject(){
-        return await this.callApi('/api/education/course/enrolledSubject', 'GET');
+    async getEnrolledSubject(stakeholder){
+        return await this.callApi('/api/education/course/enrolledSubject', 'GET',
+            {
+                cacheResponse: true,
+                params: stakeholder ? { stakeholder } : null
+            });
     }
     
     async getUserAuthenticated(){
@@ -144,6 +148,13 @@ class ApiClient {
         return await this.callApi('/api/admin/getAllUsers', 'GET',{ cacheResponse: false });
     }
 
+    async getRegisteredStakeholders(stakeholderType) {
+        return await this.callApi('/api/education/course/registeredStakeholder', 'GET',{
+            cacheResponse: true,
+            params: { stakeholderType }
+        });
+    }
+    
     async lockUser(stakeholder, isLocked){
         return await this.callApi('/api/admin/lockUser', 'POST', {
             cacheResponse: false,

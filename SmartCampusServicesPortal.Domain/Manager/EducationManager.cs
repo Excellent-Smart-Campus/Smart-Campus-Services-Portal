@@ -42,4 +42,9 @@ public class EducationManager
     public async Task<IEnumerable<Course>> GetEnrolledSubjectsAsync(int stakeholderId, StakeholderRelationshipType? stakeholderRelationshipType = null){
         return await _educationRepository.GetStakeholderCourseAndSubjectsAsync(stakeholderId, stakeholderRelationshipType);
     }
+
+    public async Task<IEnumerable<RegisteredStakeholder>> GetRegisteredStakeholderAsync(StakeholderType stakeholderType)
+    {
+        return await _educationRepository.GetRegisteredStakeholderAsync(stakeholderType);
+    }
 }
