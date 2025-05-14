@@ -257,6 +257,7 @@ public class AuthController : BaseController
         
         var profileViewModel = new ProfileVM
         {
+            Stakeholder = GetStakeholderId(),
             FirstName = stakeholder.FirstName,
             LastName = stakeholder.LastName,
             Title = stakeholder?.TitleId,

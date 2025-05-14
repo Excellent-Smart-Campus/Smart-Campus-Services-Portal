@@ -1,4 +1,5 @@
 import { roomType, days } from "@/utils/constants.jsx";
+import { status} from "@/utils/constants.jsx";
 
 function mapCoursesToOptions(courses) {
     if (!courses || !Array.isArray(courses)) return [];
@@ -9,12 +10,38 @@ function mapCoursesToOptions(courses) {
     }));
 }
 
-function mapSubjectsToOptions(subjects) {
-    if (!subjects || !Array.isArray(subjects)) return [];
-    return subjects.map(subject => ({
-        label: subject.isMandatory ? `${subject.subjectName} *` : subject.subjectName ?? '',
-        value: subject.subjectId ?? null,
-    }));
+const statusDescription = Object.fromEntries(
+    Object.entries(status).map(([key, value]) => {
+        if (key === "InProgress") {
+            return [value, "In Progress"];
+        }
+        return [value, key];
+    })
+);
+function mapSubjectsToOptions(courses) {
+    if (!courses || !Array.isArray(courses)) return [];
+    return  courses.flatMap(course => 
+        (course.subjects || []).map( subject => ({
+            label: subject.isMandatory ? `${subject.subjectName} *` : subject.subjectName ?? '', 
+            value: subject.subjectId ?? null,
+        }))
+    );
+}
+
+
+function formatServerDate(isoString) {
+    const date = new Date(isoString);
+
+    const options = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+    };
+
+    return date.toLocaleString('en-ZA', options);
 }
 
 function mapTitlesToOptions(titles) {
@@ -33,6 +60,14 @@ function mapTitle(titleOptions, title){
     return titleOptions.find(titleOption => titleOption.titleId === Number(title))?.description;
 }
 
+
+function mapRoom(roomOptions, room){
+    if (!roomOptions || !Array.isArray(roomOptions)) return '';
+    if (!room) return '';
+
+    return roomOptions.find(roomOption => roomOption.roomId === Number(room));
+}
+
 function filterStudyRooms(roomList){
     if (!roomList || !Array.isArray(roomList)) return [];
     return roomList.filter(s =>
@@ -46,6 +81,7 @@ function mapLecturersToOptions(lecturerOptions) {
         value: lecturer.lecturer ?? null,
     }));
 }
+
 
 function mapRoomsToOptions(rooms){
     if (!rooms || !Array.isArray(rooms)) return [];
@@ -129,5 +165,8 @@ export {
     mapLecturersToOptions,
     filterStudyRooms,
     mapToEvents,
-    mapTitle
+    mapTitle,
+    statusDescription,
+    mapRoom,
+    formatServerDate
 };

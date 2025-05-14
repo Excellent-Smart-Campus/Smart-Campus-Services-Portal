@@ -107,6 +107,15 @@ class ApiClient {
             },
         });
     }
+    async updateMaintenance(issueId, status){
+        return await this.callApi(`/api/service/update`, 'POST',{
+            cacheResponse: false,
+            data: {
+                IssueId: issueId,
+                Status: status
+            }
+        });
+    }
     
     async scheduleAppointment(formData){
         return await this.callApi('/api/service/scheduleAppointment', 'POST',{
@@ -133,6 +142,19 @@ class ApiClient {
         });
     }
 
+    async getMaintenance(stakeholder, statuses) {
+        return await this.callApi('/api/service/getMaintenance', 'POST',{
+            cacheResponse: false,
+            data: {
+                StakeholderId: stakeholder,
+                Statuses: statuses,
+            },
+        });
+    }
+
+    async getNotifications() {
+        return await this.callApi('/api/service/getNotificationsByStakeholder', 'GET',{ cacheResponse: false });
+    }
     async getSystemPermission() {
         return await this.callApi('/api/admin/getSystemPermission', 'GET',{ cacheResponse: true });
     }

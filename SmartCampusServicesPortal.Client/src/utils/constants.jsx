@@ -24,6 +24,16 @@ const stakeholderType = {
     Admin:3,
     Course:4
 }
+
+const status = {
+    Pending: 1,
+    Approved: 2,
+    Rejected: 3,
+    Open: 4,
+    InProgress: 5,
+    Resolved: 6
+}
+
 const days ={
     Sunday: 0,
     Monday: 1,
@@ -34,11 +44,22 @@ const days ={
     Saturday: 6,
 }
 
+const notificationTypeLabels = {
+    1: 'Room Booking Request',
+    2: 'Appointment Request',
+    3: 'Maintenance Alert',
+    4: 'Campus Announcement',
+    5: 'Subject Notification',
+    6: 'Direct Message'
+};
+
 export { 
     roomType, 
     contactType, 
     usersAndGroupsType, 
     maintenanceTypes, 
     days, 
-    stakeholderType 
+    stakeholderType,
+    status,
+    notificationTypeLabels
 };

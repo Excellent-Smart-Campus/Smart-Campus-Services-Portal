@@ -1,3 +1,5 @@
+using SmartCampusServicesPortal.Data.Enums;
+
 namespace SmartCampusServicesPortal.Server.ViewModels;
 
 public class MaintenanceVM

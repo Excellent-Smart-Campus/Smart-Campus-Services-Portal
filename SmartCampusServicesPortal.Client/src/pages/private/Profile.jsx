@@ -17,12 +17,8 @@ function Profile() {
     useEffect(() => {
         setLoading(false);
         const fetchData = async () => {
-            try {
-                const userTitles = await ApiClient.instance.getUserTitles();
-                setTitles(userTitles);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+            const userTitles = await ApiClient.instance.getUserTitles();
+            setTitles(userTitles);
         }
         fetchData();
     }, []);
@@ -33,11 +29,6 @@ function Profile() {
         safeContacts.find(c => c.contactType === type) || {};
 
     const handleContactSave = async (data, oldData) => {
-        console.log(data);
-        console.log(oldData);
-        
-        
-        
         setLoading(true);
       let userData = {
             C: bookForm.room,

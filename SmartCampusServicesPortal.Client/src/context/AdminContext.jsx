@@ -9,15 +9,21 @@ export const useAdmin = () => {
 };
 
 export function AdminProvider({ children }){
-    const { authenticated, canAccess, setLoading} = useAuth();
-    const [getAllUsers, setAllUsers] = useState([]);
-    const [getGroupActions, setGroupActions] = useState([]);
-    const [getSystemPermission, setSystemPermission] = useState([]);
-    const [getGroups, setGroups] = useState([]);
+    const { authenticated, canAccess } = useAuth();
+    const [ getAllUsers, setAllUsers ] = useState([]);
+    const [ getMaintenance, setMaintenance ] = useState([]);
+    const [ loading, setLoading ] = useState(true);
+    const [ getSystemPermission, setSystemPermission ] = useState([]);
+    const [ getGroups, setGroups ] = useState([]);
     
     const fetchAllUsers = async () => {
-        const response = await ApiClient.instance.getAllUsers();
-        setAllUsers(response);
+        try {
+            setLoading(true);
+            const response = await ApiClient.instance.getAllUsers();
+            setAllUsers(response);
+        } finally{
+            setLoading(false);
+        }
     };
     
     const fetchSystemPermission = useCallback(async () => {
@@ -35,6 +41,16 @@ export function AdminProvider({ children }){
             setLoading(true);
             const response = await ApiClient.instance.getGroup(groupId);
             setGroups(response);
+        } finally{
+            setLoading(false);
+        }
+    }, []);
+
+    const fetchMaintenance = useCallback(async (stakeholder, statuses) => {
+        setLoading(true);
+        try {
+            const response = await ApiClient.instance.getMaintenance(stakeholder, statuses);
+            setMaintenance(response);
         } finally{
             setLoading(false);
         }
@@ -64,14 +80,17 @@ export function AdminProvider({ children }){
         <AdminContext.Provider
             value={{
                 getAllUsers,
-                getGroupActions,
                 getSystemPermission, 
                 fetchSystemPermission,
                 getGroups,
                 viewGroup,
                 viewUser,
                 fetchAllUsers,
-                fetchGroups
+                fetchGroups,
+                loading,
+                setLoading,
+                getMaintenance,
+                fetchMaintenance
             }}
         >
             {children}

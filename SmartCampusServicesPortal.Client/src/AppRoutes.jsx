@@ -42,7 +42,8 @@ export const AppRoutes = (
             <Route path={constantRoutes.protected.profile}
                    element={<AccessGuard accessKey={userActions.VIEW_PROFILE}><Profile /></AccessGuard>}
             />
-            <Route path={constantRoutes.protected.notification} element={<AccessGuard accessKey={userActions.UPDATE_PROFILE}><Notification /></AccessGuard>} />
+            {/*<Route path={constantRoutes.protected.notification} element={<AccessGuard accessKey={userActions.UPDATE_PROFILE}><Notification /></AccessGuard>} /> */}
+            <Route path={constantRoutes.protected.notification} element={<Notification />} />
             <Route path={constantRoutes.protected.index}  element={ <Home /> } />
 
             {/* Student Pages */}

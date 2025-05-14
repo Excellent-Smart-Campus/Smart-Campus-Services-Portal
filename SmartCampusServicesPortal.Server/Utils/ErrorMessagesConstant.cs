@@ -1,3 +1,5 @@
+using Microsoft.Identity.Client;
+
 namespace SmartCampusServicesPortal.Server.Utils;
 
 public class ErrorMessagesConstant
@@ -17,5 +19,7 @@ public class ErrorMessagesConstant
     public const string LoginSuccess = "You’ve successfully logged in.";
     public const String AccountStatusSuccess = "Account unblocked successfully, user can login";
     public const String AccountStatusFailure = " Account Failed to unblock";
+    public const String MaintenanceUpdateFail = "Maintenance failed to update, try again later";
+    public const String MaintenanceUpdateSuccess = "Maintenance Updated Successfully";
 
 }

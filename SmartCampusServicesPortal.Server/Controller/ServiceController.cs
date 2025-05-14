@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartCampusServicesPortal.Data.Enums;
@@ -118,7 +119,7 @@ public class ServiceController: BaseController
         var room = (await GetRooms()).FirstOrDefault(r => r.RoomId == bookRoomRequest.Room);
 
         var bookRoom = await _serviceManager.CreateAppointmentAsync(
-            bookRoomRequest.ToBookARoom(GetStakeholderId(), GetStakeholderType(), GetName(), room)
+            bookRoomRequest.ToBookARoom(GetStakeholderId(), room)
         );
 
         if (bookRoom.BookingId != null)
@@ -128,16 +129,57 @@ public class ServiceController: BaseController
         
         return BadRequest(new { message = ErrorMessagesConstant.ScheduleError, success = false });
     }
-
-
-    [HttpGet("getMaintenance")]
+    
+    [HttpPost("getMaintenance")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IEnumerable<Maintenance>> GetMaintenancesAsync(
-        [FromQuery] int? stakeholderId,
-        [FromQuery] Status?[] statuses = null)
+    public async Task<IEnumerable<Maintenance>> GetMaintenancesAsync([FromBody] GetMaintenancesRequest request)
     {
-        return await _serviceManager.GetMaintenancesAsync(stakeholderId, statuses);
+        return await _serviceManager.GetMaintenancesAsync(request.StakeholderId, request.Statuses);
     }
+    
+    [HttpPost("update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> MaintenanceUpdate([FromBody] MaintenanceUpdateVM model)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        if(model.IssueId == 0){
+            return BadRequest(new { message = ErrorMessagesConstant.MaintenanceUpdateFail, success = false });
+        }
+        
+        var dbMaintenance = await _serviceManager.GetMaintenancesByIdAsync(model.IssueId) ;
+        
+        if(dbMaintenance == null){
+            return NotFound(new { message = ErrorMessagesConstant.MaintenanceUpdateFail, success = false });
+        }
+
+        var rooms = (await GetRooms()).FirstOrDefault(r => r.RoomId == dbMaintenance.RoomId);
+        var intitalStakeholder = await _stakeholderManager.GetUserProfile(dbMaintenance.StakeholderId.Value);
+
+        var newMaintenace = dbMaintenance.ToMaintenanceUpdate((Status)model.Status, intitalStakeholder, rooms, GetStakeholderId());
+
+        newMaintenace = await _serviceManager.CreateMaintenceBookingAsync(newMaintenace);
+
+        if (!newMaintenace.StatusId.Equals((Status)model.Status))
+        {
+            return BadRequest(new { message = ErrorMessagesConstant.MaintenanceUpdateFail, success = false });
+        }
+
+        return Ok(new { success = true, message = ErrorMessagesConstant.MaintenanceUpdateSuccess} );
+    }
+    
+    [HttpGet("getNotificationsByStakeholder")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IEnumerable<MarkNotification>> GetStakeholderNotificationsAsync()
+    {
+        return await _serviceManager.GetStakeholderNotificationsAsync(GetStakeholderId());
+    }
+    
 }

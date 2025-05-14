@@ -96,9 +96,9 @@
 /Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/obj/Debug/net8.0/SmartCampusServicesPortal.Server.pdb
 /Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/obj/Debug/net8.0/SmartCampusServicesPortal.Server.genruntimeconfig.cache
 /Users/excellentmashengete/Downloads/Project/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/obj/Debug/net8.0/ref/SmartCampusServicesPortal.Server.dll
+/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/bin/Debug/net8.0/spa.proxy.json
 /Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/bin/Debug/net8.0/appsettings.Development.json
 /Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/bin/Debug/net8.0/appsettings.json
-/Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/bin/Debug/net8.0/spa.proxy.json
 /Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/bin/Debug/net8.0/SmartCampusServicesPortal.Server.staticwebassets.endpoints.json
 /Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/bin/Debug/net8.0/SmartCampusServicesPortal.Server
 /Users/excellentmashengete/Downloads/Smart-Campus-Services-Portal/SmartCampusServicesPortal.Server/bin/Debug/net8.0/SmartCampusServicesPortal.Server.deps.json

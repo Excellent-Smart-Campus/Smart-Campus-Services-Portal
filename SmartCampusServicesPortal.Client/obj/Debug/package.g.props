@@ -18,10 +18,12 @@
     <PackageJsonDependenciesMuiIconsMaterial Condition="$(PackageJsonDependenciesMuiIconsMaterial) == ''">^7.0.2</PackageJsonDependenciesMuiIconsMaterial>
     <PackageJsonDependenciesMuiMaterial Condition="$(PackageJsonDependenciesMuiMaterial) == ''">^7.0.2</PackageJsonDependenciesMuiMaterial>
     <PackageJsonDependenciesMuiStyledEngineSc Condition="$(PackageJsonDependenciesMuiStyledEngineSc) == ''">^7.0.2</PackageJsonDependenciesMuiStyledEngineSc>
+    <PackageJsonDependenciesToolpadCore Condition="$(PackageJsonDependenciesToolpadCore) == ''">^0.15.0</PackageJsonDependenciesToolpadCore>
     <PackageJsonDependenciesAxios Condition="$(PackageJsonDependenciesAxios) == ''">^1.7.5</PackageJsonDependenciesAxios>
     <PackageJsonDependenciesConfig Condition="$(PackageJsonDependenciesConfig) == ''">^3.3.12</PackageJsonDependenciesConfig>
     <PackageJsonDependenciesReact Condition="$(PackageJsonDependenciesReact) == ''">^19.0.0</PackageJsonDependenciesReact>
     <PackageJsonDependenciesReactDom Condition="$(PackageJsonDependenciesReactDom) == ''">^19.0.0</PackageJsonDependenciesReactDom>
+    <PackageJsonDependenciesReactRouter Condition="$(PackageJsonDependenciesReactRouter) == ''">^7.6.0</PackageJsonDependenciesReactRouter>
     <PackageJsonDependenciesReactToastify Condition="$(PackageJsonDependenciesReactToastify) == ''">^11.0.5</PackageJsonDependenciesReactToastify>
     <PackageJsonDependenciesRsuite Condition="$(PackageJsonDependenciesRsuite) == ''">^5.80.1</PackageJsonDependenciesRsuite>
     <PackageJsonDependenciesSmartcampusservicesportalClient Condition="$(PackageJsonDependenciesSmartcampusservicesportalClient) == ''">file:</PackageJsonDependenciesSmartcampusservicesportalClient>
@@ -40,7 +42,7 @@
     <PackageJsonDevdependenciesGlobals Condition="$(PackageJsonDevdependenciesGlobals) == ''">^16.0.0</PackageJsonDevdependenciesGlobals>
     <PackageJsonDevdependenciesPrettier Condition="$(PackageJsonDevdependenciesPrettier) == ''">^3.5.3</PackageJsonDevdependenciesPrettier>
     <PackageJsonDevdependenciesPropTypes Condition="$(PackageJsonDevdependenciesPropTypes) == ''">^15.8.1</PackageJsonDevdependenciesPropTypes>
-    <PackageJsonDevdependenciesReactRouterDom Condition="$(PackageJsonDevdependenciesReactRouterDom) == ''">^6.30.0</PackageJsonDevdependenciesReactRouterDom>
+    <PackageJsonDevdependenciesReactRouterDom Condition="$(PackageJsonDevdependenciesReactRouterDom) == ''">^7.6.0</PackageJsonDevdependenciesReactRouterDom>
     <PackageJsonDevdependenciesSass Condition="$(PackageJsonDevdependenciesSass) == ''">^1.77.8</PackageJsonDevdependenciesSass>
     <PackageJsonDevdependenciesVite Condition="$(PackageJsonDevdependenciesVite) == ''">^6.3.1</PackageJsonDevdependenciesVite>
     <PackageJsonBrowserslistProduction Condition="$(PackageJsonBrowserslistProduction) == ''">[

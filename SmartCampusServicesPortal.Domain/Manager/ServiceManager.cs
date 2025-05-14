@@ -32,11 +32,21 @@ public class ServiceManager
     {
         return await _serviceRepository.CreateAppointmentAndNotificationAsync(appointment);
     }
-
+    
     public async Task<IEnumerable<Maintenance>> GetMaintenancesAsync(int? stakeholderId, Status?[] statuses = null)
     {
         var statusList = statuses != null ? string.Join(",", statuses.Select(s => (int)s)) : null;
 
         return await _serviceRepository.GetMaintenancesAsync(stakeholderId, statusList);
+    }
+
+    public async Task<Maintenance> GetMaintenancesByIdAsync(int issueId)
+    {
+        return await _serviceRepository.GetMaintenanceIssueByIdAsyn(issueId);
+    }
+    
+    public async Task<IEnumerable<MarkNotification>> GetStakeholderNotificationsAsync(int stakeholderId)
+    {
+        return await _serviceRepository.GetStakeholderNotificationsAsync(stakeholderId);
     }
 }

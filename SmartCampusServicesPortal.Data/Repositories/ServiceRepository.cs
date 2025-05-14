@@ -1,7 +1,6 @@
 using System.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
-using SmartCampusServicesPortal.Data.Enums;
 using SmartCampusServicesPortal.Data.Models;
 
 namespace SmartCampusServicesPortal.Data.Repositories;
@@ -32,8 +31,7 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
             "svc.GetAllRooms",
             commandType: CommandType.StoredProcedure);
     }
-
-
+    
     public async Task<IEnumerable<Maintenance>> GetMaintenancesAsync(int? stakeholderId,  string status = null){
         await using SqlConnection connection = await GetOpenConnectionAsync();
         var queryParameters = new DynamicParameters();
@@ -48,6 +46,19 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
             commandTimeout: DefaultTimeout);
     }
 
+    public async Task<Maintenance> GetMaintenanceIssueByIdAsyn(int issueId)
+    {
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+        
+        var queryParameters = new DynamicParameters();
+        queryParameters.Add("@issueId", issueId);
+        
+        return await connection.QueryFirstOrDefaultAsync<Maintenance>(
+            "svc.GetMaintenanceIssue",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters);
+    }
+
     public async Task<Maintenance> CreateMaintenceBookingAndNotificationAsync(Maintenance maintenance)
     {
         await using var connection = await GetOpenConnectionAsync();
@@ -55,6 +66,9 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
 
         var dbMaintenance = await CreateMaintenceBookingAsync(maintenance, connection, transaction);
         
+        maintenance.Notification.ReferenceId = dbMaintenance.IssueId;
+        await CreateNotificationWithRecipientsAsync(maintenance.Notification, connection, transaction);
+
         transaction.Commit();
         return dbMaintenance;
     }
@@ -66,6 +80,9 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
 
         var dbAppointment = await CreateAppointmentAsync(appointment, connection, transaction);
         
+        appointment.Notification.ReferenceId = dbAppointment.BookingId;
+        await CreateNotificationWithRecipientsAsync(appointment.Notification, connection, transaction);
+
         transaction.Commit();
         return dbAppointment;
     }
@@ -81,7 +98,45 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
         await using SqlConnection connection = await GetOpenConnectionAsync();
         return await CreateAppointmentAsync(appointment, connection);
     }
-    
+
+    public async Task<IEnumerable<MarkNotification>> GetStakeholderNotificationsAsync(int stakeholder)
+    {
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+        var queryParameters = new DynamicParameters();
+        queryParameters.Add("@stakeholderId", stakeholder);
+        
+        Dictionary<int, MarkNotification> markNotificationDictionary = new Dictionary<int, MarkNotification>();
+        
+        await connection.QueryAsync<MarkNotification, Subject, MarkNotification>(
+            "ntf.GetNotificationsForStakeholder",
+            (notification, subjects) =>
+            {
+                if (!markNotificationDictionary.TryGetValue(notification.NotificationId.Value, out MarkNotification markNotificationInstance)) 
+                {
+                    markNotificationInstance = notification; 
+                    markNotificationInstance.Subject = new Subject(); 
+                    markNotificationDictionary.Add(notification.NotificationId.Value, markNotificationInstance);
+                }
+                if(subjects != null){
+                    markNotificationInstance.Subject = new Subject
+                    {
+                        SubjectId = subjects.SubjectId, 
+                        SubjectCode = subjects.SubjectCode, 
+                        SubjectName = subjects.SubjectName,
+                    };
+                }
+                return notification;
+            },
+            splitOn: "SubjectId",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters,
+            commandTimeout: DefaultTimeout
+        );
+        
+        return markNotificationDictionary.Values;
+    }
+
+
     private async Task<Maintenance> CreateMaintenceBookingAsync(Maintenance maintenance, 
         SqlConnection connection, SqlTransaction transaction = null)
     {
@@ -121,5 +176,40 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
             param: queryParameters,
             transaction: transaction,
             commandTimeout: DefaultTimeout);
+    }
+
+    private async Task<Notification> CreateNotificationWithRecipientsAsync(Notification notification,
+        SqlConnection connection, SqlTransaction transaction = null){
+             var queryParameters = new DynamicParameters();
+        queryParameters.Add("@senderId", notification.SenderId);
+        queryParameters.Add("@notificationTypeId", (int)notification.NotificationTypeId);
+        queryParameters.Add("@message", notification.Message);
+        queryParameters.Add("@subjectId", notification.SubjectId);
+        queryParameters.Add("@referenceId", notification.ReferenceId);
+        queryParameters.Add("@recipientIds", notification.RecipientIds);
+        
+        return await connection.QueryFirstOrDefaultAsync<Notification>(
+            "ntf.CreateNotificationWithRecipients",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters,
+            transaction: transaction,
+            commandTimeout: DefaultTimeout);
+    }
+
+    private async Task<Notification> DistributeSubjectNotificationsAsync(int senderId, int subjectId,
+         string message, SqlConnection connection, SqlTransaction transaction = null
+        ){
+             var queryParameters = new DynamicParameters();
+            queryParameters.Add("@senderId", senderId);
+            queryParameters.Add("@message", message);
+            queryParameters.Add("@subjectId", subjectId);
+            
+            return await connection.QueryFirstOrDefaultAsync<Notification>(
+                "ntf.DistributeSubjectNotification",
+                commandType: CommandType.StoredProcedure,
+                param: queryParameters,
+                transaction: transaction,
+                commandTimeout: DefaultTimeout
+            );
     }
 }

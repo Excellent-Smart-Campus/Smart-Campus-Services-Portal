@@ -3,6 +3,7 @@ namespace SmartCampusServicesPortal.Server.ViewModels;
 
 public class ProfileVM
 {
+    public int Stakeholder { get; set;  }
     public int? Title { get; set; }
     
     public string FirstName { get; set; }
