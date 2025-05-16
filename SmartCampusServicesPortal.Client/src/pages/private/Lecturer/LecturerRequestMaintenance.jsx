@@ -11,6 +11,9 @@ import { useAuth } from "@/context/AuthContext.jsx";
 import { Box } from '@mui/material';
 import { Error, Success } from '@/helper/Toasters.jsx';
 import { filterStudyRooms } from  '@/utils/mapper.jsx';
+import { status } from "@/utils/constants.jsx";
+import { useAdmin } from "@/context/AdminContext.jsx";
+import { useEducation } from "@/context/EducationContext.jsx";
 import AccessGuard from "@/components/AccessGuard.jsx";
 import CustomContainer from "@/components/CustomContainer.jsx";
 import CustomButton from "@/components/CustomButton.jsx";
@@ -19,15 +22,26 @@ import ApiClient from '@/service/ApiClient';
 
 
 function LecturerRequestMaintenance(){
-    const { setLoading } = useAuth();
+    const { setLoading, profile } = useAuth();
     const { rooms } = useService();
-    const navigate = useNavigate();
+    const { getNotifications } = useEducation()
+    const { fetchMaintenance, fetchBookings } = useAdmin();
     const maintenanceFormRef = useRef();
     const [ maintenanceForm, setMaintenanceForm ] = useState({name: '', room: null, description: ''});
-
+    const navigate = useNavigate();
     useEffect(() => {
         setLoading(false);
     }, []);
+
+    const fetchData = async () => {
+        try {
+            await fetchMaintenance(profile.stakeholder, [Number(status.Open), Number(status.InProgress)])
+            await fetchBookings();
+            await getNotifications();
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const handleMaintenanceRequest = async e => {
         setLoading(true);
@@ -42,7 +56,8 @@ function LecturerRequestMaintenance(){
                 maintenanceForm.name, maintenanceForm.room, maintenanceForm.description
             );
             Success(response.message);
-            navigate(constantRoutes.protected.index);
+            await fetchData()
+           navigate(constantRoutes.protected.index);
         } catch(e) {
             Error(getErrorMessageFromResponse(e));
         }finally {

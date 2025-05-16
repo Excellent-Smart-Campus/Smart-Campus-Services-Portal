@@ -100,7 +100,8 @@ export function EducationProvider({ children }){
                 notifications,
                 titles,
                 notificationsCount,
-                loading
+                loading,
+                getNotifications
             }}
         >
             {children}

@@ -51,7 +51,7 @@ const BookARoom = () => {
         try {
             const response = await ApiClient.instance.bookARoom(userData);
             Success(response.message);
-            navigate(constantRoutes.protected.index);
+            window.location.href = constantRoutes.protected.index;
         } catch (e) {
             Error(getErrorMessageFromResponse(e));
         } finally{

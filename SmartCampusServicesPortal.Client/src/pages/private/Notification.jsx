@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Divider, Card, CardContent } from '@mui/material';
 import { useEducation } from "@/context/EducationContext.jsx";
 import { constantRoutes } from "@/utils/constantRoutes.jsx";
@@ -11,10 +11,11 @@ import AccessGuard from "@/components/AccessGuard.jsx";
 import CustomContainer from "@/components/CustomContainer.jsx";
 import CustomBreadcrumb from '@/components/CustomBreadcrumb.jsx';
 import ApiClient from '@/service/ApiClient';
+import Loader from "@/components/Loader.jsx";
 
 function Notification() {
     const { notifications } = useEducation()
-    const { setLoading} = useAuth();
+    const [ loading,  setLoading ] = useState(false);
 
     useEffect(() => {
         setLoading(true);
@@ -27,6 +28,10 @@ function Notification() {
         }
         fetchData()
     }, [])
+
+    if(loading){
+        return  <Loader />
+    }
 
     return (
         <AccessGuard accessKey={userActions.VIEW_NOTIFICATIONS}>

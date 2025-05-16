@@ -12,6 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import { useAdmin } from "@/context/AdminContext.jsx";
 import { statusDescription, formatServerTime, formatServerDateOnly} from "@/utils/mapper.jsx";
 import { useDialogs } from '@toolpad/core/useDialogs';
+import { useEducation } from "@/context/EducationContext.jsx";
 import AccessGuard from "@/components/AccessGuard.jsx";
 import CustomContainer from "@/components/CustomContainer.jsx";
 import CustomButton from "@/components/CustomButton.jsx";
@@ -21,12 +22,14 @@ import ApiClient from '@/service/ApiClient';
 
 const ManageLecturerBookings = () => {
     const dialogs = useDialogs();
-    const { fetchBookings, getBookings, setLoading } = useAdmin();
-    const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const { profile } = useAuth();
+    const { getNotifications } = useEducation()
+    const { fetchBookings, fetchMaintenance, getBookings, setLoading } = useAdmin();
     const [value, setValue] = useState(appointmentsAndBookingsType.Bookings);
     const [filteredData, setFilteredData] = useState([]);
+    const navigate = useNavigate();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -59,6 +62,16 @@ const ManageLecturerBookings = () => {
         fetchData();
     }, [value, getBookings]);
     
+    const fetchData = async () => {
+        try {
+            await fetchMaintenance(profile.stakeholder, [Number(status.Open), Number(status.InProgress)])
+            await fetchBookings();
+            await getNotifications();
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const approveAppointment = async (data) => {
         const confirmed = await dialogs.confirm(
             `Are you sure you want to confirm appointment?`, {
@@ -71,6 +84,7 @@ const ManageLecturerBookings = () => {
             try {
                 const response = await ApiClient.instance.confirmBooking(data.bookingId);
                 Success(response.message);
+                await fetchData();
                 navigate(constantRoutes.protected.lecturer.index);
             } catch (e) {
                 Error(getErrorMessageFromResponse(e));
@@ -93,8 +107,8 @@ const ManageLecturerBookings = () => {
             try {
                 const response = await ApiClient.instance.cancelBooking(data.bookingId);
                 Success(response.message);
+                await fetchData();
                 navigate(constantRoutes.protected.lecturer.index);
-
             } catch (e) {
                 Error(getErrorMessageFromResponse(e));
             } finally {
