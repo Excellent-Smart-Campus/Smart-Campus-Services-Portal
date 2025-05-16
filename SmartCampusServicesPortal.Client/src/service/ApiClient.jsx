@@ -107,6 +107,15 @@ class ApiClient {
             },
         });
     }
+    async updateMaintenance(issueId, status){
+        return await this.callApi(`/api/service/update`, 'POST',{
+            cacheResponse: false,
+            data: {
+                IssueId: issueId,
+                Status: status
+            }
+        });
+    }
     
     async scheduleAppointment(formData){
         return await this.callApi('/api/service/scheduleAppointment', 'POST',{
@@ -130,6 +139,31 @@ class ApiClient {
                 StartTime: formData.startTime,
                 EndTime: formData.endTime,
             },
+        });
+    }
+
+    async getMaintenance(stakeholder, statuses) {
+        return await this.callApi('/api/service/getMaintenance', 'POST',{
+            cacheResponse: false,
+            data: {
+                StakeholderId: stakeholder,
+                Statuses: statuses,
+            },
+        });
+    }
+
+    async getNotifications() {
+        return await this.callApi('/api/service/getNotificationsByStakeholder', 'GET',{ cacheResponse: false });
+    }
+
+    async getStakeholderBookings() {
+        return await this.callApi('/api/service/getStakeholderBookingById', 'GET',{ cacheResponse: false });
+    }
+
+    async cancelBooking(bookingId){
+        return await this.callApi('/api/service/cancelBooking', 'GET',{ 
+            cacheResponse: false,
+            params: { bookingId }
         });
     }
 
@@ -179,8 +213,17 @@ class ApiClient {
         });    
     }
     
+    clearCache() {
+        this.cache = {};
+    }
+
     async logout() {
-        return await this.callApi('/api/auth/logout', 'POST', { cacheResponse: false });
+        try {
+            await this.callApi('/api/auth/logout', 'POST', { cacheResponse: false });
+        } finally {
+            this.clearCache();
+            return;
+        }
     }
     
     async login(email, password) {

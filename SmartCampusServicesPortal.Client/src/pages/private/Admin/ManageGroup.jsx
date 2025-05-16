@@ -1,6 +1,7 @@
 import  {useState, useEffect } from 'react';
 import { decodeId } from '@/utils/hashHelper';
 import { useParams } from 'react-router-dom';
+import { userActions } from "@/utils/authEnums.jsx";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Checkbox, FormControlLabel, FormGroup , useMediaQuery, Divider} from '@mui/material';
 import { constantRoutes } from "@/utils/constantRoutes.jsx";
@@ -97,14 +98,14 @@ const ManageGroup = () => {
                                     variant={'contained'}
                                     color={'primary'}
                                 />
-                            
-                                  
-                                <CustomButton
-                                    handle={()=>{}}
-                                    label={'Update'}
-                                    variant={'contained'}
-                                    color={'secondary'}
-                                />
+                                {canAccess(userActions.REVOKE_ACTION_FROM_GROUP) && (                  
+                                    <CustomButton
+                                        handle={()=>{}}
+                                        label={'Update'}
+                                        variant={'contained'}
+                                        color={'secondary'}
+                                    />
+                                )}
                             </ButtonToolbar>
                         </Box>
                     </Box>

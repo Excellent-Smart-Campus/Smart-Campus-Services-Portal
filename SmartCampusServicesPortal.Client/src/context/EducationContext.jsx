@@ -10,10 +10,10 @@ export const useEducation = () => {
 };
 
 export function EducationProvider({ children }){
-    const { authenticated, canAccess} = useAuth();
-    const [ loading, setLoading] = useState(true);
+    const { authenticated, canAccess, loading, setLoading} = useAuth();
     const [ titles, setTitles ] = useState([]);
     const [enrolled, setEnrolled] = useState([]);
+    const [notifications, setNotifications] = useState([]);
     const [timeTable, setTimeTable] = useState({});
     const [enrolledError, setEnrolledError] = useState(null);
     const [registeredStakeholders, setRegisteredStakeholders ] = useState([]);
@@ -22,6 +22,15 @@ export function EducationProvider({ children }){
         try {
             const response = await ApiClient.instance.getEnrolledSubject();
             setEnrolled(response);
+        } catch (error){
+            setEnrolledError(error?.message || "An error occurred while fetching enrolled subjects.");
+        }
+    }, []);
+    
+    const getNotifications = useCallback(async () => {
+        try {
+            const response = await ApiClient.instance.getNotifications();
+            setNotifications(response);
         } catch (error){
             setEnrolledError(error?.message || "An error occurred while fetching enrolled subjects.");
         }
@@ -60,14 +69,22 @@ export function EducationProvider({ children }){
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            await Promise.all([getEnrolled(), getTimeTable(), getTitles()]);
-            setLoading(false);
+            try {
+                await Promise.all([
+                    getEnrolled(), 
+                    getTimeTable(), 
+                    getTitles(),
+                    getNotifications(),
+                ]);
+            }finally {
+                setLoading(false)
+            }
         };
 
         if (authenticated) {
             fetchData();
         }
-    }, [authenticated, getEnrolled, getTimeTable]);
+    }, [authenticated, getEnrolled, getTimeTable, getTitles, getNotifications]);
     
     return (
         <EducationContext.Provider
@@ -77,6 +94,7 @@ export function EducationProvider({ children }){
                 enrolledError,
                 fetchRegisteredStakeholders,
                 registeredStakeholders,
+                notifications,
                 titles,
                 loading
             }}

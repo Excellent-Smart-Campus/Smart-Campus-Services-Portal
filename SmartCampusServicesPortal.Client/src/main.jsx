@@ -6,6 +6,7 @@ import { EducationProvider } from "@/context/EducationContext.jsx";
 import { ServiceProvider } from "@/context/ServiceContext.jsx";
 import { AdminProvider } from "@/context/AdminContext.jsx";
 import { ToastContainer } from 'react-toastify';
+import { DialogsProvider } from '@toolpad/core/useDialogs';
 import App from './App.jsx';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -15,16 +16,18 @@ import '@fontsource/roboto/700.css';
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <BrowserRouter>
-            <AuthProvider>
-                <EducationProvider>
-                    <ServiceProvider>
-                        <AdminProvider>
-                            <ToastContainer />
-                            <App />
-                        </AdminProvider>
-                    </ServiceProvider>
-                </EducationProvider>
-            </AuthProvider>
+            <DialogsProvider>
+                <AuthProvider>
+                    <EducationProvider>
+                        <ServiceProvider>
+                            <AdminProvider>
+                                <ToastContainer />
+                                <App />
+                            </AdminProvider>
+                        </ServiceProvider>
+                    </EducationProvider>
+                </AuthProvider>
+            </DialogsProvider>
         </BrowserRouter>
     </StrictMode>
 )

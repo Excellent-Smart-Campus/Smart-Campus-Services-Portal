@@ -27,14 +27,10 @@ function Register() {
     useEffect(() => {
         setLoading(false);
         const fetchData = async () => {
-            try {
-                const courses = await ApiClient.instance.getCourseById(null);
-                const userTitles = await ApiClient.instance.getUserTitles();
-                setCourses(courses);
-                setTitles(userTitles);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+            const courses = await ApiClient.instance.getCourseById(null);
+            const userTitles = await ApiClient.instance.getUserTitles();
+            setCourses(courses);
+            setTitles(userTitles);
         }
         fetchData();
     }, []);

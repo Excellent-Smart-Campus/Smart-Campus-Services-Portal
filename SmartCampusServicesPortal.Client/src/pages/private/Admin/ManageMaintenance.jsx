@@ -1,116 +1,199 @@
-import  {useState, useEffect } from 'react';
-import { Box, Tabs, Tab, CardActions, useMediaQuery, Card, CardContent, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { constantRoutes } from "@/utils/constantRoutes.jsx";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, Fragment } from 'react'
+import {
+    Box,
+    Tabs,
+    Tab,
+    Divider,
+    IconButton,
+    useMediaQuery,
+    Card,
+    CardContent,
+    Typography,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Collapse
+} from '@mui/material';
+import { useDialogs } from '@toolpad/core/useDialogs';
 import { ButtonToolbar } from 'rsuite';
-import { maintenanceTypes } from "@/utils/constants.jsx";
-import { useAdmin } from  "@/context/AdminContext.jsx";
+import { constantRoutes } from '@/utils/constantRoutes.jsx';
+import { maintenanceTypes, status } from '@/utils/constants.jsx';
+import { mapRoom, statusDescription, formatServerDate } from '@/utils/mapper.jsx';
+import { useAdmin } from '@/context/AdminContext.jsx';
+import { useService } from '@/context/ServiceContext.jsx';
 import { useTheme } from '@mui/material/styles';
-import { encodeId } from '@/utils/hashHelper';
-import CustomContainer from "@/components/CustomContainer.jsx";
-import CustomTabPanel from "@/components/CustomTabPanel.jsx";
-import CustomBreadcrumb from '@/components/CustomBreadcrumb.jsx';
+import { useAuth } from "@/context/AuthContext.jsx";
+import { getErrorMessageFromResponse } from "@/utils/getErrorMessageFromResponse.jsx";
+import { Error, Success } from "@/helper/Toasters.jsx";
+import { ExpandMore } from '@/helper/ExpandMore.jsx';
 import CustomButton from "@/components/CustomButton.jsx";
-import EditIcon from '@mui/icons-material/Edit';
+import CustomContainer from '@/components/CustomContainer.jsx'
+import CustomTabPanel from '@/components/CustomTabPanel.jsx';
+import CustomBreadcrumb from '@/components/CustomBreadcrumb.jsx';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Loader from '@/components/Loader.jsx';
+import ApiClient from '@/service/ApiClient';
 
 const ManageMaintenance = () => {
-    const { fetchAllUsers, fetchGroups, getGroups ,getAllUsers} = useAdmin();
-    const navigate = useNavigate();
+    const dialogs = useDialogs();
+    const { rooms } = useService();
+    const { loading, setLoading, canAccess } = useAuth();
+    const { getMaintenance, fetchMaintenance } = useAdmin();
+    const [getFocused, setFocused] = useState(null);
+    const [getDetails, setDetails] = useState({});
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [value, setValue] = useState(maintenanceTypes.Open);
+
     const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+        setValue(newValue)
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             if (value === maintenanceTypes.Open) {
-
+                setFocused(null);
+                setDetails({});
+                await fetchMaintenance(null, [Number(status.Open), Number(status.InProgress)])
             } else if (value === maintenanceTypes.Closed) {
-
+                setFocused(null);
+                setDetails({});
+                await fetchMaintenance(null, [status.Resolved])
             }
-        };
+        }
+        fetchData()
+    }, [value])
 
-        fetchData();
-    }, [value]);
+    if (loading) {
+        return <Loader />
+    }
 
-    const handleUserClick = (userId) => {
-    };
+    const handleInProgressWork = async (data) => {
+        const confirmed = await dialogs.confirm(
+            `Are you sure you want to start working on this maintanance request?`, {
+            okText: 'Yes',
+            cancelText: 'No',
+        });
 
-    const handleGroupClick = (groupId) => {
-    };
-    
-    const renderUsers = () => {
+        if (confirmed) {
+            setLoading(true);
+            try {
+                const response = await ApiClient.instance.updateMaintenance(
+                    data.issueId, status.InProgress
+                );
+                Success(response.message);
+            } catch (e) {
+                Error(getErrorMessageFromResponse(e));
+            } finally {
+                setLoading(false);
+            }
+        }
+
+    }
+
+    const handleCloseIssue = async (data) => {
+        const confirmed = await dialogs.confirm(
+            `Are you sure you want to close the current in progress maintenance work.?`, {
+            okText: 'Yes',
+            cancelText: 'No',
+        });
+
+        if (confirmed) {
+            setLoading(true);
+            try {
+                const response = await ApiClient.instance.updateMaintenance(
+                    data.issueId, status.Resolved
+                );
+                Success(response.message);
+            } catch (e) {
+                Error(getErrorMessageFromResponse(e));
+            } finally {
+                setLoading(false);
+            }
+        }
+    }
+    const renderOpen = () => {
         return isMobile ? (
-            <Box display="flex" flexDirection="column" gap={2}>
-                {getAllUsers.map((user, index) => (
-                    <Card key={index} onClick={() => handleUserClick(user.stakeholderId)} sx={{ cursor: 'pointer' }}>
+            <Box display='flex' flexDirection='column' gap={2}>
+                {getMaintenance.map((man, index) => (
+                    <Card key={index} sx={{ cursor: 'pointer' }}>
                         <CardContent>
-                            <Typography variant="h6">{user.displayName}</Typography>
-                            <Typography variant="body2">Email: {user.username}</Typography>
-                            <Typography variant="body2">Role: {user.groups}</Typography>
-
-                        </CardContent>
-                    </Card>
-                ))}
-            </Box>
-        ) : (
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>User Permission Group(s)</TableCell>
-                        <TableCell>Account Status</TableCell>
-                        <TableCell>Action</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {getAllUsers.map((user, index) => (
-                        <TableRow key={index} onClick={() => handleUserClick(user.stakeholderId)}>
-                            <TableCell>{user.displayName}</TableCell>
-                            <TableCell>{user.username}</TableCell>
-                            <TableCell>{user.groups}</TableCell>
-                            <TableCell>
-                                <Box
-                                    justifyContent={'center'}
+                            <Typography variant='h6'>{man.title}</Typography>
+                            <Typography variant='body2'>Room Number: {mapRoom(rooms, man.roomId)?.roomNumber}</Typography>
+                            <Typography variant='body2'>Room Name: {mapRoom(rooms, man.roomId)?.roomName}</Typography>
+                            <Typography variant='body2'>Reported Date: {formatServerDate(man.dateReported)}</Typography>
+                            <Box display={'flex'} sx={{ my: '0.5rem' }} justifyContent={'space-between'}>
+                                <Box justifyContent={'center'}
                                     sx={{
                                         p: '0.5em',
-                                        bgcolor: user.isLocked ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 128, 0, 0.1)',
-                                        color: user.isLocked ? 'red' : 'green',
-                                        width: '50%',
+                                        bgcolor: man.statusId === status.Open
+                                            ? 'rgba(255, 165, 0, 0.1)'
+                                            : man.statusId === status.InProgress
+                                                ? 'rgba(30, 144, 255, 0.1)'
+                                                : 'rgba(0, 128, 0, 0.1)',
+                                        color: man.statusId === status.Open
+                                            ? 'orange'
+                                            : man.statusId === status.InProgress
+                                                ? 'dodgerblue'
+                                                : 'green',
+                                        width: '40%',
                                         textAlign: 'center',
                                         borderRadius: '4px',
                                     }}
                                 >
-                                    {user.isLocked ? 'Locked' : 'Active'}
+                                    {statusDescription[man.statusId]}
                                 </Box>
-                            </TableCell>
-                            <TableCell align="right" sx={{ width: '10%' }}>
-                                <ButtonToolbar  className="button-toolbar">
-                                    <EditIcon onClick={() => handleUserClick(user.stakeholderId)} sx={{ cursor: 'pointer' }} color="secondary" fontSize="small" />
-                                </ButtonToolbar>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        );
-    };
+                                <ExpandMore
+                                    expand={getFocused === index ? true : false}
+                                    onClick={() => {
+                                        setDetails(man)
+                                        setFocused(getFocused === index ? null : index)
+                                    }}
+                                    aria-expanded={getFocused === index ? true : false}
+                                    aria-label="show more"
+                                >
+                                    <ExpandMoreIcon />
+                                </ExpandMore>
+                            </Box>
+                            <Collapse in={getFocused === index} timeout="auto" unmountOnExit>
+                                {getDetails && (
+                                    <Box key={`details-collapse`}>
+                                        <Divider sx={{ my: '1rem' }} />
+                                        <Typography variant="body1"> Description </Typography>
+                                        <Typography variant="body2">{getDetails.description}</Typography>
+                                        <Divider sx={{ my: '1rem' }} />
 
-    const renderGroups = () => {
-        return isMobile ? (
-            <Box display="flex" flexDirection="column" gap={2}>
-                {getGroups.map((group, index) => (
-                    <Card key={index} >
-                        <CardContent>
-                            <Typography variant="h6">{group.description}</Typography>
-                            <Typography variant="body2">{!group.isDeleted === true ? 'Active' : 'Inactive'}</Typography>
+                                        <Typography variant="body2">
+                                            <ButtonToolbar>
+                                                {man.statusId === status.Open && (
+                                                    <CustomButton
+                                                        handle={() => handleInProgressWork(man)}
+                                                        size={'small'}
+                                                        label={'Start Work'}
+                                                        variant={'contained'}
+                                                        color={'primary'}
+                                                    />
+                                                )}
+                                                {man.statusId === status.InProgress && (
+                                                    <CustomButton
+                                                        handle={() => handleCloseIssue(man)}
+                                                        size={'small'}
+                                                        label={'Close'}
+                                                        variant={'contained'}
+                                                        color={'success'}
+                                                    />
+                                                )}
+                                            </ButtonToolbar>
+                                        </Typography>
+
+                                    </Box>
+                                )}
+                            </Collapse>
                         </CardContent>
-                        <CardActions>
-                            <EditIcon onClick={() => handleGroupClick(group.groupId)} sx={{ cursor: 'pointer' }} color="secondary" fontSize="small" />
-                        </CardActions>
                     </Card>
                 ))}
             </Box>
@@ -118,32 +201,305 @@ const ManageMaintenance = () => {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ width: '80%' }}>Group Name</TableCell>
-                        <TableCell sx={{ width: '10%' }}>Status</TableCell>
-                        <TableCell sx={{ width: '10%' }}>Actions</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell>Issue Title</TableCell>
+                        <TableCell>Reported Room Number</TableCell>
+                        <TableCell>Reported Room Name</TableCell>
+                        <TableCell>Date Reported</TableCell>
+                        <TableCell>Maintenance Status</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {getGroups.map((group, index) => (
-                        <TableRow key={index} onClick={() => handleGroupClick(group.groupId)}>
-                            <TableCell sx={{ width: '80%' }}>{group.description}</TableCell>
-                            <TableCell sx={{ width: '10%' }}>{!group.isDeleted ? 'Active' : 'Inactive'}</TableCell>
-                            <TableCell align="right" sx={{ width: '10%' }}>
-                                <ButtonToolbar  className="button-toolbar">
-                                    <EditIcon onClick={() => handleGroupClick(group.groupId)} sx={{ cursor: 'pointer' }} color="secondary" fontSize="small" />
-                                </ButtonToolbar>
-                            </TableCell>
-                        </TableRow>
+                    {getMaintenance.map((man, index) => (
+                        <Fragment key={index}>
+                            <TableRow key={`lecturer-row-${index}`}
+                                sx={{
+                                    '&:last-child td, &:last-child th': { borderBottom: 'none' }
+                                }}>
+                                <TableCell>
+                                    <IconButton
+                                        aria-label='expand row'
+                                        size='small'
+                                        onClick={() => {
+                                            setDetails(man)
+                                            setFocused(getFocused === index ? null : index)
+                                        }}
+                                    >
+                                        {getFocused === index ? (
+                                            <KeyboardArrowUpIcon />
+                                        ) : (
+                                            <KeyboardArrowDownIcon />
+                                        )}
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell>{man.title}</TableCell>
+                                <TableCell>{mapRoom(rooms, man.roomId)?.roomNumber}</TableCell>
+                                <TableCell>{mapRoom(rooms, man.roomId)?.roomName}</TableCell>
+                                <TableCell>{formatServerDate(man.dateReported)}</TableCell>
+                                <TableCell>
+                                    <Box
+                                        justifyContent={'center'}
+                                        sx={{
+                                            p: '0.5em',
+                                            bgcolor: man.statusId === status.Open
+                                                ? 'rgba(255, 165, 0, 0.1)'
+                                                : man.statusId === status.InProgress
+                                                    ? 'rgba(30, 144, 255, 0.1)'
+                                                    : 'rgba(0, 128, 0, 0.1)',
+                                            color: man.statusId === status.Open
+                                                ? 'orange'
+                                                : man.statusId === status.InProgress
+                                                    ? 'dodgerblue'
+                                                    : 'green',
+                                            width: '100%',
+                                            textAlign: 'center',
+                                            borderRadius: '4px'
+                                        }}
+                                    >
+                                        {statusDescription[man.statusId]}
+                                    </Box>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow key={`student-collapse-${index}`}
+                                sx={{
+                                    '&:last-child td, &:last-child th': { borderBottom: 'none' }
+                                }}>
+                                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                                    <Collapse in={getFocused === index} timeout="auto" unmountOnExit>
+                                        {getDetails && (
+                                            <Box sx={{ margin: 1 }}>
+                                                <Typography variant="h6" gutterBottom component="div">
+                                                    Details
+                                                </Typography>
+                                                <Table>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell colSpan={5}>Description</TableCell>
+                                                            <TableCell colSpan={1}>Actions</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody width={'100%'} justifyContent={'space-between'} sx={{
+                                                        '&:last-child td, &:last-child th': { borderBottom: 'none' }
+                                                    }}>
+                                                        <TableCell colSpan={5}>{getDetails.description}</TableCell>
+                                                        <TableCell colSpan={1}>
+                                                            <ButtonToolbar>
+                                                                {man.statusId === status.Open && (
+                                                                    <CustomButton
+                                                                        handle={() => handleInProgressWork(man)}
+                                                                        size={'small'}
+                                                                        label={'Start Work'}
+                                                                        variant={'contained'}
+                                                                        color={'primary'}
+                                                                    />
+                                                                )}
+                                                                {man.statusId === status.InProgress && (
+                                                                    <CustomButton
+                                                                        handle={() => handleCloseIssue(man)}
+                                                                        size={'small'}
+                                                                        label={'Close'}
+                                                                        variant={'contained'}
+                                                                        color={'success'}
+                                                                    />
+                                                                )}
+                                                            </ButtonToolbar>
+                                                        </TableCell>
+                                                    </TableBody>
+                                                </Table>
+                                            </Box>
+                                        )}
+                                    </Collapse>
+                                </TableCell>
+                            </TableRow>
+                        </Fragment>
                     ))}
                 </TableBody>
             </Table>
-        );
+        )
+    }
+
+    const renderClosed = () => {
+        return isMobile ? (
+            <Box display='flex' flexDirection='column' gap={2}>
+                {getMaintenance.map((man, index) => (
+                    <Card key={index} sx={{ cursor: 'pointer' }}>
+                        <CardContent>
+                            <Typography variant='h6'>{man.title}</Typography>
+                            <Typography variant='body2'>Room Number: {mapRoom(rooms, man.roomId)?.roomNumber}</Typography>
+                            <Typography variant='body2'>Room Name: {mapRoom(rooms, man.roomId)?.roomName}</Typography>
+                            <Typography variant='body2'>Reported Date: {formatServerDate(man.dateReported)}</Typography>
+                            <Box display={'flex'} sx={{ my: '0.5rem' }} justifyContent={'space-between'}>
+                                <Box justifyContent={'center'}
+                                    sx={{
+                                        p: '0.5em',
+                                        bgcolor: man.statusId === status.Open
+                                            ? 'rgba(255, 165, 0, 0.1)'
+                                            : man.statusId === status.InProgress
+                                                ? 'rgba(30, 144, 255, 0.1)'
+                                                : 'rgba(0, 128, 0, 0.1)',
+                                        color: man.statusId === status.Open
+                                            ? 'orange'
+                                            : man.statusId === status.InProgress
+                                                ? 'dodgerblue'
+                                                : 'green',
+                                        width: '40%',
+                                        textAlign: 'center',
+                                        borderRadius: '4px',
+                                    }}
+                                >
+                                    {statusDescription[man.statusId]}
+                                </Box>
+                                <ExpandMore
+                                    expand={getFocused === index ? true : false}
+                                    onClick={() => {
+                                        setDetails(man)
+                                        setFocused(getFocused === index ? null : index)
+                                    }}
+                                    aria-expanded={getFocused === index ? true : false}
+                                    aria-label="show more"
+                                >
+                                    <ExpandMoreIcon />
+                                </ExpandMore>
+                            </Box>
+                            <Collapse in={getFocused === index} timeout="auto" unmountOnExit>
+                                {getDetails && (
+                                    <Box key={`details-collapse`}>
+                                        <Divider sx={{ my: '1rem' }} />
+                                        <Typography variant="body1"> Description </Typography>
+                                        <Typography variant="body2">{getDetails.description}</Typography>
+                                        <Divider sx={{ my: '1rem' }} />
+
+                                        <Typography variant="body2">
+                                            <ButtonToolbar>
+                                                {man.statusId === status.Open && (
+                                                    <CustomButton
+                                                        handle={() => handleInProgressWork(man)}
+                                                        size={'small'}
+                                                        label={'Start Work'}
+                                                        variant={'contained'}
+                                                        color={'primary'}
+                                                    />
+                                                )}
+                                                {man.statusId === status.InProgress && (
+                                                    <CustomButton
+                                                        handle={() => handleCloseIssue(man)}
+                                                        size={'small'}
+                                                        label={'Close'}
+                                                        variant={'contained'}
+                                                        color={'success'}
+                                                    />
+                                                )}
+                                            </ButtonToolbar>
+                                        </Typography>
+
+                                    </Box>
+                                )}
+                            </Collapse>
+                        </CardContent>
+                    </Card>
+                ))}
+            </Box>
+        ) : (
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell>Issue Title</TableCell>
+                        <TableCell>Reported Room Number</TableCell>
+                        <TableCell>Reported Room Name</TableCell>
+                        <TableCell>Date Reported</TableCell>
+                        <TableCell>Date Resolved</TableCell>
+                        <TableCell>Maintenance Status</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {getMaintenance.map((man, index) => (
+                        <Fragment key={index}>
+                            <TableRow key={`lecturer-row-${index}`}
+                                sx={{
+                                    '&:last-child td, &:last-child th': { borderBottom: 'none' }
+                                }}>
+                                <TableCell>
+                                    <IconButton
+                                        aria-label='expand row'
+                                        size='small'
+                                        onClick={() => {
+                                            setDetails(man)
+                                            setFocused(getFocused === index ? null : index)
+                                        }}
+                                    >
+                                        {getFocused === index ? (
+                                            <KeyboardArrowUpIcon />
+                                        ) : (
+                                            <KeyboardArrowDownIcon />
+                                        )}
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell>{man.title}</TableCell>
+                                <TableCell>{mapRoom(rooms, man.roomId)?.roomNumber}</TableCell>
+                                <TableCell>{mapRoom(rooms, man.roomId)?.roomName}</TableCell>
+                                <TableCell>{formatServerDate(man.dateReported)}</TableCell>
+                                <TableCell>{formatServerDate(man.dateResolved)}</TableCell>
+                                <TableCell>
+                                    <Box
+                                        justifyContent={'center'}
+                                        sx={{
+                                            p: '0.5em',
+                                            bgcolor: man.statusId === status.Open
+                                                ? 'rgba(255, 165, 0, 0.1)'
+                                                : man.statusId === status.InProgress
+                                                    ? 'rgba(30, 144, 255, 0.1)'
+                                                    : 'rgba(0, 128, 0, 0.1)',
+                                            color: man.statusId === status.Open
+                                                ? 'orange'
+                                                : man.statusId === status.InProgress
+                                                    ? 'dodgerblue'
+                                                    : 'green',
+                                            width: '100%',
+                                            textAlign: 'center',
+                                            borderRadius: '4px'
+                                        }}
+                                    >
+                                        {statusDescription[man.statusId]}
+                                    </Box>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow key={`student-collapse-${index}`}>
+                                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                                    <Collapse in={getFocused === index} timeout="auto" unmountOnExit>
+                                        {getDetails && (
+                                            <Box sx={{ margin: 1 }}>
+                                                <Typography variant="h6" gutterBottom component="div">
+                                                    Details
+                                                </Typography>
+                                                <Table>
+                                                    <TableHead>
+                                                        <TableRow  >
+                                                            <TableCell>Description</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody sx={{
+                                                        '&:last-child td, &:last-child th': { borderBottom: 'none' }
+                                                    }}>
+                                                        <TableCell>{getDetails.description}</TableCell>
+                                                    </TableBody>
+                                                </Table>
+                                            </Box>
+                                        )}
+                                    </Collapse>
+                                </TableCell>
+                            </TableRow>
+                        </Fragment>
+                    ))}
+                </TableBody>
+            </Table>
+        )
     }
 
     const tabData = [
-        { label: 'Open', content: renderUsers(), key: maintenanceTypes.Open },
-        { label: 'Closed', content: renderGroups(), key: maintenanceTypes.Closed }
-    ];
+        { label: 'Open', content: renderOpen(), key: maintenanceTypes.Open },
+        { label: 'Closed', content: renderClosed(), key: maintenanceTypes.Closed }
+    ]
 
     return (
         <Box>
@@ -152,31 +508,37 @@ const ManageMaintenance = () => {
                     <CustomBreadcrumb
                         items={[
                             { label: 'Admin', link: constantRoutes.protected.admin.index },
-                            { label: 'Manage-users-groups', link: constantRoutes.protected.admin.manageUserAndGroups},
+                            {
+                                label: 'Manage-maintenance-groups',
+                                link: constantRoutes.protected.admin.manageMaintenance
+                            }
                         ]}
                     />
                 }
-                title={'Manage Users Groups'}
+                title={'Manage Maintenances'}
             />
 
             <CustomContainer
                 bgColor={!isMobile}
-
                 children={
-                    <Box sx={{ width: '100%'}}>
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            borderBottom: 1,
-                            borderColor: 'divider',
-                            width: '100%'
-                        }}>
-                            <Tabs textColor="secondary"
-                                  indicatorColor="secondary"
-                                  value={value}
-                                  onChange={handleChange}
-                                  aria-label="dynamic tabs">
+                    <Box sx={{ width: '100%' }}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                borderBottom: 1,
+                                borderColor: 'divider',
+                                width: '100%'
+                            }}
+                        >
+                            <Tabs
+                                textColor='secondary'
+                                indicatorColor='secondary'
+                                value={value}
+                                onChange={handleChange}
+                                aria-label='dynamic tabs'
+                            >
                                 {tabData.map((tab, index) => (
                                     <Tab
                                         key={index}
@@ -187,8 +549,8 @@ const ManageMaintenance = () => {
                                     />
                                 ))}
                             </Tabs>
-
                         </Box>
+
                         {tabData.map((tab, index) => (
                             <CustomTabPanel
                                 key={index}
@@ -201,7 +563,7 @@ const ManageMaintenance = () => {
                 }
             />
         </Box>
-    );
-};
+    )
+}
 
-export default ManageMaintenance;
+export default ManageMaintenance

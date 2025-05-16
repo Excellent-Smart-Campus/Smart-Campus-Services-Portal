@@ -12,7 +12,6 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 
 function AdminIndex(){
     const { user } = useAuth();
-    const { } = useAdmin();
     
     return(
         <Box sx={{ flexGrow: 1 }}>

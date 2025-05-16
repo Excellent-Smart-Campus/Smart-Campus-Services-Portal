@@ -7,12 +7,12 @@ namespace SmartCampusServicesPortal.Domain.Manager;
 public class ServiceManager
 {
     private readonly ServiceRepository _serviceRepository;
-    
-    public ServiceManager( ServiceRepository serviceRepository, SecurityRepository securityRepository)
+
+    public ServiceManager(ServiceRepository serviceRepository, SecurityRepository securityRepository)
     {
         _serviceRepository = serviceRepository;
     }
-    
+
     public async Task<IEnumerable<AvailableRooms>> GetAvailableRoomsAsync(int year, int month, RoomType?[] status = null)
     {
         var roomTypeList = status != null ? string.Join(",", status.Select(s => (int)s)) : null;
@@ -27,7 +27,7 @@ public class ServiceManager
     {
         return await _serviceRepository.CreateMaintenceBookingAndNotificationAsync(maintenance);
     }
-    
+
     public async Task<Appointment> CreateAppointmentAsync(Appointment appointment)
     {
         return await _serviceRepository.CreateAppointmentAndNotificationAsync(appointment);
@@ -38,5 +38,26 @@ public class ServiceManager
         var statusList = statuses != null ? string.Join(",", statuses.Select(s => (int)s)) : null;
 
         return await _serviceRepository.GetMaintenancesAsync(stakeholderId, statusList);
+    }
+
+    public async Task<Maintenance> GetMaintenancesByIdAsync(int issueId)
+    {
+        return await _serviceRepository.GetMaintenanceIssueByIdAsyn(issueId);
+    }
+
+    public async Task<Appointment> GetBookingAsync(int bookingId)
+    {
+        return await _serviceRepository.GetBookingAsync(bookingId);
+    }
+    
+
+    public async Task<IEnumerable<MarkNotification>> GetStakeholderNotificationsAsync(int stakeholderId)
+    {
+        return await _serviceRepository.GetStakeholderNotificationsAsync(stakeholderId);
+    }
+
+    public async Task<IEnumerable<Appointment>> GetBookingForStakeholderAsync(int stakeholder)
+    {
+        return await _serviceRepository.GetBookingForStakeholderAsync(stakeholder);
     }
 }

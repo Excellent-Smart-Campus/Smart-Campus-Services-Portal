@@ -7,7 +7,7 @@ import {CustomTimePicker} from "@/components/CustomTimePicker.jsx";
 
 export const AppointmentForm = ((props) => {
     const { formRef, setFormValue, formValue, model, subjectOptions, lecturerOptions } = props;
-
+    
     return (
         <Form fluid ref={formRef} onChange={setFormValue} formValue={formValue} model={model}>
             <Row className="show-grid" gutter={24} >
@@ -19,7 +19,7 @@ export const AppointmentForm = ((props) => {
                             <Form.Control
                                 name="subject"
                                 accepter={SelectPicker}
-                                data={mapSubjectsToOptions(subjectOptions?.subjects) || []}
+                                data={mapSubjectsToOptions(subjectOptions) || []}
                                 placeholder="Select subject"
                                 searchable
                                 style={{ width: '100%' }}
