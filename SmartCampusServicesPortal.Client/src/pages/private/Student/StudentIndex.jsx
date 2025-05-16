@@ -84,7 +84,7 @@ function StudentIndex() {
                             label="View Class Schedule"
                             variant="contained"
                             color="primary"
-                            handle={() => navigate(constantRoutes.protected.student.viewSchedule)}
+                            handle={() => navigate(constantRoutes.protected.viewSchedule)}
                         />
                         <CustomButton
                             label="Request Maintenance"
@@ -104,8 +104,8 @@ function StudentIndex() {
                 <Grid order={{ xs: 1 }} size={{ xs: 12, md: 8 }}>
                     {enrolled.length > 0 ?
                         (
-                            enrolled.map((course) => (
-                                <CustomAccordion title={`${course.courseCode} - ${course.courseName}`}
+                            enrolled.map((course, index) => (
+                                <CustomAccordion key={index} title={`${course.courseCode} - ${course.courseName}`}
                                     icon={<MenuBookIcon color="secondary" fontSize="small" style={{ display: 'flex' }} />}
                                     expandIconText="View All">
                                     {
@@ -143,9 +143,9 @@ function StudentIndex() {
                         <CustomAccordion title={'My Bookings Appointments'}
                             icon={<InsertInvitationIcon color="secondary" fontSize="small" style={{ display: 'flex' }} />}
                             expandIconText="View All">
-                            <Box gap={2} display={'flex'} flexDirection={'column'} sx={{ maxHeight: '600px', overflowY: 'auto' }} container direction="column" spacing={2}>
-                                {getBookings.map((booking) => (
-                                    <Grid >
+                            <Box gap={2} display={'flex'} flexDirection={'column'} sx={{ maxHeight: '600px', overflowY: 'auto' }} direction="column" spacing={2}>
+                                {getBookings.map((booking, index) => (
+                                    <Grid key={index}>
                                         <Card elevation={0} >
                                             <CardContent>
                                                 <Typography variant="body1">{booking.lecturerId ? 'Appointment Request': 'Room Booking Request'}</Typography>
@@ -206,9 +206,9 @@ function StudentIndex() {
                         <CustomAccordion title={'My maintenance progress'}
                             icon={<BookmarkAddedIcon color="secondary" fontSize="small" style={{ display: 'flex' }} />}
                             expandIconText="View All">
-                            <Box gap={2} display={'flex'} flexDirection={'column'} sx={{ maxHeight: '600px', overflowY: 'auto' }} container direction="column" spacing={2}>
-                                {getMaintenance.map((maintenance) => (
-                                    <Grid >
+                            <Box gap={2} display={'flex'} flexDirection={'column'} sx={{ maxHeight: '600px', overflowY: 'auto' }} direction="column" spacing={2}>
+                                {getMaintenance.map((maintenance, index) => (
+                                    <Grid key={index}>
                                         <Card elevation={0} >
                                             <CardContent>
                                                 <Typography variant="body1">{maintenance.title}</Typography>
@@ -258,9 +258,9 @@ function StudentIndex() {
                             <CustomAccordion title={'Notifications'} expandIconText="Expand All"
                                 icon={<NotificationsIcon color="secondary" fontSize="small" style={{ display: 'flex' }} />} >
 
-                                <Box sx={{ bgcolor: 'white', maxHeight: '600px', overflowY: 'auto' }} container direction="column">
-                                    {notifications.map((notification) => (
-                                        <Grid sx={{ m: '0.6em' }}>
+                                <Box sx={{ bgcolor: 'white', maxHeight: '600px', overflowY: 'auto' }} direction="column">
+                                    {notifications.map((notification, index) => (
+                                        <Grid key={index} sx={{ m: '0.6em' }}>
                                             <NotificationCard
                                                 title={notificationTypeLabels[notification.notificationTypeId]}
                                                 subtitle={notification.subject}

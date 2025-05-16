@@ -1,5 +1,5 @@
 import { useState} from 'react';
-import { Box, Modal, Backdrop, Fade, Typography, List, ListItem, ListItemText} from '@mui/material';
+import { Box, Modal, Backdrop, Fade, Typography} from '@mui/material';
 import { constantRoutes } from "@/utils/constantRoutes.jsx";
 import { ButtonToolbar } from 'rsuite';
 import { useEducation } from "@/context/EducationContext.jsx";
@@ -56,10 +56,6 @@ const Schedule = () => {
         link.click();
         document.body.removeChild(link);
     };
-
-    const handleDateClick = (arg) => {
-        alert(arg.dateStr)
-    }
     
     const handleModelClick = (info) => {
         const { title, start, end, extendedProps } = info.event;
@@ -78,7 +74,7 @@ const Schedule = () => {
                 breadcrum={
                     <CustomBreadcrumb
                         items={[
-                            { label: 'Student', link: constantRoutes.protected.student.index },
+                            { label: 'Home', link: constantRoutes.protected.index },
                             { label: 'View-Schedule', link: constantRoutes.protected.student.viewSchedule},
                         ]}
                     />
@@ -105,7 +101,6 @@ const Schedule = () => {
                                 initialView="dayGridMonth"
                                 weekends={false}
                                 events={events}
-                                dateClick={handleDateClick}
                                 headerToolbar={{
                                     left: '',
                                     center: 'title',
@@ -118,8 +113,6 @@ const Schedule = () => {
                         </div>
                     </Box>
                 }
-
-
             />
 
             <Modal

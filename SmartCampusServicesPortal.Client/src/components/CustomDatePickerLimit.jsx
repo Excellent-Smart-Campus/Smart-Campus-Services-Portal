@@ -39,6 +39,7 @@ export const CustomDatePickerLimit = React.forwardRef((props, ref) => {
                 appearance={getAppearance()}
                 oneTap={oneTap}
                 style={style}
+                container={() => document.querySelector('.dialog-modal')}
                 disabledDate={(date) => {
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);

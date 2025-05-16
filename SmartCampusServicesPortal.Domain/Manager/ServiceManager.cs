@@ -49,7 +49,7 @@ public class ServiceManager
     {
         return await _serviceRepository.GetBookingAsync(bookingId);
     }
-    
+
 
     public async Task<IEnumerable<MarkNotification>> GetStakeholderNotificationsAsync(int stakeholderId)
     {
@@ -59,5 +59,10 @@ public class ServiceManager
     public async Task<IEnumerable<Appointment>> GetBookingForStakeholderAsync(int stakeholder)
     {
         return await _serviceRepository.GetBookingForStakeholderAsync(stakeholder);
+    }
+
+    public async Task<bool> MarkNotificationsAsReadAsync(int stakeholder)
+    {
+        return await _serviceRepository.MarkNotificationsAsync(stakeholder);
     }
 }

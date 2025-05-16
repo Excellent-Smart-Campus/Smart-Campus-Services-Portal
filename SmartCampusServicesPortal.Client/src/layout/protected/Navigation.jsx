@@ -56,9 +56,7 @@ const Navigation = ({handleDrawer}) => {
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-            <MenuItem>You have 17 new notifications</MenuItem>
-            <MenuItem>System maintenance at 10 PM</MenuItem>
-            <MenuItem>New user registered</MenuItem>
+            <MenuItem onClick={() => {navigate(constantRoutes.protected.notification);}}> You have {notifications.length} new notifications</MenuItem>
         </Menu>
     );
 

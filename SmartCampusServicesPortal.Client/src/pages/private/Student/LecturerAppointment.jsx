@@ -19,7 +19,7 @@ function LecturerAppointment(){
     const { enrolled } = useEducation()
     const [ getLecturerSubjects, setLecturerSubjects ] = useState([]);
     const [ appointmentForm, setAppointmentForm ] = useState({
-        subject: null, lecturer: null, purpose: '', appointmentDate: null,  startTime: null});
+        subject: null, lecturer: null, purpose: '', appointmentDate: null,  startTime: null, endTime: null});
     const navigate = useNavigate();
     const appointmentFormRef = useRef();
 
@@ -48,6 +48,7 @@ function LecturerAppointment(){
             purpose: appointmentForm.purpose,
             appointmentDate: appointmentForm.appointmentDate,
             startTime: formatTimeOnly(appointmentForm.startTime),
+            endTime: formatTimeOnly(appointmentForm.endTime)
         }
         try {
             const response = await ApiClient.instance.scheduleAppointment(userData);

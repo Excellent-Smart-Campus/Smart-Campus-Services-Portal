@@ -54,7 +54,6 @@ export const TextField = React.forwardRef((props, ref) => {
                         </InputGroup>
                     )}
 
-                    {/* Show Progress */}
                     {showProgress && !showBoth && passwordValue && (
                         <div style={{ marginTop: 8 }}>
                             <Progress.Line
@@ -69,7 +68,6 @@ export const TextField = React.forwardRef((props, ref) => {
                         </div>
                     )}
 
-                    {/* Show Both Eye and Progress */}
                     {showBoth && (
                         <>
                             <InputGroup inside>

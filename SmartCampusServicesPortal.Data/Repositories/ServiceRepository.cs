@@ -167,8 +167,20 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
         return markNotificationDictionary.Values;
     }
 
+    public async Task<bool> MarkNotificationsAsync(int stakeholder)
+    {
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+        var queryParameters = new DynamicParameters();
+        queryParameters.Add("@stakeholderId", stakeholder);
+        
+        return await connection.QueryFirstOrDefaultAsync<bool>(
+            "ntf.MarkNotificationsARead",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters,
+            commandTimeout: DefaultTimeout);
+    }
 
-    private async Task<Maintenance> CreateMaintenceBookingAsync(Maintenance maintenance, 
+    private async Task<Maintenance> CreateMaintenceBookingAsync(Maintenance maintenance,
         SqlConnection connection, SqlTransaction transaction = null)
     {
         var queryParameters = new DynamicParameters();
@@ -178,7 +190,7 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
         queryParameters.Add("@title", maintenance.Title);
         queryParameters.Add("@description", maintenance.Description);
         queryParameters.Add("@statusId", maintenance.StatusId);
-        
+
         return await connection.QueryFirstOrDefaultAsync<Maintenance>(
             "svc.SetMaintenanceIssue",
             commandType: CommandType.StoredProcedure,
@@ -201,12 +213,14 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
         queryParameters.Add("@endTime", appointment.EndTime);
         queryParameters.Add("@statusId", appointment.StatusId);
         
-        return await connection.QueryFirstOrDefaultAsync<Appointment>(
+        var results =  await connection.QueryFirstOrDefaultAsync<Appointment>(
             "svc.SetBooking",
             commandType: CommandType.StoredProcedure,
             param: queryParameters,
             transaction: transaction,
             commandTimeout: DefaultTimeout);
+
+        return results;
     }
 
     private async Task<Notification> CreateNotificationWithRecipientsAsync(Notification notification,

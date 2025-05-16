@@ -45,7 +45,7 @@ export const AppointmentForm = ((props) => {
                     <TextField name="purpose" label="Purpose of the appointment" />
                 </Col>
                 
-                <Col xs={24} sm={24} md={24} lg={12} style={{marginBlock: '1rem'}} className="text">
+                <Col xs={24} sm={24} md={24} lg={24} style={{marginBlock: '1rem'}} className="text">
                     <CustomDatePickerLimit name="appointmentDate" label="Appointment Date" pickerType="date" />
                 </Col>
                 
@@ -55,6 +55,14 @@ export const AppointmentForm = ((props) => {
                         label="Appointment Time"
                         placeholder="Select appointment time"
                         isStart
+                    />
+                </Col>
+                 <Col xs={24} sm={24} md={12} lg={12} style={{marginBlock: '1rem'}} className="text">
+                    <CustomTimePicker
+                        name="endTime"
+                        label="End Time"
+                        placeholder="Select end time"
+                        startTime={formValue.startTime}
                     />
                 </Col>
             </Row>

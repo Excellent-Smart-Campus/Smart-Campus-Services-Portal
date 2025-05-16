@@ -12,16 +12,17 @@ public class ErrorMessagesConstant
     public const string ManyAttemptsLockAccount = "Your account has been locked due to too many failed attempts. Please contact support";
     public const string InvalidCredentials = "Incorrect username or password.";
     public const string ScheduleSuccess = "Schedule request submitted successfully.";
+    public const string ScheduleConfirmed = "Appointment booking confirmed successfully.";
     public const string ScheduleError = "Failed to submit schedule request.";
     public const string EmailAlreadyExists = "An account already exists.";
     public const string RegistrationError = "Registration failed. Please try again.";
     public const string RegistrationSuccess = "Registration completed successfully.";
     public const string LoginSuccess = "You’ve successfully logged in.";
-    public const String AccountStatusSuccess = "Account unblocked successfully, user can login";
-    public const String AccountStatusFailure = " Account Failed to unblock";
-    public const String MaintenanceUpdateFail = "Maintenance failed to update, try again later";
-    public const String MaintenanceUpdateSuccess = "Maintenance Updated Successfully";
-    public const String BookingUpdateFail = "Booking failed to update, try again later";
-    public const String BookingUpdateSuccess = "Booking Updated Successfully";
+    public const string AccountStatusSuccess = "Account unblocked successfully, user can login";
+    public const string AccountStatusFailure = " Account Failed to unblock";
+    public const string MaintenanceUpdateFail = "Maintenance failed to update, try again later";
+    public const string MaintenanceUpdateSuccess = "Maintenance Updated Successfully";
+    public const string BookingUpdateFail = "Booking failed to update, try again later";
+    public const string BookingUpdateSuccess = "Booking Updated Successfully";
 
 }

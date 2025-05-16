@@ -146,6 +146,7 @@ public static class ModelExtension
             Purpose = appointmentSchedule.Purpose,
             BookingDate = appointmentSchedule.AppointmentDate,
             StartTime = appointmentSchedule.StartTime,
+            EndTime = appointmentSchedule.EndTime,
             StatusId = Status.Pending,
             Notification = new Notification
             {

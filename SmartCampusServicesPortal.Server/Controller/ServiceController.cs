@@ -184,6 +184,19 @@ public class ServiceController : BaseController
         return await _serviceManager.GetStakeholderNotificationsAsync(GetStakeholderId());
     }
 
+    [HttpGet("markNotificationsRead")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> MarkNotificationsRead()
+    {
+        var result = await _serviceManager.MarkNotificationsAsReadAsync(GetStakeholderId());
+
+        if (!result) { return BadRequest(new { message = "Unable to read all notifications", success = false }); }
+        
+        return Ok(new { success = true, message = "Read all notifications successfully" });
+    }
+
     [HttpGet("getStakeholderBookingById")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -226,7 +239,7 @@ public class ServiceController : BaseController
         dbBooking.Notification = new Notification
         {
             Message = $"Good day \n\n" +
-                $"Please be informed that event has been cancelled by owner ${GetName()}. \n\n" +
+                $"Please be informed that event has been cancelled by owner {GetName()}. \n\n" +
                 $"Apologize for any inconvenience caused."
                 ,
             SenderId = GetStakeholderId(),
@@ -241,5 +254,62 @@ public class ServiceController : BaseController
             return BadRequest(new { message = ErrorMessagesConstant.BookingUpdateFail, success = false });
         }
 
-        return Ok(new { success = true, message = ErrorMessagesConstant.BookingUpdateSuccess });    }
+        return Ok(new { success = true, message = ErrorMessagesConstant.BookingUpdateSuccess });    
+    }
+    
+    [HttpGet("confirmAppointmentBooking")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult>  ConfirmAppointmentBooking([FromQuery] int bookingId)
+    {
+        if (bookingId == 0)
+        {
+            return BadRequest(new { message = ErrorMessagesConstant.ScheduleError, success = false });
+        }
+
+        var dbBooking = await _serviceManager.GetBookingAsync(bookingId);
+
+        if (dbBooking == null)
+        {
+            return NotFound(new { message = ErrorMessagesConstant.ScheduleError, success = false });
+        }
+
+        var recipientIds = new List<int> {
+            GetStakeholderId(),
+            dbBooking.StakeholderId.Value,
+        };
+
+        if (dbBooking.LecturerId.HasValue)
+        {
+            recipientIds.Add(dbBooking.StakeholderId.Value);
+        }
+
+        string recipientString = string.Join(",", recipientIds);
+
+        var appointmentRequester = await _stakeholderManager.GetUserProfile(dbBooking.StakeholderId.Value);
+        
+        dbBooking.StatusId = Status.Cancelled;
+        dbBooking.Notification = new Notification
+        {
+            Message = $"Dear {appointmentRequester.FirstName} {appointmentRequester.LastName} \n\n" +
+                      $"Your request to meet with {GetName()}. has been approved \n\n" +
+                      $"Please take note of the scheduled appointment details as reflected in the request notification. \n\n"+
+                      $"Ensure that you arrive on time and come prepared with any necessary materials.\n\n" +
+                      $"Should you be unable to attend, kindly inform us in advance.\n\n"
+            ,
+            SenderId = GetStakeholderId(),
+            RecipientIds = recipientString,
+            NotificationTypeId = NotificationType.Appointment
+        };
+        
+        var newBooking = await _serviceManager.CreateAppointmentAsync(dbBooking);
+
+        if (!newBooking.BookingId.Equals(bookingId))
+        {
+            return BadRequest(new { message = ErrorMessagesConstant.ScheduleError, success = false });
+        }
+        
+        return Ok(new { success = true, message = ErrorMessagesConstant.ScheduleConfirmed });
+    }
 }

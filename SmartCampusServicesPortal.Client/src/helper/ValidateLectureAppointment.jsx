@@ -25,5 +25,11 @@ export const modelAppointment = Schema.Model({
     startTime: DateType()
         .isRequired(errorMessages.required)
         .min(minStartTime, errorMessages.appointmentTime.start)
-        .max(maxStartTime, errorMessages.appointmentTime.start)
+        .max(maxStartTime, errorMessages.appointmentTime.start),       
+    endTime: DateType()
+        .isRequired(errorMessages.required)
+        .addRule((value, data) => {
+            if (!data.startTime || !value) return true;
+            return new Date(value) > new Date(data.startTime);
+        }, 'End Time must be after Start Time'),
 });
