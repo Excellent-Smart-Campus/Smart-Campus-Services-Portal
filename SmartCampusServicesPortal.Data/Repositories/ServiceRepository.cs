@@ -174,7 +174,7 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
         queryParameters.Add("@stakeholderId", stakeholder);
         
         return await connection.QueryFirstOrDefaultAsync<bool>(
-            "ntf.MarkNotificationsARead",
+            "ntf.MarkNotificationAsRead",
             commandType: CommandType.StoredProcedure,
             param: queryParameters,
             commandTimeout: DefaultTimeout);
