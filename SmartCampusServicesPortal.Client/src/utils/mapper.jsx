@@ -44,6 +44,32 @@ function formatServerDate(isoString) {
     return date.toLocaleString('en-ZA', options);
 }
 
+
+function formatServerTime(timeString) {
+    const [hour, minute] = timeString.split(":");
+    const date = new Date();
+    date.setHours(parseInt(hour), parseInt(minute));
+
+    return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    });
+}
+
+function formatServerDateOnly(isoString) {
+    const date = new Date(isoString);
+
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+
+    return date.toLocaleString('en-ZA', options);
+}
+    
+
 function mapTitlesToOptions(titles) {
     if (!titles || !Array.isArray(titles)) return [];
 
@@ -168,5 +194,7 @@ export {
     mapTitle,
     statusDescription,
     mapRoom,
-    formatServerDate
+    formatServerDate,
+    formatServerDateOnly,
+    formatServerTime
 };

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AppBar, Box, Toolbar, Typography, Badge, MenuItem, Menu} from '@mui/material';
 import { useAuth } from '@/context/AuthContext.jsx';
 import { useNavigate } from "react-router-dom";
+import { useEducation } from "@/context/EducationContext.jsx";
 import { constantRoutes } from "@/utils/constantRoutes.jsx";
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -10,8 +11,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const Navigation = ({handleDrawer}) => {
     const {user, logout} = useAuth();
-    
-const [anchorEl, setAnchorEl] = useState(null);
+    const { notifications } = useEducation()
+    const [anchorEl, setAnchorEl] = useState(null);
     const [notifAnchorEl, setNotifAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -77,7 +78,7 @@ const [anchorEl, setAnchorEl] = useState(null);
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <IconButton size="large" color="inherit" onClick={handleNotifMenuOpen}>
-                            <Badge badgeContent={17} color="error">
+                            <Badge badgeContent={notifications.length} color="error">
                                 <NotificationsIcon sx={{ fontSize: 30 }} />
                             </Badge>
                         </IconButton>

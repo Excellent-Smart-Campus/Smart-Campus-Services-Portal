@@ -59,13 +59,27 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
             param: queryParameters);
     }
 
+    public async Task<Appointment> GetBookingAsync(int issueId)
+    {
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+        
+        var queryParameters = new DynamicParameters();
+        queryParameters.Add("@bookingId", issueId);
+        
+        return await connection.QueryFirstOrDefaultAsync<Appointment>(
+            "svc.GetBooking",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters);
+    }
+    
+
     public async Task<Maintenance> CreateMaintenceBookingAndNotificationAsync(Maintenance maintenance)
     {
         await using var connection = await GetOpenConnectionAsync();
         await using var transaction = await connection.BeginTransactionAsync() as SqlTransaction;
 
         var dbMaintenance = await CreateMaintenceBookingAsync(maintenance, connection, transaction);
-        
+
         maintenance.Notification.ReferenceId = dbMaintenance.IssueId;
         await CreateNotificationWithRecipientsAsync(maintenance.Notification, connection, transaction);
 
@@ -98,30 +112,47 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
         await using SqlConnection connection = await GetOpenConnectionAsync();
         return await CreateAppointmentAsync(appointment, connection);
     }
+    
+    public async Task<IEnumerable<Appointment>> GetBookingForStakeholderAsync(int stakeholder)
+    {
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+        var queryParameters = new DynamicParameters();
+
+        queryParameters.Add("@stakeholderId", stakeholder);
+
+        return await connection.QueryAsync<Appointment>(
+            "svc.GetBookingForStakeholder",
+            commandType: CommandType.StoredProcedure,
+            param: queryParameters,
+            commandTimeout: DefaultTimeout
+        );
+    }
+
 
     public async Task<IEnumerable<MarkNotification>> GetStakeholderNotificationsAsync(int stakeholder)
     {
         await using SqlConnection connection = await GetOpenConnectionAsync();
         var queryParameters = new DynamicParameters();
         queryParameters.Add("@stakeholderId", stakeholder);
-        
+
         Dictionary<int, MarkNotification> markNotificationDictionary = new Dictionary<int, MarkNotification>();
-        
+
         await connection.QueryAsync<MarkNotification, Subject, MarkNotification>(
             "ntf.GetNotificationsForStakeholder",
             (notification, subjects) =>
             {
-                if (!markNotificationDictionary.TryGetValue(notification.NotificationId.Value, out MarkNotification markNotificationInstance)) 
+                if (!markNotificationDictionary.TryGetValue(notification.NotificationId.Value, out MarkNotification markNotificationInstance))
                 {
-                    markNotificationInstance = notification; 
-                    markNotificationInstance.Subject = new Subject(); 
+                    markNotificationInstance = notification;
+                    markNotificationInstance.Subject = new Subject();
                     markNotificationDictionary.Add(notification.NotificationId.Value, markNotificationInstance);
                 }
-                if(subjects != null){
+                if (subjects != null)
+                {
                     markNotificationInstance.Subject = new Subject
                     {
-                        SubjectId = subjects.SubjectId, 
-                        SubjectCode = subjects.SubjectCode, 
+                        SubjectId = subjects.SubjectId,
+                        SubjectCode = subjects.SubjectCode,
                         SubjectName = subjects.SubjectName,
                     };
                 }
@@ -132,7 +163,7 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
             param: queryParameters,
             commandTimeout: DefaultTimeout
         );
-        
+
         return markNotificationDictionary.Values;
     }
 

@@ -1,11 +1,10 @@
 using SmartCampusServicesPortal.Data.Enums;
 using SmartCampusServicesPortal.Data.Models;
 using SmartCampusServicesPortal.Server.ViewModels;
-using NotificationType = SmartCampusServicesPortal.Data.Models.NotificationType;
 
-namespace SmartCampusServicesPortal.Server.Extentions;
+namespace SmartCampusServicesPortal.Server.Extensions;
 
-public static class ModelExtention
+public static class ModelExtension
 {
     public static Stakeholder ToStakeHolderUser(this RegisterVM registerVM)
     {
@@ -17,6 +16,7 @@ public static class ModelExtention
 
         return stakeholder;
     }
+
     public static StakeholderPerson ToPerson(this RegisterVM registerVM)
     {
         var person = new StakeholderPerson
@@ -59,7 +59,7 @@ public static class ModelExtention
             RelatedStakeholderId = registerVM.Course,
             StakeholderRelationshipTypeId = StakeholderRelationshipType.Enrolled
         };
-        
+
         return stakeholderRelated;
     }
     public static ApplicationUser ToUSer(this RegisterVM registerVM)
@@ -74,9 +74,9 @@ public static class ModelExtention
         StakeholderType stakeholderType, Rooms room)
     {
         var recipientIds = new List<int> { stakeholder };
-        
+
         string recipientString = string.Join(",", recipientIds);
-        
+
         var maintenance = new Maintenance
         {
             RoomId = maintenanceVM.Room,
@@ -86,29 +86,27 @@ public static class ModelExtention
             StatusId = Status.Open,
             Notification = new Notification
             {
-                Message = 
-                    $"Dear Staff, " +
-                    $" "+
+                Message =
+                    $"Dear Staff, \n\n" +
                     $"A maintenance request has been submitted for {room.RoomName}** by a {stakeholderType}." +
-                    $"Issue Description: "+
-                    $" "+
-                    $"{maintenanceVM.Description}" +
-                    $" "+
+                    $"Issue Description: \n\n" +
+                    $"{maintenanceVM.Description} \n\n" +
                     $"Please review and take the necessary action at your earliest convenience.",
                 SenderId = stakeholder,
                 RecipientIds = recipientString,
-                NotificationTypeId = NotificationType.Maintenance  
+                NotificationTypeId = NotificationType.Maintenance
             }
         };
         return maintenance;
     }
 
-    public static Maintenance ToMaintenanceUpdate(this Maintenance dbMaintenance, Status status, 
-        StakeholderPerson person, Rooms room, int stakeholder){
-        
-        var recipientIds = new List<int> { dbMaintenance.StakeholderId.Value, stakeholder};
+    public static Maintenance ToMaintenanceUpdate(this Maintenance dbMaintenance, Status status,
+        StakeholderPerson person, Rooms room, int stakeholder)
+    {
+
+        var recipientIds = new List<int> { dbMaintenance.StakeholderId.Value, stakeholder };
         string recipientString = string.Join(",", recipientIds);
-        
+
         var maintenance = new Maintenance
         {
             RoomId = dbMaintenance.RoomId,
@@ -120,17 +118,14 @@ public static class ModelExtention
             IssueId = dbMaintenance.IssueId,
             Notification = new Notification
             {
-                Message = 
-                    $"Dear {person.FirstName} {person.LastName}, " +
-                    $" "+
-                    $"The maintenance request for {room.RoomName} has been updated by Admin staff." +
-                    $" "+
-                    $"Current Status: {status}" +
-                    $" "+
+                Message =
+                    $"Dear {person.FirstName} {person.LastName}, \n\n" +
+                    $"The maintenance request for {room.RoomName} has been updated by Admin staff. \n\n" +
+                    $"Current Status: {status} \n\n" +
                     $"Thank you for your patience.",
                 SenderId = stakeholder,
                 RecipientIds = recipientString,
-                NotificationTypeId = NotificationType.Maintenance            
+                NotificationTypeId = NotificationType.Maintenance
             }
         };
 
@@ -140,7 +135,7 @@ public static class ModelExtention
     public static Appointment ToScheduleAppointment(
            this AppointmentSchedule appointmentSchedule, int stakeholder, string name, StakeholderPerson person)
     {
-        
+
         var recipientIds = new List<int> { appointmentSchedule.Lecturer, stakeholder };
         string recipientString = string.Join(",", recipientIds);
 
@@ -154,16 +149,11 @@ public static class ModelExtention
             StatusId = Status.Pending,
             Notification = new Notification
             {
-                Message = $"Dear {person.FirstName} {person.LastName}, " + 
-                    $" "+
-                    $" I hope this message finds you well. " +
-                    $" "+
-                    $" My name is {name} and I would like to kindly request an appointment with you on " +
-                    $" "+
-                    $" {appointmentSchedule.AppointmentDate:dddd, MMMM d, yyyy} "+
-                    $" "+
-                    $" The purpose of the appointment is to discuss {appointmentSchedule.Purpose} "+
-                    $" "+
+                Message = $"Dear {person.FirstName} {person.LastName}, \n\n" +
+                    $" I hope this message finds you well. \n\n" +
+                    $" My name is {name} and I would like to kindly request an appointment with you on \n\n" +
+                    $" {appointmentSchedule.AppointmentDate:dddd, MMMM d, yyyy} \n\n" +
+                    $" The purpose of the appointment is to discuss {appointmentSchedule.Purpose} \n\n" +
                     $" Please let me know if you are available at that time or suggest an alternative."
                 ,
                 SenderId = stakeholder,
@@ -176,10 +166,10 @@ public static class ModelExtention
     }
 
     public static Appointment ToBookARoom(this BookRoomVM bookRoomVM, int stakeholder, Rooms room)
-    {   
-        var recipientIds = new List<int> { stakeholder,  };
+    {
+        var recipientIds = new List<int> { stakeholder, };
         string recipientString = string.Join(",", recipientIds);
-        
+
         var bookRoom = new Appointment
         {
             RoomId = bookRoomVM.Room,
@@ -191,19 +181,13 @@ public static class ModelExtention
             StatusId = Status.Pending,
             Notification = new Notification
             {
-                Message = $"Dear Staff" +
-                          $" "+
-                          $"I hope this message finds you well." +
-                          $" "+
+                Message = $"Dear Staff \n\n" +
+                          $"I hope this message finds you well. \n\n" +
                           $"I am writing to request a booking for Room {room.RoomName} on " +
                           $"{bookRoomVM.BookingDate:dddd, MMMM d, yyyy} " +
-                          $"from {bookRoomVM.StartTime:hh\\:mm} to {bookRoomVM.EndTime:hh\\:mm}." +
-                          $" "+
-                          $"The purpose of this booking is: {bookRoomVM.Purpose}." +
-                          $" "+
-                          $"Please review and take the necessary action at your earliest convenience."
-                ,
-                
+                          $"from {bookRoomVM.StartTime:hh\\:mm} to {bookRoomVM.EndTime:hh\\:mm}. \n\n" +
+                          $"The purpose of this booking is: {bookRoomVM.Purpose}. \n\n" +
+                          $"Please review and take the necessary action at your earliest convenience.",
                 SenderId = stakeholder,
                 RecipientIds = recipientString,
                 NotificationTypeId = NotificationType.Booking
@@ -213,3 +197,5 @@ public static class ModelExtention
         return bookRoom;
     }
 }
+
+

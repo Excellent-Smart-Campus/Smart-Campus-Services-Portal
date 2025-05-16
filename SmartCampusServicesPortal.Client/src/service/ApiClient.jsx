@@ -155,6 +155,18 @@ class ApiClient {
     async getNotifications() {
         return await this.callApi('/api/service/getNotificationsByStakeholder', 'GET',{ cacheResponse: false });
     }
+
+    async getStakeholderBookings() {
+        return await this.callApi('/api/service/getStakeholderBookingById', 'GET',{ cacheResponse: false });
+    }
+
+    async cancelBooking(bookingId){
+        return await this.callApi('/api/service/cancelBooking', 'GET',{ 
+            cacheResponse: false,
+            params: { bookingId }
+        });
+    }
+
     async getSystemPermission() {
         return await this.callApi('/api/admin/getSystemPermission', 'GET',{ cacheResponse: true });
     }
@@ -201,8 +213,17 @@ class ApiClient {
         });    
     }
     
+    clearCache() {
+        this.cache = {};
+    }
+
     async logout() {
-        return await this.callApi('/api/auth/logout', 'POST', { cacheResponse: false });
+        try {
+            await this.callApi('/api/auth/logout', 'POST', { cacheResponse: false });
+        } finally {
+            this.clearCache();
+            return;
+        }
     }
     
     async login(email, password) {

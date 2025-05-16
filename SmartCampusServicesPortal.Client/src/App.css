@@ -47,6 +47,10 @@ body {
 
 }
 
+.no-calendar-header .MuiPickersCalendarHeader-root {
+  display: none;
+}
+
 @media (max-width: 600px) {
   .responsive-card {
     flex-direction: column;

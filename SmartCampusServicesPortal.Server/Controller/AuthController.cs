@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartCampusServicesPortal.Data.Enums;
 using SmartCampusServicesPortal.Data.Models;
 using SmartCampusServicesPortal.Domain.Manager;
-using SmartCampusServicesPortal.Server.Extentions;
+using SmartCampusServicesPortal.Server.Extensions;
 using SmartCampusServicesPortal.Server.Helper;
 using SmartCampusServicesPortal.Server.Utils;
 using SmartCampusServicesPortal.Server.ViewModels;

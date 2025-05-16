@@ -15,6 +15,7 @@ export function AdminProvider({ children }){
     const [ loading, setLoading ] = useState(true);
     const [ getSystemPermission, setSystemPermission ] = useState([]);
     const [ getGroups, setGroups ] = useState([]);
+    const [ getBookings, setGetBookings ] = useState([]);
     
     const fetchAllUsers = async () => {
         try {
@@ -56,6 +57,16 @@ export function AdminProvider({ children }){
         }
     }, []);
 
+    const fetchBookings = useCallback(async () => {
+        setLoading(true);
+        try {
+            const response = await ApiClient.instance.getStakeholderBookings();
+            setGetBookings(response);
+        } finally{
+            setLoading(false);
+        }
+    }, []);
+
     const viewGroup = groupId => {
         return getGroups.find(group => group.groupId === Number(groupId));
     };
@@ -90,7 +101,9 @@ export function AdminProvider({ children }){
                 loading,
                 setLoading,
                 getMaintenance,
-                fetchMaintenance
+                fetchMaintenance,
+                fetchBookings,
+                getBookings
             }}
         >
             {children}

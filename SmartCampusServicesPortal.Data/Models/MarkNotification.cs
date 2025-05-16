@@ -1,3 +1,5 @@
+using SmartCampusServicesPortal.Data.Enums;
+
 namespace SmartCampusServicesPortal.Data.Models;
 
 public class MarkNotification
