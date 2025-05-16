@@ -14,6 +14,7 @@ export function EducationProvider({ children }){
     const [ titles, setTitles ] = useState([]);
     const [enrolled, setEnrolled] = useState([]);
     const [notifications, setNotifications] = useState([]);
+    const [notificationsCount, setNotificationsCount] = useState(0);
     const [timeTable, setTimeTable] = useState({});
     const [enrolledError, setEnrolledError] = useState(null);
     const [registeredStakeholders, setRegisteredStakeholders ] = useState([]);
@@ -31,6 +32,8 @@ export function EducationProvider({ children }){
         try {
             const response = await ApiClient.instance.getNotifications();
             setNotifications(response);
+            const unreadCount = response.filter(n => !n.isRead).length;
+            setNotificationsCount(unreadCount);
         } catch (error){
             setEnrolledError(error?.message || "An error occurred while fetching enrolled subjects.");
         }
@@ -96,6 +99,7 @@ export function EducationProvider({ children }){
                 registeredStakeholders,
                 notifications,
                 titles,
+                notificationsCount,
                 loading
             }}
         >

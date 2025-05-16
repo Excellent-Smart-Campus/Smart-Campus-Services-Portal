@@ -11,7 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const Navigation = ({handleDrawer}) => {
     const {user, logout} = useAuth();
-    const { notifications } = useEducation()
+    const { notificationsCount } = useEducation()
     const [anchorEl, setAnchorEl] = useState(null);
     const [notifAnchorEl, setNotifAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -56,7 +56,7 @@ const Navigation = ({handleDrawer}) => {
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-            <MenuItem onClick={() => {navigate(constantRoutes.protected.notification);}}> You have {notifications.length} new notifications</MenuItem>
+            <MenuItem onClick={() => {navigate(constantRoutes.protected.notification);}}> You have {notificationsCount} new notifications</MenuItem>
         </Menu>
     );
 
@@ -76,7 +76,7 @@ const Navigation = ({handleDrawer}) => {
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <IconButton size="large" color="inherit" onClick={handleNotifMenuOpen}>
-                            <Badge badgeContent={notifications.length} color="error">
+                            <Badge badgeContent={notificationsCount} color="error">
                                 <NotificationsIcon sx={{ fontSize: 30 }} />
                             </Badge>
                         </IconButton>
