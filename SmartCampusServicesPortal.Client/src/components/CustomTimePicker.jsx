@@ -48,6 +48,7 @@ export const CustomTimePicker = React.forwardRef((props, ref) => {
                     ref={ref}
                     placement="bottomStart"
                     ranges={[]}
+                    container={() => document.querySelector('.dialog-modal')}
                     {...rest}
                 />
             </Form.Group>

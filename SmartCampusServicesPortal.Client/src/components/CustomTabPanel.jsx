@@ -1,7 +1,7 @@
 import { Box} from '@mui/material';
 
 function CustomTabPanel(props) {
-    const { children, value, index } = props;
+    const { children, value, index, py=3 } = props;
 
     return (
         <div
@@ -11,7 +11,7 @@ function CustomTabPanel(props) {
             aria-labelledby={`tab-${index}`}
         >
             {value === index && 
-                <Box sx={{ py: 3 }}>
+                <Box sx={{ py: py }}>
                     {children}
                 </Box>
             }

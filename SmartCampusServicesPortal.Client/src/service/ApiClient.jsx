@@ -15,7 +15,6 @@ class ApiClient {
         const cacheKey = this.buildCacheKey(path, params);
 
         if (method.toUpperCase() === 'GET' && cacheResponse && this.cache[cacheKey]) {
-            console.log(`Returning cached data for ${cacheKey}`);
             return JSON.parse(this.cache[cacheKey]);
         }
 
@@ -125,6 +124,7 @@ class ApiClient {
                 Purpose : formData.purpose,
                 AppointmentDate: formData.appointmentDate,
                 StartTime: formData.startTime,
+                EndTime: formData.endTime,
             },
         });
     }
@@ -156,6 +156,10 @@ class ApiClient {
         return await this.callApi('/api/service/getNotificationsByStakeholder', 'GET',{ cacheResponse: false });
     }
 
+    async markNotificationsRead() {
+        return await this.callApi('/api/service/markNotificationsRead', 'GET', { cacheResponse: false });
+    }
+
     async getStakeholderBookings() {
         return await this.callApi('/api/service/getStakeholderBookingById', 'GET',{ cacheResponse: false });
     }
@@ -167,6 +171,12 @@ class ApiClient {
         });
     }
 
+    async confirmBooking(bookingId){
+        return await this.callApi('/api/service/confirmAppointmentBooking', 'GET',{
+            cacheResponse: false,
+            params: { bookingId }
+        });
+    }
     async getSystemPermission() {
         return await this.callApi('/api/admin/getSystemPermission', 'GET',{ cacheResponse: true });
     }
@@ -218,12 +228,7 @@ class ApiClient {
     }
 
     async logout() {
-        try {
-            await this.callApi('/api/auth/logout', 'POST', { cacheResponse: false });
-        } finally {
-            this.clearCache();
-            return;
-        }
+        return  await this.callApi('/api/auth/logout', 'POST', { cacheResponse: false });
     }
     
     async login(email, password) {

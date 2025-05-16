@@ -27,22 +27,24 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ApiClient from '@/service/ApiClient';
 
 function LecturerIndex() {
-    const { user, canAccess } = useAuth();
+    const { user, profile, canAccess } = useAuth();
     const { enrolled, notifications } = useEducation()
     const { getMaintenance, fetchMaintenance, fetchBookings, getBookings, setLoading } = useAdmin();
     const navigate = useNavigate();
 
-    const handleSubjectView = async (subject) => {
-        if (!canAccess(userActions.STUDENT_ENROLLMENT_SUBJECT)) {
-            navigate(constantRoutes.access.unauthorised);
+    useEffect(() => {
+        setLoading(true);
+        const fetchData = async () => {
+            try {
+                await fetchMaintenance(profile.stakeholder, [Number(status.Open), Number(status.InProgress)])
+                await fetchBookings();
+            } finally {
+                setLoading(false);
+            }
         }
-        navigate(constantRoutes.protected.student.subject, {
-            state: { subject },
-        });
-    };
-
-    console.log(enrolled)
-
+        fetchData()
+    }, [])
+    
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Typography variant="h6"> 👋 Welcome, {user.name} </Typography>
@@ -60,6 +62,7 @@ function LecturerIndex() {
                             label="View Class Schedule"
                             variant="contained"
                             color="primary"
+                            handle={() => navigate(constantRoutes.protected.viewSchedule)}
                         />
                         <CustomButton
                             label="Request Maintenance"
@@ -68,26 +71,26 @@ function LecturerIndex() {
                             handle={() => navigate(constantRoutes.protected.lecturer.maintenanceRequest)}
                         />
                         <CustomButton
-                            label="Manage Appointments"
+                            label="Manage Bookings"
                             variant="contained"
                             color="primary"
-                            handle={() => navigate(constantRoutes.protected.lecturer.manageAppointents)}
+                            handle={() => navigate(constantRoutes.protected.lecturer.manageBookings)}
                         />
                     </ButtonToolbar>
                 </Grid>
 
-                <Grid item order={{ xs: 1 }} size={{ xs: 12, md: 8 }}>
+                <Grid order={{ xs: 1 }} size={{ xs: 12, md: 8 }}>
                     {enrolled.length > 0 ?
                         (
-                            enrolled.map((course) => (
-                                <CustomAccordion title={`${course.courseCode} - ${course.courseName}`}
+                            enrolled.map((course, index) => (
+                                <CustomAccordion key={index} title={`${course.courseCode} - ${course.courseName}`}
                                     icon={<MenuBookIcon color="secondary" fontSize="small" style={{ display: 'flex' }} />}
                                     expandIconText="View All">
                                     {
                                         Array.isArray(course.subjects) && course.subjects.length > 0 ? (
                                             <Grid container direction="column" spacing={2}>
                                                 {course.subjects.map((subject) => (
-                                                    <Grid key={subject?.subjectId} item>
+                                                    <Grid key={subject?.subjectId}>
                                                         <CustomCard
                                                             title={subject?.subjectName}
                                                             description={subject?.subjectCode}
@@ -116,76 +119,14 @@ function LecturerIndex() {
                             </Card>
                         )
                     }
-                    {getBookings.length > 0 && (
-                        <CustomAccordion title={'My Bookings Appointments'}
-                            icon={<InsertInvitationIcon color="secondary" fontSize="small" style={{ display: 'flex' }} />}
-                            expandIconText="View All">
-                            <Box gap={2} display={'flex'} flexDirection={'column'} sx={{ maxHeight: '600px', overflowY: 'auto' }} container direction="column" spacing={2}>
-                                {getBookings.map((booking) => (
-                                    <Grid >
-                                        <Card elevation={0} >
-                                            <CardContent>
-                                                <Typography variant="body1">{booking.lecturerId ? 'Appointment Request' : 'Room Booking Request'}</Typography>
-                                                <Typography sx={{ whiteSpace: 'pre-line', my: '0.5em' }} variant='body2'>{booking.purpose}</Typography>
-                                                <Typography variant='body2'>Created:  </Typography>
-                                                <Typography variant='body2'>{formatServerDateOnly(booking.bookingDate)}</Typography>
-                                                <Box>
-                                                    {booking.startTime != null && (
-                                                        <>
-                                                            <Typography variant='body2'>Start Time: {formatServerTime(booking.startTime)}</Typography>
-                                                            <Typography variant='body2'>End Time: {formatServerTime(booking.endTime)}</Typography>
-                                                        </>
-                                                    )}
-                                                </Box>
-
-                                                <Box display={'flex'} sx={{ my: '1rem' }} justifyContent={'space-between'}>
-                                                    <Box justifyContent={'center'}
-                                                        sx={{
-                                                            p: '0.5em',
-                                                            bgcolor: booking.statusId === status.Pending
-                                                                ? 'rgba(255, 165, 0, 0.1)'
-                                                                : booking.statusId === status.Approved
-                                                                    ? 'rgba(30, 144, 255, 0.1)'
-                                                                    : 'rgba(0, 128, 0, 0.1)',
-                                                            color: booking.statusId === status.Pending
-                                                                ? 'orange'
-                                                                : booking.statusId === status.Approved
-                                                                    ? 'dodgerblue'
-                                                                    : 'green',
-                                                            width: '50%',
-                                                            textAlign: 'center',
-                                                            borderRadius: '4px',
-                                                        }}
-                                                    >
-                                                        {statusDescription[booking.statusId]}
-                                                    </Box>
-                                                </Box>
-                                                <ButtonToolbar>
-                                                    {booking.statusId === status.Pending && (
-                                                        <CustomButton
-                                                            handle={() => handleCancel(booking)}
-                                                            size={'small'}
-                                                            label={'Cancel Booking'}
-                                                            variant={'contained'}
-                                                            color={'secondary'}
-                                                        />
-                                                    )}
-                                                </ButtonToolbar>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>
-                                ))}
-                            </Box>
-                        </CustomAccordion>
-                    )}
 
                     {getMaintenance.length > 0 && (
                         <CustomAccordion title={'My maintenance progress'}
                             icon={<BookmarkAddedIcon color="secondary" fontSize="small" style={{ display: 'flex' }} />}
                             expandIconText="View All">
-                            <Box gap={2} display={'flex'} flexDirection={'column'} sx={{ maxHeight: '600px', overflowY: 'auto' }} container direction="column" spacing={2}>
-                                {getMaintenance.map((maintenance) => (
-                                    <Grid >
+                            <Box gap={2} display={'flex'} flexDirection={'column'} sx={{ maxHeight: '600px', overflowY: 'auto' }} direction="column" spacing={2}>
+                                {getMaintenance.map((maintenance, index) => (
+                                    <Grid key={index}>
                                         <Card elevation={0} >
                                             <CardContent>
                                                 <Typography variant="body1">{maintenance.title}</Typography>
@@ -235,9 +176,9 @@ function LecturerIndex() {
                             <CustomAccordion title={'Notifications'} expandIconText="Expand All"
                                 icon={<NotificationsIcon color="secondary" fontSize="small" style={{ display: 'flex' }} />} >
 
-                                <Box sx={{ bgcolor: 'white', maxHeight: '600px', overflowY: 'auto' }} container direction="column">
-                                    {notifications.map((notification) => (
-                                        <Grid sx={{ m: '0.6em' }}>
+                                <Box sx={{ bgcolor: 'white', maxHeight: '600px', overflowY: 'auto' }} direction="column">
+                                    {notifications.map((notification, index) => (
+                                        <Grid  key={index} sx={{ m: '0.6em' }}>
                                             <NotificationCard
                                                 title={notificationTypeLabels[notification.notificationTypeId]}
                                                 subtitle={notification.subject}

@@ -18,6 +18,7 @@ const statusDescription = Object.fromEntries(
         return [value, key];
     })
 );
+
 function mapSubjectsToOptions(courses) {
     if (!courses || !Array.isArray(courses)) return [];
     return  courses.flatMap(course => 
@@ -27,7 +28,6 @@ function mapSubjectsToOptions(courses) {
         }))
     );
 }
-
 
 function formatServerDate(isoString) {
     const date = new Date(isoString);
@@ -43,7 +43,6 @@ function formatServerDate(isoString) {
 
     return date.toLocaleString('en-ZA', options);
 }
-
 
 function formatServerTime(timeString) {
     const [hour, minute] = timeString.split(":");
@@ -86,7 +85,6 @@ function mapTitle(titleOptions, title){
     return titleOptions.find(titleOption => titleOption.titleId === Number(title))?.description;
 }
 
-
 function mapRoom(roomOptions, room){
     if (!roomOptions || !Array.isArray(roomOptions)) return '';
     if (!room) return '';
@@ -99,6 +97,7 @@ function filterStudyRooms(roomList){
     return roomList.filter(s =>
          s?.roomTypeId !== roomType.StudyRoom);
 }
+
 function mapLecturersToOptions(lecturerOptions) {
     if (!lecturerOptions || !Array.isArray(lecturerOptions)) return [];
 

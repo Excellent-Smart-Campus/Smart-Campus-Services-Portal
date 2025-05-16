@@ -13,6 +13,8 @@ export const constantRoutes = {
         index: '/',
         profile: '/profile/',
         notification: '/notification/',
+        viewSchedule: '/view-schedule/',
+        
         admin: {
             index: '/admin/',
             manageUserAndGroups: '/admin/manage-users-and-groups/',
@@ -27,13 +29,12 @@ export const constantRoutes = {
             maintenanceRequest:'booking/maintenance-request/',
             bookRoom: 'book-room/',
             lecturerAppointment: 'lecturer-appointment/',
-            viewSchedule: 'view-schedule/'
         },
         lecturer:{
             index: '/lecture/',
             maintenanceRequest:'booking/maintenance-request',
             bookRoom: 'book-room/',
-            manageAppointents: 'manage-appointments/',
+            manageBookings: 'manage-bookings/',
         }
     }
 }

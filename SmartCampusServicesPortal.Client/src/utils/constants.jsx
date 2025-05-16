@@ -13,6 +13,11 @@ const usersAndGroupsType = {
     Users: 0,
     Groups: 1
 };
+
+const appointmentsAndBookingsType = {
+    Bookings: 0,
+    Appointments: 1
+};
 const maintenanceTypes = {
     Open: 0,
     Closed: 1
@@ -61,5 +66,6 @@ export {
     days, 
     stakeholderType,
     status,
-    notificationTypeLabels
+    notificationTypeLabels,
+    appointmentsAndBookingsType
 };

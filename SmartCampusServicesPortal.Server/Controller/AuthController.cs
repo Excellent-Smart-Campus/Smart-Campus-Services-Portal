@@ -222,7 +222,6 @@ public class AuthController : BaseController
     {
         var result = await GetUserGroup();
         var userActions = await _stakeholderManager.GetUserActionsByGroupIdAsync(result);
-
         return Ok(new
         {
             IsAuthenticated = User.Identity?.IsAuthenticated,

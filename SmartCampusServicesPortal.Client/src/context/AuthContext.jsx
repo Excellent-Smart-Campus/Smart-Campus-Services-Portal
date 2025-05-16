@@ -66,6 +66,7 @@ export function AuthProvider({ children }){
             setAuthenticated(false);
             setUserPermissions([]);
             setCurrentDashboard(null);
+            await ApiClient.instance.clearCache();
         }
     }, [setUser, setAuthenticated, setUserPermissions, setCurrentDashboard]);
 
