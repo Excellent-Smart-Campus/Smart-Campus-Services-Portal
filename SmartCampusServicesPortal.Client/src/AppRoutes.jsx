@@ -23,6 +23,7 @@ import ManageUserAndGroups from "@/pages/private/Admin/ManageUserAndGroups.jsx";
 import ManageGroup from "@/pages/private/Admin/ManageGroup.jsx";
 import ManageLockedUsers from "@/pages/private/Admin/ManageLockedUsers.jsx";
 import ManageMaintenance from "@/pages/private/Admin/ManageMaintenance.jsx";
+import ManageBookings from "@/pages/private/Admin/ManageBookings.jsx";
 import RegisteredStudents from "@/pages/private/Admin/RegisteredStudents.jsx";
 import ScheduledLecturers from "@/pages/private/Admin/ScheduledLecturers.jsx";
 
@@ -76,6 +77,7 @@ export const AppRoutes = (
                 <Route path={constantRoutes.protected.admin.manageUserAndGroups} element={<ManageUserAndGroups />} />
                 <Route path={constantRoutes.protected.admin.lockedUsers} element={<ManageLockedUsers />} />
                 <Route path={constantRoutes.protected.admin.manageMaintenance} element={<ManageMaintenance/>} />
+                <Route path={constantRoutes.protected.admin.manageBookings} element={<ManageBookings/>} />
                 <Route path={constantRoutes.protected.admin.registeredStudents} element={<RegisteredStudents/>} />
                 <Route path={constantRoutes.protected.admin.scheduledLecturer} element={<ScheduledLecturers/>} />
                 <Route path={constantRoutes.protected.admin.viewGroup(':groupId')} element={<ManageGroup />} /> 

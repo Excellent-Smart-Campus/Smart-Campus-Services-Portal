@@ -15,6 +15,8 @@ public class Appointment
     public Status StatusId { get; set; }
     public DateTime? DateCreated { get; set; }
     public DateTime? DateUpdated { get; set; }
+    
+    public Rooms Room { get; set; }
     public Notification Notification {get; set; }
 
 }

@@ -193,7 +193,7 @@ public class ServiceController : BaseController
         var result = await _serviceManager.MarkNotificationsAsReadAsync(GetStakeholderId());
 
         if (!result) { return BadRequest(new { message = "Unable to read all notifications", success = false }); }
-        
+
         return Ok(new { success = true, message = "Read all notifications successfully" });
     }
 
@@ -205,12 +205,21 @@ public class ServiceController : BaseController
     {
         return await _serviceManager.GetBookingForStakeholderAsync(GetStakeholderId());
     }
+    
+    [HttpGet("getRoomBookingForAdmin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IEnumerable<Appointment>> GetRoomBookingForAdmin()
+    {
+        return await _serviceManager.GetRoomBookingForAdminAsync();
+    }
 
     [HttpGet("cancelBooking")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult>  CancelBooking([FromQuery] int bookingId)
+    public async Task<IActionResult> CancelBooking([FromQuery] int bookingId)
     {
         if (bookingId == 0)
         {
@@ -254,14 +263,14 @@ public class ServiceController : BaseController
             return BadRequest(new { message = ErrorMessagesConstant.BookingUpdateFail, success = false });
         }
 
-        return Ok(new { success = true, message = ErrorMessagesConstant.BookingUpdateSuccess });    
+        return Ok(new { success = true, message = ErrorMessagesConstant.BookingUpdateSuccess });
     }
-    
+
     [HttpGet("confirmAppointmentBooking")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult>  ConfirmAppointmentBooking([FromQuery] int bookingId)
+    public async Task<IActionResult> ConfirmAppointmentBooking([FromQuery] int bookingId)
     {
         if (bookingId == 0)
         {
@@ -284,31 +293,44 @@ public class ServiceController : BaseController
             recipientIds.Add(dbBooking.LecturerId.Value);
         }
 
+        if (dbBooking.RoomId.HasValue)
+        {
+            recipientIds.Add(GetStakeholderId());
+        }
+
         string recipientString = string.Join(",", recipientIds);
 
         var appointmentRequester = await _stakeholderManager.GetUserProfile(dbBooking.StakeholderId.Value);
-        
+
+
         dbBooking.StatusId = Status.Approved;
         dbBooking.Notification = new Notification
         {
-            Message = $"Dear {appointmentRequester.FirstName} {appointmentRequester.LastName} \n\n" +
-                      $"Your request to meet with {GetName()}. has been approved \n\n" +
-                      $"Please take note of the scheduled appointment details as reflected in the request notification. \n\n"+
-                      $"Ensure that you arrive on time and come prepared with any necessary materials.\n\n" +
-                      $"Should you be unable to attend, kindly inform us in advance.\n\n"
-            ,
+            Message = dbBooking.LecturerId.HasValue
+                ?
+                    $"Dear {appointmentRequester.FirstName} {appointmentRequester.LastName} \n\n" +
+                    $"Your request to meet with {GetName()}. has been approved \n\n" +
+                    $"Please take note of the scheduled appointment details as reflected in the request notification. \n\n" +
+                    $"Ensure that you arrive on time and come prepared with any necessary materials.\n\n" +
+                    $"Should you be unable to attend, kindly inform us in advance.\n\n"
+                :
+                    $"Dear {appointmentRequester.FirstName} {appointmentRequester.LastName},\n\n" +
+                    $"Your room booking request has been approved.\n\n" +
+                    $"Please check your booking details for the room number, date, and time.\n\n" +
+                    $"Ensure that you use the room responsibly and vacate it on time.\n\n" +
+                    $"If you need to cancel the booking, please notify us in advance.\n\n",
             SenderId = GetStakeholderId(),
             RecipientIds = recipientString,
-            NotificationTypeId = NotificationType.Appointment
+            NotificationTypeId = dbBooking.LecturerId.HasValue ? NotificationType.Appointment : NotificationType.Booking
         };
-        
+
         var newBooking = await _serviceManager.CreateAppointmentAsync(dbBooking);
 
         if (!newBooking.BookingId.Equals(bookingId))
         {
             return BadRequest(new { message = ErrorMessagesConstant.ScheduleError, success = false });
         }
-        
+
         return Ok(new { success = true, message = ErrorMessagesConstant.ScheduleConfirmed });
     }
 }

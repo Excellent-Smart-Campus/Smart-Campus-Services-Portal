@@ -65,4 +65,9 @@ public class ServiceManager
     {
         return await _serviceRepository.MarkNotificationsAsync(stakeholder);
     }
+    
+    public async Task<IEnumerable<Appointment>> GetRoomBookingForAdminAsync()
+    {
+        return await _serviceRepository.GetRoomBookingForAdminAsync();
+    }
 }

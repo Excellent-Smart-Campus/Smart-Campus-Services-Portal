@@ -115,7 +115,6 @@ class ApiClient {
             }
         });
     }
-    
     async scheduleAppointment(formData){
         return await this.callApi('/api/service/scheduleAppointment', 'POST',{
             cacheResponse: false,
@@ -152,6 +151,10 @@ class ApiClient {
         });
     }
 
+    async getRoomBookingForAdmin() {
+        return await this.callApi('/api/service/getRoomBookingForAdmin', 'GET',{ cacheResponse: false });
+    }
+    
     async getNotifications() {
         return await this.callApi('/api/service/getNotificationsByStakeholder', 'GET',{ cacheResponse: false });
     }

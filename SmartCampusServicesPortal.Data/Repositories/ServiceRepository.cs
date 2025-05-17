@@ -180,6 +180,41 @@ public class ServiceRepository(string connectionString) : BaseRepository(connect
             commandTimeout: DefaultTimeout);
     }
 
+    public async Task<IEnumerable<Appointment>> GetRoomBookingForAdminAsync()
+    {
+        await using SqlConnection connection = await GetOpenConnectionAsync();
+        Dictionary<int, Appointment> appointmentDictionary = new Dictionary<int, Appointment>();
+
+        await connection.QueryAsync<Appointment, Rooms, Appointment>(
+            "svc.GetBookingsForAdmin",
+            (appointment, room) =>
+            { 
+                if (!appointmentDictionary.TryGetValue(appointment.BookingId.Value, out Appointment appointmentInstance))
+                { 
+                    appointmentInstance = appointment; 
+                    appointmentInstance.Room = new Rooms(); 
+                    appointmentDictionary.Add(appointment.BookingId.Value, appointmentInstance);
+                } 
+                if (room != null) 
+                { 
+                    appointmentInstance.Room = new Rooms 
+                    { 
+                        RoomId = room.RoomId, 
+                        RoomTypeId = room.RoomTypeId, 
+                        RoomNumber = room.RoomNumber, 
+                        RoomName = room.RoomName
+                    };
+                } 
+                return appointment;
+            }, 
+            splitOn: "RoomId", 
+            commandType: CommandType.StoredProcedure,
+            commandTimeout: DefaultTimeout
+        );
+        
+        return appointmentDictionary.Values;
+    }
+
     private async Task<Maintenance> CreateMaintenceBookingAsync(Maintenance maintenance,
         SqlConnection connection, SqlTransaction transaction = null)
     {
