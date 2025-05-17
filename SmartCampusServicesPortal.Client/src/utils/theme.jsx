@@ -18,6 +18,10 @@ const muiTheme = createTheme({
             primary: '#000000de',
             secondary: '#141b2d',
         },
+        action:{
+            selected: '#E0F7FA',
+            hover: '#E0F7FA',
+        }
     },
 });
 

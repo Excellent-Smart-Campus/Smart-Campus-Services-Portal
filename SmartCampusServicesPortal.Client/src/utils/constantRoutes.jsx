@@ -22,6 +22,7 @@ export const constantRoutes = {
             scheduledLecturer: '/admin/scheduled-lecturers/',
             registeredStudents: '/admin/registered-students/',
             manageMaintenance: '/admin/manage-maintenance/',
+            manageBookings: '/admin/manage-bookings/',
             viewGroup: groupId => `/admin/view-group/${groupId}/`,
         },
         student:{

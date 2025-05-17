@@ -45,8 +45,7 @@ function AdminIndex(){
                         <StatBox
                             title={8}
                             subtitle="Room Bookings"
-                            progress="0.50"
-                            increase="+21%"
+                            link={constantRoutes.protected.admin.manageBookings}
                             icon={<MeetingRoomIcon color="secondary" fontSize="large" />}
                         />
                     </Grid>

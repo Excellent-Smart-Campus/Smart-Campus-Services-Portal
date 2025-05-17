@@ -12,6 +12,7 @@ export function AdminProvider({ children }){
     const { authenticated, canAccess } = useAuth();
     const [ getAllUsers, setAllUsers ] = useState([]);
     const [ getMaintenance, setMaintenance ] = useState([]);
+    const [ adminBookings, setAdminBooking] = useState([]);
     const [ loading, setLoading ] = useState(true);
     const [ getSystemPermission, setSystemPermission ] = useState([]);
     const [ getGroups, setGroups ] = useState([]);
@@ -52,6 +53,16 @@ export function AdminProvider({ children }){
         try {
             const response = await ApiClient.instance.getMaintenance(stakeholder, statuses);
             setMaintenance(response);
+        } finally{
+            setLoading(false);
+        }
+    }, []);
+    
+    const fetchAdminRoomBookings = useCallback( async () => {
+        setLoading(true)
+        try {
+            const response = await ApiClient.instance.getRoomBookingForAdmin();
+            setAdminBooking(response);
         } finally{
             setLoading(false);
         }
@@ -103,7 +114,9 @@ export function AdminProvider({ children }){
                 getMaintenance,
                 fetchMaintenance,
                 fetchBookings,
-                getBookings
+                getBookings,
+                fetchAdminRoomBookings,
+                adminBookings
             }}
         >
             {children}
