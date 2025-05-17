@@ -24,24 +24,27 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import ApiClient from '@/service/ApiClient';
+import {Error, Success} from "@/helper/Toasters.jsx";
+
 
 function LecturerIndex() {
     const { user, profile, canAccess } = useAuth();
     const { enrolled, notifications } = useEducation()
-    const { getMaintenance, fetchMaintenance, fetchBookings, getBookings, setLoading } = useAdmin();
+    const { getMaintenance, fetchMaintenance, fetchBookings, setLoading } = useAdmin();
     const navigate = useNavigate();
+
+    const fetchData = async () => {
+        try {
+            await fetchMaintenance(profile.stakeholder, [Number(status.Open), Number(status.InProgress)])
+            await fetchBookings();
+        } finally {
+            setLoading(false);
+        }
+    }
 
     useEffect(() => {
         setLoading(true);
-        const fetchData = async () => {
-            try {
-                await fetchMaintenance(profile.stakeholder, [Number(status.Open), Number(status.InProgress)])
-                await fetchBookings();
-            } finally {
-                setLoading(false);
-            }
-        }
+        
         fetchData()
     }, [])
     

@@ -36,11 +36,11 @@ function RequestMaintenance(){
         }
 
          try {
-             const response = await ApiClient.instance.requestMaintenance(
-                 maintenanceForm.name, maintenanceForm.room, maintenanceForm.description
-             );
-             Success(response.message);
-             navigate(constantRoutes.protected.index);
+            const response = await ApiClient.instance.requestMaintenance(
+                maintenanceForm.name, maintenanceForm.room, maintenanceForm.description
+            );
+            Success(response.message);
+            window.location.href = constantRoutes.protected.index;
          } catch(e) {
             Error(getErrorMessageFromResponse(e));
         }finally {

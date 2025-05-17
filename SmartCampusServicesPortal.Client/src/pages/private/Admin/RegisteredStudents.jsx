@@ -6,6 +6,7 @@ import { stakeholderType } from "@/utils/constants.jsx";
 import { useTheme } from '@mui/material/styles';
 import { mapTitle } from '@/utils/mapper.jsx';
 import { ExpandMore } from '@/helper/ExpandMore.jsx';
+import { useAuth } from "@/context/AuthContext.jsx";
 import { useEducation } from "@/context/EducationContext.jsx";
 import CustomContainer from "@/components/CustomContainer.jsx";
 import CustomBreadcrumb from '@/components/CustomBreadcrumb.jsx';
@@ -16,6 +17,7 @@ import Loader from "@/components/Loader.jsx";
 import ApiClient from '@/service/ApiClient';
 
 const RegisteredStudents = () => {
+    const { setLoading } = useAuth();
     const { fetchRegisteredStakeholders, loading, titles, registeredStakeholders} = useEducation();
     const [ openCourses, setCourses] = useState(null);
     const [ localLoading, setLocalLoading ] = useState(null);
@@ -25,6 +27,7 @@ const RegisteredStudents = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
+        setLoading(false);
         const fetchData = async () => {
             await fetchRegisteredStakeholders(stakeholderType.Student);
         };
@@ -32,17 +35,13 @@ const RegisteredStudents = () => {
     }, []);
     
     const handleStakeholderClick = async (stakeholder) =>{
-        setLocalLoading(true);
+        setLoading(true);
         if (stakeholder) {
             const response = await ApiClient.instance.getEnrolledSubject(stakeholder);
             setSubjects(response);
         }
-        setLocalLoading(false);
+        setLoading(false);
     }
-    
-    if (loading || localLoading) {
-        return  <Loader />
-    }  
     
     return (
         <Box>

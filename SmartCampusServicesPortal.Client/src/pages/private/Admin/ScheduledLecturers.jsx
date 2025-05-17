@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import { useEducation } from "@/context/EducationContext.jsx";
 import { ExpandMore } from '@/helper/ExpandMore.jsx';
 import { mapTitle } from '@/utils/mapper.jsx';
+import { useAuth } from "@/context/AuthContext.jsx";
 import CustomContainer from "@/components/CustomContainer.jsx";
 import CustomBreadcrumb from '@/components/CustomBreadcrumb.jsx';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -16,15 +17,16 @@ import Loader from "@/components/Loader.jsx";
 import ApiClient from '@/service/ApiClient';
 
 const ScheduledLecturers = () => {
-    const { fetchRegisteredStakeholders, loading,  titles, registeredStakeholders} = useEducation();
+    const { fetchRegisteredStakeholders,  titles, registeredStakeholders} = useEducation();
+    const { setLoading } = useAuth();
     const [ openCourses, setCourses] = useState(null);
-    const [ localLoading, setLocalLoading ] = useState(null);
     const [ openCourseSubjects, setCourseSubjects] = useState(null);
     const [ getSubjects, setSubjects ] = useState([]);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
+        setLoading(false);
         const fetchData = async () => {
             await fetchRegisteredStakeholders(stakeholderType.Lecture);
         };
@@ -33,17 +35,13 @@ const ScheduledLecturers = () => {
     }, []);
 
     const handleStakeholderClick = async (stakeholder) =>{
-        setLocalLoading(true);
+        setLoading(true);
         if (stakeholder) {
             const response = await ApiClient.instance.getEnrolledSubject(stakeholder);
             setSubjects(response);
         }
-        setLocalLoading(false);
+        setLoading(false);
     }
-    
-    if (loading || localLoading) {
-        return  <Loader />
-    }  
 
     return (
         <Box>

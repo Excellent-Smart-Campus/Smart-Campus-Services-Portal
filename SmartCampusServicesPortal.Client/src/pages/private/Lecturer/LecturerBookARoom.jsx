@@ -13,25 +13,39 @@ import { getErrorMessageFromResponse } from "@/utils/getErrorMessageFromResponse
 import { useAuth } from "@/context/AuthContext.jsx";
 import { Error, Success } from "@/helper/Toasters.jsx";
 import { filterStudyRooms } from  '@/utils/mapper.jsx';
+import { status } from "@/utils/constants.jsx";
+import { useAdmin } from "@/context/AdminContext.jsx";
 import AccessGuard from "@/components/AccessGuard.jsx";
 import CustomContainer from "@/components/CustomContainer.jsx";
 import CustomButton from "@/components/CustomButton.jsx";
 import CustomTabPanel from "@/components/CustomTabPanel.jsx";
 import CustomBreadcrumb from '@/components/CustomBreadcrumb.jsx';
 import ApiClient from '@/service/ApiClient';
+
 const LecturerBookARoom = () => {
-    const { setLoading } = useAuth();
-    const { enrolled } = useEducation()
+    const { setLoading, profile } = useAuth();
+    const { getNotifications } = useEducation();
     const { rooms } = useService();
-    const navigate = useNavigate();
-    const bookRoomFormRef = useRef();
+    const { fetchMaintenance, fetchBookings } = useAdmin();
     const [bookForm, setBookForm] = useState({
         room: null, purpose: '', bookingDate: '', startTime: null, endTime: null});
     const [value, setValue] = useState(0);
+    const navigate = useNavigate();
+    const bookRoomFormRef = useRef();
 
     useEffect(() => {
         setLoading(false);
     }, []);
+
+    const fetchData = async () => {
+        try {
+            await fetchMaintenance(profile.stakeholder, [Number(status.Open), Number(status.InProgress)])
+            await fetchBookings();
+            await getNotifications();
+        } finally {
+            setLoading(false);
+        }
+    }
     
     const handleRoomBooking = async e => {
         setLoading(true);
@@ -51,6 +65,7 @@ const LecturerBookARoom = () => {
         try {
             const response = await ApiClient.instance.bookARoom(userData);
             Success(response.message);
+            await fetchData();
             navigate(constantRoutes.protected.index);
         } catch (e) {
             Error(getErrorMessageFromResponse(e));

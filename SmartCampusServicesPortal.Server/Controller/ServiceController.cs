@@ -225,12 +225,12 @@ public class ServiceController : BaseController
         }
 
         var recipientIds = new List<int> {
-            GetStakeholderId()
+            dbBooking.StakeholderId.Value
         };
 
         if (dbBooking.LecturerId.HasValue)
         {
-            recipientIds.Add(dbBooking.StakeholderId.Value);
+            recipientIds.Add(dbBooking.LecturerId.Value);
         }
 
         string recipientString = string.Join(",", recipientIds);
@@ -276,20 +276,19 @@ public class ServiceController : BaseController
         }
 
         var recipientIds = new List<int> {
-            GetStakeholderId(),
             dbBooking.StakeholderId.Value,
         };
 
         if (dbBooking.LecturerId.HasValue)
         {
-            recipientIds.Add(dbBooking.StakeholderId.Value);
+            recipientIds.Add(dbBooking.LecturerId.Value);
         }
 
         string recipientString = string.Join(",", recipientIds);
 
         var appointmentRequester = await _stakeholderManager.GetUserProfile(dbBooking.StakeholderId.Value);
         
-        dbBooking.StatusId = Status.Cancelled;
+        dbBooking.StatusId = Status.Approved;
         dbBooking.Notification = new Notification
         {
             Message = $"Dear {appointmentRequester.FirstName} {appointmentRequester.LastName} \n\n" +

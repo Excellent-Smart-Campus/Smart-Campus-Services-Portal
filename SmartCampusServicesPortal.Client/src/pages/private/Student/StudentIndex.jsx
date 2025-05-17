@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Divider, Card, CardContent } from '@mui/material';
 import { ButtonToolbar } from 'rsuite';
 import { CustomButton } from "@/components/CustomButton.jsx";
@@ -24,25 +24,27 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import {Error, Success} from "@/helper/Toasters.jsx";
 import ApiClient from '@/service/ApiClient';
 
 function StudentIndex() {
     const dialogs = useDialogs();
-    const { user, profile, canAccess } = useAuth();
-    const { enrolled, notifications } = useEducation()
+    const { user, profile, canAccess} = useAuth();
+    const { enrolled, notifications, getNotifications } = useEducation()
     const { getMaintenance, fetchMaintenance, fetchBookings, getBookings, setLoading } = useAdmin();
     const navigate = useNavigate();
 
+    const fetchData = async () => {
+        try {
+            await fetchMaintenance(profile.stakeholder, [Number(status.Open), Number(status.InProgress)])
+            await fetchBookings();
+            await getNotifications();
+        } finally {
+            setLoading(false);
+        }
+    }
     useEffect(() => {
         setLoading(true);
-        const fetchData = async () => {
-            try {
-                await fetchMaintenance(profile.stakeholder, [Number(status.Open), Number(status.InProgress)])
-                await fetchBookings();
-            } finally {
-                setLoading(false);
-            }
-        }
         fetchData()
     }, [])
 
@@ -59,6 +61,7 @@ function StudentIndex() {
             try {
                 const response = await ApiClient.instance.cancelBooking(data.bookingId);
                 Success(response.message);
+                await fetchData();
             } catch (e) {
                 Error(getErrorMessageFromResponse(e));
             } finally {
